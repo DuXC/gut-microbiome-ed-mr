@@ -5,7 +5,21 @@ microbiome_2026:
   ancestry: EUR
   genome_build: GRCh37
   license: GWAS Catalog CC0 or accession-specific terms
-  overlap_note: Swedish discovery cohorts and Norwegian HUNT replication
+  cohort_membership: [Swedish_discovery_cohorts]
+  known_overlap_datasets: []
+  replication_role: exposure_discovery
+  overlap_note: Swedish discovery cohorts
+microbiome_2026_hunt:
+  accessions: {first: GCST90666541, last: GCST90667549}
+  article: https://doi.org/10.1038/s41588-026-02512-2
+  catalog_root: https://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics
+  ancestry: EUR
+  genome_build: GRCh37
+  license: GWAS Catalog CC0 or accession-specific terms
+  cohort_membership: [HUNT]
+  known_overlap_datasets: []
+  replication_role: independent_exposure_replication
+  overlap_note: Norwegian HUNT independent exposure replication cohort
 ed_2025:
   article_id: 30505799
   api: https://api.figshare.com/v2/articles/30505799
@@ -17,6 +31,9 @@ ed_2025:
     AFR: '^ed_afr_meta_(aa|ab)\.gz$'
     cross_ancestry: '^ed_cross_ancestry_meta_(aa|ab|ac)\.gz$'
   license: CC BY 4.0 article; file terms recorded from Figshare
+  cohort_membership: [UK_Biobank, MVP, FinnGen, All_of_Us, Estonian_Biobank, Partners_HealthCare_Biobank]
+  known_overlap_datasets: [finngen_r12]
+  replication_role: high_power_outcome_meta_sensitivity
   overlap_note: Meta-analysis includes UK Biobank, MVP, FinnGen, AoU, Estonia, and PHB
 finngen_r12:
   manifest: https://storage.googleapis.com/finngen-public-data-r12/summary_stats/finngen_R12_manifest.tsv
@@ -24,10 +41,16 @@ finngen_r12:
   ancestry: Finnish
   genome_build: GRCh38
   license: FinnGen public summary-statistics terms
-  overlap_note: Independent of Swedish microbiome discovery cohorts
+  cohort_membership: [FinnGen]
+  known_overlap_datasets: [ed_2025]
+  replication_role: outcome_source_known_overlap_with_ed_2025
+  overlap_note: FinnGen overlaps the ed_2025 outcome meta-analysis
 ld_reference_1kg:
   record: https://doi.org/10.5281/zenodo.6614170
   ancestry_files: [EUR, AFR]
   genome_build: GRCh37
   license: 1000 Genomes open data terms; Zenodo record metadata retained
+  cohort_membership: [1000_Genomes]
+  known_overlap_datasets: []
+  replication_role: external_ld_reference
   overlap_note: External LD reference only

@@ -35,6 +35,7 @@ mutate_approved_value <- function(value) {
   if (is.character(value) && length(value) == 1L) {
     return(paste0(value, "_changed"))
   }
+  if (is.character(value) && length(value) == 0L) return("unexpected")
   value[rev(seq_along(value))]
 }
 
@@ -158,7 +159,7 @@ test_that("data sources include access and overlap metadata", {
   expect_true(
     all(
       c(
-        "microbiome_2026", "ed_2025", "finngen_r12",
+        "microbiome_2026", "microbiome_2026_hunt", "ed_2025", "finngen_r12",
         "ld_reference_1kg"
       ) %in% names(src)
     )
@@ -166,9 +167,34 @@ test_that("data sources include access and overlap metadata", {
   expect_true(all(vapply(src, function(x) nzchar(x$license), logical(1))))
 })
 
+test_that("structured cohort overlap and replication roles are exact and symmetric", {
+  src <- read_source_config(source_config_path)
+  expect_equal(
+    src$microbiome_2026$cohort_membership,
+    "Swedish_discovery_cohorts"
+  )
+  expect_equal(src$microbiome_2026_hunt$accessions$first, "GCST90666541")
+  expect_equal(src$microbiome_2026_hunt$accessions$last, "GCST90667549")
+  expect_equal(src$microbiome_2026_hunt$cohort_membership, "HUNT")
+  expect_equal(
+    src$microbiome_2026_hunt$replication_role,
+    "independent_exposure_replication"
+  )
+  expect_equal(src$ed_2025$known_overlap_datasets, "finngen_r12")
+  expect_equal(src$finngen_r12$known_overlap_datasets, "ed_2025")
+  expect_length(src$microbiome_2026$known_overlap_datasets, 0L)
+  expect_length(src$microbiome_2026_hunt$known_overlap_datasets, 0L)
+
+  broken <- yaml::read_yaml(source_config_path)
+  broken$finngen_r12$known_overlap_datasets <- character()
+  path <- write_temp_yaml(broken)
+  expect_error(read_source_config(path), "not symmetric")
+})
+
 test_that("source builds and ED ancestry patterns are deterministic", {
   src <- read_source_config(source_config_path)
   expect_equal(src$microbiome_2026$genome_build, "GRCh37")
+  expect_equal(src$microbiome_2026_hunt$genome_build, "GRCh37")
   expect_equal(src$ed_2025$genome_build, "GRCh38")
   expect_equal(src$finngen_r12$genome_build, "GRCh38")
   expect_equal(
@@ -230,6 +256,15 @@ test_that("immutable source identities are closed to approved values", {
     ),
     microbiome_2026.genome_build = "GRCh37",
     microbiome_2026.ancestry = "EUR",
+    microbiome_2026_hunt.accessions.first = "GCST90666541",
+    microbiome_2026_hunt.accessions.last = "GCST90667549",
+    microbiome_2026_hunt.article =
+      "https://doi.org/10.1038/s41588-026-02512-2",
+    microbiome_2026_hunt.catalog_root = paste0(
+      "https://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics"
+    ),
+    microbiome_2026_hunt.genome_build = "GRCh37",
+    microbiome_2026_hunt.ancestry = "EUR",
     ed_2025.article_id = 30505799,
     ed_2025.api = "https://api.figshare.com/v2/articles/30505799",
     ed_2025.article = "https://doi.org/10.1038/s41467-025-66723-7",
@@ -245,7 +280,16 @@ test_that("immutable source identities are closed to approved values", {
     finngen_r12.ancestry = "Finnish",
     ld_reference_1kg.record = "https://doi.org/10.5281/zenodo.6614170",
     ld_reference_1kg.ancestry_files = c("EUR", "AFR"),
-    ld_reference_1kg.genome_build = "GRCh37"
+    ld_reference_1kg.genome_build = "GRCh37",
+    microbiome_2026.cohort_membership = "Swedish_discovery_cohorts",
+    microbiome_2026.replication_role = "exposure_discovery",
+    microbiome_2026_hunt.cohort_membership = "HUNT",
+    microbiome_2026_hunt.replication_role =
+      "independent_exposure_replication",
+    ed_2025.replication_role = "high_power_outcome_meta_sensitivity",
+    finngen_r12.replication_role =
+      "outcome_source_known_overlap_with_ed_2025",
+    ld_reference_1kg.replication_role = "external_ld_reference"
   )
 
   for (key in names(approved)) {

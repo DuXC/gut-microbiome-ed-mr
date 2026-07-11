@@ -248,7 +248,7 @@ test_that("project thresholds are explicit", {
 })
 test_that("data sources include access and overlap metadata", {
   src <- read_source_config("config/data_sources.yml")
-  expect_true(all(c("microbiome_2026", "ed_2025", "finngen_r12", "ld_reference_1kg") %in% names(src)))
+  expect_true(all(c("microbiome_2026", "microbiome_2026_hunt", "ed_2025", "finngen_r12", "ld_reference_1kg") %in% names(src)))
   expect_true(all(vapply(src, function(x) nzchar(x$license), logical(1))))
 })
 ```
@@ -310,7 +310,21 @@ microbiome_2026:
   ancestry: EUR
   genome_build: GRCh37
   license: GWAS Catalog CC0 or accession-specific terms
-  overlap_note: Swedish discovery cohorts and Norwegian HUNT replication
+  cohort_membership: [Swedish_discovery_cohorts]
+  known_overlap_datasets: []
+  replication_role: exposure_discovery
+  overlap_note: Swedish discovery cohorts
+microbiome_2026_hunt:
+  accessions: {first: GCST90666541, last: GCST90667549}
+  article: https://doi.org/10.1038/s41588-026-02512-2
+  catalog_root: https://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics
+  ancestry: EUR
+  genome_build: GRCh37
+  license: GWAS Catalog CC0 or accession-specific terms
+  cohort_membership: [HUNT]
+  known_overlap_datasets: []
+  replication_role: independent_exposure_replication
+  overlap_note: Norwegian HUNT independent exposure replication cohort
 ed_2025:
   article_id: 30505799
   api: https://api.figshare.com/v2/articles/30505799
@@ -322,6 +336,9 @@ ed_2025:
     AFR: '^ed_afr_meta_(aa|ab)\.gz$'
     cross_ancestry: '^ed_cross_ancestry_meta_(aa|ab|ac)\.gz$'
   license: CC BY 4.0 article; file terms recorded from Figshare
+  cohort_membership: [UK_Biobank, MVP, FinnGen, All_of_Us, Estonian_Biobank, Partners_HealthCare_Biobank]
+  known_overlap_datasets: [finngen_r12]
+  replication_role: high_power_outcome_meta_sensitivity
   overlap_note: Meta-analysis includes UK Biobank, MVP, FinnGen, AoU, Estonia, and PHB
 finngen_r12:
   manifest: https://storage.googleapis.com/finngen-public-data-r12/summary_stats/finngen_R12_manifest.tsv
@@ -329,12 +346,18 @@ finngen_r12:
   ancestry: Finnish
   genome_build: GRCh38
   license: FinnGen public summary-statistics terms
-  overlap_note: Independent of Swedish microbiome discovery cohorts
+  cohort_membership: [FinnGen]
+  known_overlap_datasets: [ed_2025]
+  replication_role: outcome_source_known_overlap_with_ed_2025
+  overlap_note: FinnGen overlaps the ed_2025 outcome meta-analysis
 ld_reference_1kg:
   record: https://doi.org/10.5281/zenodo.6614170
   ancestry_files: [EUR, AFR]
   genome_build: GRCh37
   license: 1000 Genomes open data terms; Zenodo record metadata retained
+  cohort_membership: [1000_Genomes]
+  known_overlap_datasets: []
+  replication_role: external_ld_reference
   overlap_note: External LD reference only
 ```
 
@@ -350,7 +373,7 @@ read_yaml_checked <- function(path, keys) {
   x
 }
 read_project_config <- function(path) read_yaml_checked(path, c("genome_build", "instruments", "ld", "multiple_testing", "replication", "coloc", "mvmr_covariates"))
-read_source_config <- function(path) read_yaml_checked(path, c("microbiome_2026", "ed_2025", "finngen_r12", "ld_reference_1kg"))
+read_source_config <- function(path) read_yaml_checked(path, c("microbiome_2026", "microbiome_2026_hunt", "ed_2025", "finngen_r12", "ld_reference_1kg"))
 ```
 
 - [ ] **Step 5: Test and commit**
@@ -420,12 +443,12 @@ parse_figshare_files <- function(x) {
 
 - [ ] **Step 4: Implement inventory-only network resolution**
 
-`scripts/01_source_inventory.R` must enumerate every microbiome accession directory, select `.tsv.gz` plus metadata YAML files, query the Figshare API, query the FinnGen R12 manifest with the configured phenotype regex, resolve the EUR/AFR PLINK reference files and published MD5 values from Zenodo record `6614170`, and write `00_admin/source_inventory.csv` without downloading any GWAS payload. Inventory rows must consume each source's configured `genome_build` directly. ED ancestry must be assigned only by a unique match against the named `ancestry_file_patterns`; zero matches, multiple matches, unknown pattern keys, and files outside the configured patterns must fail. The combined `ed_2025.ancestry` label is descriptive metadata and must never be parsed to infer a file's ancestry.
+`scripts/01_source_inventory.R` must enumerate every Swedish-discovery and HUNT microbiome accession directory and resolve exactly one original summary-statistics file named either `GCST########.tsv.gz` or `GCST########.tsv`, plus the exact matching metadata filename `<data_file_name>-meta.yaml`. It must preserve the upstream filename and compression without downloading, recompressing, or renaming any GWAS payload. Both data candidates are checked with metadata-only HEAD requests: both present and neither present must fail, 404 means an absent candidate, and the chosen file's matching metadata must exist. The script must query the Figshare API, query the FinnGen R12 manifest with the configured phenotype regex, HEAD the resolved FinnGen object for exact size and consistent MD5 headers, resolve the EUR/AFR PLINK reference files and published MD5 values from Zenodo record `6614170`, and write `00_admin/source_inventory.csv` without downloading any GWAS payload. Inventory rows must consume each source's configured `genome_build`, structured cohort membership, overlap links, and replication role directly. Reruns preserve timestamps for unchanged rows and are byte-identical when stable metadata is unchanged; removed rows stop replacement. ED ancestry must be assigned only by a unique match against the named `ancestry_file_patterns`; zero matches, multiple matches, unknown pattern keys, and files outside the configured patterns must fail. The combined `ed_2025.ancestry` label is descriptive metadata and must never be parsed to infer a file's ancestry.
 
 Required columns:
 
 ```text
-dataset,source_id,file_name,source_url,expected_bytes,ancestry,genome_build,license,overlap_note,resolved_at_utc
+dataset,source_id,file_name,source_url,expected_bytes,ancestry,genome_build,license,overlap_note,cohort_membership,known_overlap_datasets,replication_role,resolved_at_utc,checksum_algorithm,expected_checksum
 ```
 
 `source_id` is the accession or version identifier and `file_name` is the original source filename. The immutable key `dataset + source_id + file_name` must be unique. These fields, plus `source_url` and `license`, are carried unchanged into the receipt so the download row joins deterministically to this inventory.
@@ -434,8 +457,8 @@ dataset,source_id,file_name,source_url,expected_bytes,ancestry,genome_build,lice
 
 ```bash
 /opt/homebrew/bin/Rscript scripts/01_source_inventory.R
-/opt/homebrew/bin/Rscript -e 'x <- read.csv("00_admin/source_inventory.csv"); key <- paste(x$dataset, x$source_id, x$file_name, sep = "\037"); stopifnot(any(x$dataset == "microbiome_2026"), any(x$dataset == "ed_2025"), any(x$dataset == "finngen_r12"), !anyDuplicated(key), !anyDuplicated(x$source_url), all(c("dataset", "source_id", "file_name", "source_url", "license") %in% names(x)))'
-git add R/catalog.R R/provenance.R scripts/01_source_inventory.R tests/testthat/test-catalog.R 00_admin/source_inventory.csv
+/opt/homebrew/bin/Rscript -e 'source("R/provenance.R"); x <- read_source_inventory_csv("00_admin/source_inventory.csv"); key <- paste(x$dataset, x$source_id, x$file_name, sep = "\037"); stopifnot(identical(as.integer(table(factor(x$dataset, levels = c("microbiome_2026", "microbiome_2026_hunt", "ed_2025", "finngen_r12", "ld_reference_1kg")))), c(3144L, 2018L, 8L, 1L, 6L)), !anyDuplicated(key), !anyDuplicated(x$source_url), identical(names(x), SOURCE_INVENTORY_REQUIRED_COLUMNS)); validate_source_inventory(x); validate_overlap_symmetry(x)'
+git add config/data_sources.yml R/config.R R/catalog.R R/provenance.R scripts/01_source_inventory.R tests/testthat/test-config.R tests/testthat/test-catalog.R 00_admin/source_inventory.csv docs/superpowers/plans/2026-07-10-gut-ed-mr-rebuild-implementation.md
 git commit -m 'feat: resolve public GWAS source inventory'
 ```
 
@@ -455,7 +478,7 @@ The versioned manifest schema is exactly:
 dataset,source_id,file_name,path,source_url,license,bytes,sha256,frozen_at_utc
 ```
 
-`path` is project-relative. The other provenance fields are copied from the uniquely matched source-inventory row, where `source_id` is the accession/version and `file_name` is the original filename.
+`path` is project-relative. The other provenance fields are copied from the uniquely matched source-inventory row, where `source_id` is the accession/version and `file_name` is the original filename, including its upstream-preserved `.tsv.gz` or `.tsv` form. Task 5 download and receipt logic must not assume that every GWAS original is gzip-compressed.
 
 - [ ] **Step 1: Write failing provenance tests**
 
@@ -1117,7 +1140,7 @@ grade_evidence <- function(x) {
 
 - [ ] **Step 3: Build the cross-dataset matrix and final grades**
 
-Rows are microbial traits; columns are discovery EUR, independent FinnGen, high-power EUR meta, AFR, and cross-ancestry. Each cell stores effect, CI, P, q, nsnp, overlap class, every gate boolean/reason, and status. Only overlap class exactly `none_known` can support replication; `known` and `possible` are sensitivity-only.
+Rows are microbial traits; columns are Swedish discovery EUR, independent HUNT exposure replication, high-power EUR meta, AFR, cross-ancestry, and FinnGen sensitivity. HUNT is the primary independent exposure-replication path. FinnGen cannot independently validate the 2025 ED meta-analysis because that meta-analysis includes FinnGen; the `ed_2025` to `finngen_r12` pair is `known` overlap and sensitivity-only. Each cell stores effect, CI, P, q, nsnp, overlap class, every gate boolean/reason, and status. Only overlap class exactly `none_known` can support replication; `known` and `possible` are sensitivity-only.
 
 `build_replication_matrix()` consumes `05_results/tables/mr_multiplicity.csv` and applies independent-replication gates only to forward rows. After gate evaluation, `finalize_grades()` joins the gate output back to every multiplicity row and writes `05_results/tables/mr_graded.csv`: `insufficient` is reserved for ineligible or non-estimable primary effects; every estimable eligible reverse row is `exploratory` with `analysis_role = reverse_sensitivity` even when `replicated` is missing; every estimable eligible forward exploratory-tier row or forward row failing any Primary replication gate is `exploratory`; only forward primary-tier estimable rows passing all gates are `primary`, or `strict` when they also pass the combined Bonferroni threshold.
 

@@ -296,21 +296,43 @@ read_project_config <- function(path) {
 }
 
 validate_source_config <- function(x, path) {
+  for (source in intersect(
+    names(x),
+    c(
+      "microbiome_2026", "microbiome_2026_hunt", "ed_2025",
+      "finngen_r12", "ld_reference_1kg"
+    )
+  )) {
+    if (is.list(x[[source]]$known_overlap_datasets) &&
+        !length(x[[source]]$known_overlap_datasets)) {
+      x[[source]]$known_overlap_datasets <- character()
+    }
+  }
   required <- list(
     microbiome_2026 = c(
       "accessions.first", "accessions.last", "article", "catalog_root",
-      "ancestry", "genome_build", "license", "overlap_note"
+      "ancestry", "genome_build", "license", "cohort_membership",
+      "known_overlap_datasets", "replication_role", "overlap_note"
+    ),
+    microbiome_2026_hunt = c(
+      "accessions.first", "accessions.last", "article", "catalog_root",
+      "ancestry", "genome_build", "license", "cohort_membership",
+      "known_overlap_datasets", "replication_role", "overlap_note"
     ),
     ed_2025 = c(
       "article_id", "api", "article", "ancestry", "genome_build",
-      "ancestry_file_patterns", "license", "overlap_note"
+      "ancestry_file_patterns", "license", "cohort_membership",
+      "known_overlap_datasets", "replication_role", "overlap_note"
     ),
     finngen_r12 = c(
       "manifest", "phenotype_regex", "ancestry", "genome_build", "license",
+      "cohort_membership", "known_overlap_datasets", "replication_role",
       "overlap_note"
     ),
     ld_reference_1kg = c(
-      "record", "ancestry_files", "genome_build", "license", "overlap_note"
+      "record", "ancestry_files", "genome_build", "license",
+      "cohort_membership", "known_overlap_datasets", "replication_role",
+      "overlap_note"
     )
   )
   for (source in names(required)) {
@@ -321,6 +343,7 @@ validate_source_config <- function(x, path) {
 
   url_keys <- c(
     "microbiome_2026.article", "microbiome_2026.catalog_root",
+    "microbiome_2026_hunt.article", "microbiome_2026_hunt.catalog_root",
     "ed_2025.api", "ed_2025.article", "finngen_r12.manifest",
     "ld_reference_1kg.record"
   )
@@ -328,13 +351,18 @@ validate_source_config <- function(x, path) {
 
   metadata_keys <- unlist(lapply(
     names(required),
-    function(source) paste(source, c("license", "overlap_note"), sep = ".")
+    function(source) paste(
+      source, c("license", "replication_role", "overlap_note"), sep = "."
+    )
   ))
   invisible(lapply(metadata_keys, function(key) validate_text(x, path, key)))
 
   text_keys <- c(
     "microbiome_2026.accessions.first", "microbiome_2026.accessions.last",
     "microbiome_2026.ancestry", "microbiome_2026.genome_build",
+    "microbiome_2026_hunt.accessions.first",
+    "microbiome_2026_hunt.accessions.last",
+    "microbiome_2026_hunt.ancestry", "microbiome_2026_hunt.genome_build",
     "ed_2025.ancestry", "ed_2025.genome_build",
     "finngen_r12.phenotype_regex", "finngen_r12.ancestry",
     "finngen_r12.genome_build",
@@ -344,24 +372,43 @@ validate_source_config <- function(x, path) {
 
   validate_positive_number(x, path, "ed_2025.article_id", integer = TRUE)
 
-  accessions <- c(
-    first = config_value(x, path, "microbiome_2026.accessions.first"),
-    last = config_value(x, path, "microbiome_2026.accessions.last")
-  )
-  for (bound in names(accessions)) {
-    if (!grepl("^GCST[0-9]{8}$", accessions[[bound]])) {
+  for (source in c("microbiome_2026", "microbiome_2026_hunt")) {
+    accessions <- c(
+      first = config_value(x, path, paste0(source, ".accessions.first")),
+      last = config_value(x, path, paste0(source, ".accessions.last"))
+    )
+    for (bound in names(accessions)) {
+      if (!grepl("^GCST[0-9]{8}$", accessions[[bound]])) {
+        config_error(
+          path, paste(source, "accessions", bound, sep = "."),
+          "must match ^GCST[0-9]{8}$"
+        )
+      }
+    }
+    accession_numbers <- as.numeric(sub("^GCST", "", accessions))
+    if (accession_numbers[[1L]] > accession_numbers[[2L]]) {
       config_error(
-        path, paste("microbiome_2026.accessions", bound, sep = "."),
-        "must match ^GCST[0-9]{8}$"
+        path, paste0(source, ".accessions.first"),
+        paste0("must not exceed ", source, ".accessions.last")
       )
     }
   }
-  accession_numbers <- as.numeric(sub("^GCST", "", accessions))
-  if (accession_numbers[[1L]] > accession_numbers[[2L]]) {
-    config_error(
-      path, "microbiome_2026.accessions.first",
-      "must not exceed microbiome_2026.accessions.last"
-    )
+
+  validate_source_vector <- function(source, field, allow_empty = FALSE) {
+    value <- config_value(x, path, paste(source, field, sep = "."))
+    valid <- is.character(value) && !anyNA(value) &&
+      (allow_empty || length(value) > 0L) &&
+      all(nzchar(value)) && all(value == trimws(value)) && !anyDuplicated(value)
+    if (!valid) {
+      config_error(
+        path, paste(source, field, sep = "."),
+        "must be an ordered vector of unique normalized strings"
+      )
+    }
+  }
+  for (source in names(required)) {
+    validate_source_vector(source, "cohort_membership")
+    validate_source_vector(source, "known_overlap_datasets", allow_empty = TRUE)
   }
 
   patterns <- config_value(x, path, "ed_2025.ancestry_file_patterns")
@@ -393,6 +440,26 @@ validate_source_config <- function(x, path) {
     )
   }
 
+  for (source in names(required)) {
+    overlaps <- config_value(x, path, paste0(source, ".known_overlap_datasets"))
+    unknown <- setdiff(overlaps, names(required))
+    if (length(unknown)) {
+      config_error(
+        path, paste0(source, ".known_overlap_datasets"),
+        paste("contains unknown datasets", paste(unknown, collapse = ", "))
+      )
+    }
+    for (other in overlaps) {
+      reverse <- config_value(x, path, paste0(other, ".known_overlap_datasets"))
+      if (!source %in% reverse) {
+        config_error(
+          path, paste0(source, ".known_overlap_datasets"),
+          paste("is not symmetric with", other)
+        )
+      }
+    }
+  }
+
   approved_scalars <- list(
     microbiome_2026.accessions.first = "GCST90670368",
     microbiome_2026.accessions.last = "GCST90671939",
@@ -402,11 +469,26 @@ validate_source_config <- function(x, path) {
       "https://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics",
     microbiome_2026.genome_build = "GRCh37",
     microbiome_2026.ancestry = "EUR",
+    microbiome_2026.overlap_note = "Swedish discovery cohorts",
+    microbiome_2026.replication_role = "exposure_discovery",
+    microbiome_2026_hunt.accessions.first = "GCST90666541",
+    microbiome_2026_hunt.accessions.last = "GCST90667549",
+    microbiome_2026_hunt.article =
+      "https://doi.org/10.1038/s41588-026-02512-2",
+    microbiome_2026_hunt.catalog_root =
+      "https://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics",
+    microbiome_2026_hunt.genome_build = "GRCh37",
+    microbiome_2026_hunt.ancestry = "EUR",
+    microbiome_2026_hunt.overlap_note =
+      "Norwegian HUNT independent exposure replication cohort",
+    microbiome_2026_hunt.replication_role =
+      "independent_exposure_replication",
     ed_2025.article_id = 30505799,
     ed_2025.api = "https://api.figshare.com/v2/articles/30505799",
     ed_2025.article = "https://doi.org/10.1038/s41467-025-66723-7",
     ed_2025.genome_build = "GRCh38",
     ed_2025.ancestry = "EUR, AFR, cross-ancestry",
+    ed_2025.replication_role = "high_power_outcome_meta_sensitivity",
     finngen_r12.manifest = paste0(
       "https://storage.googleapis.com/finngen-public-data-r12/",
       "summary_stats/finngen_R12_manifest.tsv"
@@ -415,8 +497,13 @@ validate_source_config <- function(x, path) {
       "(^|_)ERECTILE_DYSFUNCTION$|(^|_)N52($|_)",
     finngen_r12.genome_build = "GRCh38",
     finngen_r12.ancestry = "Finnish",
+    finngen_r12.overlap_note =
+      "FinnGen overlaps the ed_2025 outcome meta-analysis",
+    finngen_r12.replication_role =
+      "outcome_source_known_overlap_with_ed_2025",
     ld_reference_1kg.record = "https://doi.org/10.5281/zenodo.6614170",
-    ld_reference_1kg.genome_build = "GRCh37"
+    ld_reference_1kg.genome_build = "GRCh37",
+    ld_reference_1kg.replication_role = "external_ld_reference"
   )
   invisible(lapply(
     names(approved_scalars),
@@ -427,6 +514,24 @@ validate_source_config <- function(x, path) {
   validate_exact_vector(
     x, path, "ld_reference_1kg.ancestry_files", c("EUR", "AFR")
   )
+  approved_vectors <- list(
+    microbiome_2026.cohort_membership = "Swedish_discovery_cohorts",
+    microbiome_2026.known_overlap_datasets = character(),
+    microbiome_2026_hunt.cohort_membership = "HUNT",
+    microbiome_2026_hunt.known_overlap_datasets = character(),
+    ed_2025.cohort_membership = c(
+      "UK_Biobank", "MVP", "FinnGen", "All_of_Us", "Estonian_Biobank",
+      "Partners_HealthCare_Biobank"
+    ),
+    ed_2025.known_overlap_datasets = "finngen_r12",
+    finngen_r12.cohort_membership = "FinnGen",
+    finngen_r12.known_overlap_datasets = "ed_2025",
+    ld_reference_1kg.cohort_membership = "1000_Genomes",
+    ld_reference_1kg.known_overlap_datasets = character()
+  )
+  invisible(lapply(names(approved_vectors), function(key) {
+    validate_exact_vector(x, path, key, approved_vectors[[key]])
+  }))
   approved_patterns <- list(
     EUR = "^ed_eur_meta_(aa|ab|ac)\\.gz$",
     AFR = "^ed_afr_meta_(aa|ab)\\.gz$",
@@ -453,7 +558,10 @@ validate_source_config <- function(x, path) {
 read_source_config <- function(path) {
   x <- read_yaml_checked(
     path,
-    c("microbiome_2026", "ed_2025", "finngen_r12", "ld_reference_1kg")
+    c(
+      "microbiome_2026", "microbiome_2026_hunt", "ed_2025",
+      "finngen_r12", "ld_reference_1kg"
+    )
   )
   validate_source_config(x, path)
 }
