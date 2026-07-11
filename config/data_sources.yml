@@ -1,0 +1,33 @@
+microbiome_2026:
+  accessions: {first: GCST90670368, last: GCST90671939}
+  article: https://doi.org/10.1038/s41588-026-02512-2
+  catalog_root: https://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics
+  ancestry: EUR
+  genome_build: GRCh37
+  license: GWAS Catalog CC0 or accession-specific terms
+  overlap_note: Swedish discovery cohorts and Norwegian HUNT replication
+ed_2025:
+  article_id: 30505799
+  api: https://api.figshare.com/v2/articles/30505799
+  article: https://doi.org/10.1038/s41467-025-66723-7
+  ancestry: EUR, AFR, cross-ancestry
+  genome_build: GRCh38
+  ancestry_file_patterns:
+    EUR: '^ed_eur_meta_(aa|ab|ac)\.gz$'
+    AFR: '^ed_afr_meta_(aa|ab)\.gz$'
+    cross_ancestry: '^ed_cross_ancestry_meta_(aa|ab|ac)\.gz$'
+  license: CC BY 4.0 article; file terms recorded from Figshare
+  overlap_note: Meta-analysis includes UK Biobank, MVP, FinnGen, AoU, Estonia, and PHB
+finngen_r12:
+  manifest: https://storage.googleapis.com/finngen-public-data-r12/summary_stats/finngen_R12_manifest.tsv
+  phenotype_regex: (^|_)ERECTILE_DYSFUNCTION$|(^|_)N52($|_)
+  ancestry: Finnish
+  genome_build: GRCh38
+  license: FinnGen public summary-statistics terms
+  overlap_note: Independent of Swedish microbiome discovery cohorts
+ld_reference_1kg:
+  record: https://doi.org/10.5281/zenodo.6614170
+  ancestry_files: [EUR, AFR]
+  genome_build: GRCh37
+  license: 1000 Genomes open data terms; Zenodo record metadata retained
+  overlap_note: External LD reference only

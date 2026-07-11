@@ -1,0 +1,34 @@
+genome_build: GRCh38
+instruments: {primary_p: 5.0e-8, exploratory_p: 1.0e-5, min_f: 10, min_snps_mr_presso: 4}
+ld:
+  eur: {population: EUR, r2: 0.001, kb: 10000}
+  afr: {population: AFR, r2: 0.001, kb: 10000}
+multiple_testing:
+  method: BH
+  fdr: 0.05
+  freeze_eligibility_before_mr_p: true
+  eligibility_criteria: [source, qc, instrument]
+  families: [forward_primary, reverse]
+  record_denominators: true
+  strata_reduce_denominators: false
+  global_bonferroni: {alpha: 0.05, denominator: N_forward_plus_N_reverse}
+replication:
+  discovery_family: forward_primary
+  discovery_q_lt: 0.05
+  required_overlap_class: none_known
+  sensitivity_only_overlap_classes: [known, possible]
+  validation: {same_beta_sign: true, two_sided_p_lt: 0.05, ci_excludes_null_same_direction: true}
+  robust_estimators: [weighted_median, mr_raps]
+  require_one_robust_same_sign: true
+  robust_significance_required: false
+  steiger_reversal_p_lt: 0.05
+  steiger_unavailable: report_not_support
+  pleiotropy:
+    egger_intercept_p_lt: 0.05
+    presso_global_p_lt: 0.05
+    unresolved_outliers_fail: true
+    corrected_sign_change_fail: true
+    corrected_unavailable_fail: true
+  non_estimable_tests: report_not_pass
+coloc: {prior_p1: 1.0e-4, prior_p2: 1.0e-4, prior_p12: 1.0e-5, pp4_support: 0.80}
+mvmr_covariates: [BMI, type_2_diabetes, coronary_artery_disease]

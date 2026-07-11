@@ -308,6 +308,7 @@ microbiome_2026:
   article: https://doi.org/10.1038/s41588-026-02512-2
   catalog_root: https://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics
   ancestry: EUR
+  genome_build: GRCh37
   license: GWAS Catalog CC0 or accession-specific terms
   overlap_note: Swedish discovery cohorts and Norwegian HUNT replication
 ed_2025:
@@ -315,12 +316,18 @@ ed_2025:
   api: https://api.figshare.com/v2/articles/30505799
   article: https://doi.org/10.1038/s41467-025-66723-7
   ancestry: EUR, AFR, cross-ancestry
+  genome_build: GRCh38
+  ancestry_file_patterns:
+    EUR: '^ed_eur_meta_(aa|ab|ac)\.gz$'
+    AFR: '^ed_afr_meta_(aa|ab)\.gz$'
+    cross_ancestry: '^ed_cross_ancestry_meta_(aa|ab|ac)\.gz$'
   license: CC BY 4.0 article; file terms recorded from Figshare
   overlap_note: Meta-analysis includes UK Biobank, MVP, FinnGen, AoU, Estonia, and PHB
 finngen_r12:
   manifest: https://storage.googleapis.com/finngen-public-data-r12/summary_stats/finngen_R12_manifest.tsv
   phenotype_regex: (^|_)ERECTILE_DYSFUNCTION$|(^|_)N52($|_)
   ancestry: Finnish
+  genome_build: GRCh38
   license: FinnGen public summary-statistics terms
   overlap_note: Independent of Swedish microbiome discovery cohorts
 ld_reference_1kg:
@@ -413,7 +420,7 @@ parse_figshare_files <- function(x) {
 
 - [ ] **Step 4: Implement inventory-only network resolution**
 
-`scripts/01_source_inventory.R` must enumerate every microbiome accession directory, select `.tsv.gz` plus metadata YAML files, query the Figshare API, query the FinnGen R12 manifest with the configured phenotype regex, resolve the EUR/AFR PLINK reference files and published MD5 values from Zenodo record `6614170`, and write `00_admin/source_inventory.csv` without downloading any GWAS payload.
+`scripts/01_source_inventory.R` must enumerate every microbiome accession directory, select `.tsv.gz` plus metadata YAML files, query the Figshare API, query the FinnGen R12 manifest with the configured phenotype regex, resolve the EUR/AFR PLINK reference files and published MD5 values from Zenodo record `6614170`, and write `00_admin/source_inventory.csv` without downloading any GWAS payload. Inventory rows must consume each source's configured `genome_build` directly. ED ancestry must be assigned only by a unique match against the named `ancestry_file_patterns`; zero matches, multiple matches, unknown pattern keys, and files outside the configured patterns must fail. The combined `ed_2025.ancestry` label is descriptive metadata and must never be parsed to infer a file's ancestry.
 
 Required columns:
 
