@@ -116,7 +116,7 @@ Evidence grades:
 
 Reverse ED→microbiome analyses are a separate sensitivity family: estimable eligible rows are always Exploratory, ineligible or non-estimable rows are Insufficient, and all carry `analysis_role = reverse_sensitivity`.
 
-Raw GWAS files are immutable and excluded from Git. Every input is recorded in `MANIFEST.csv` with source, version, size, and SHA-256.
+Raw GWAS files are immutable and excluded from Git. The freeze is verified from effective no-write mode bits where supported, or from a verified macOS `uchg` flag on `noowners`/exFAT. AppleDouble `._*` sidecars inside ignored raw paths may be required to persist the flag and must never be ingested or deleted as payloads. Every input is recorded in the exact nine-column `MANIFEST.csv` with source, version, size, and SHA-256.
 
 `01_protocol/analysis_decisions.md` is the normative operational source; the README, configuration, and rule engine must not weaken it.
 
@@ -599,26 +599,32 @@ verify_manifest <- function(manifest_path, inventory_path, project_root = ".") {
 
 - [ ] **Step 3: Implement resumable downloads**
 
-`scripts/02_download_freeze.R` must reject any source or destination basename beginning `._`; use `curl --fail --location --continue-at - --retry 5 --retry-delay 5`; write to `*.part`; verify expected bytes when supplied; rename atomically; pass the uniquely matched source-inventory row to `file_receipt()`; update `MANIFEST.csv` through `append_receipt_idempotent()`; and set raw files read-only with `Sys.chmod(path, "0444")`. On rerun, an identical key/provenance/path/bytes/hash receipt is a no-op. The same immutable key with any conflicting provenance, path, bytes, or hash stops the run and is never appended or overwritten silently.
+`scripts/02_download_freeze.R` must reject any source or destination basename beginning `._`; use `curl --fail --location --continue-at - --retry 5 --retry-delay 5 --proto =https --proto-redir =https`; write to a non-symlink regular `*.part`; charge and resume only its missing bytes; promote an exact-size checksum-valid partial without curl; verify expected bytes and the Task 4 checksum; rename atomically; pass the uniquely matched source-inventory row to `file_receipt()`; and update `MANIFEST.csv` through `append_receipt_idempotent()`. Beyond curl's default transient retry policy, the R layer retries only status 18, at most three extra times with a one-second delay and the same `--continue-at -` target. After every nonzero curl status it must revalidate that `.part` is a non-symlink regular file, is not oversized, is writable when partial, and is checksum-valid when complete; a complete valid file proceeds to promotion, while permanent status 22 and unsafe or corrupt states stop without R-layer retry. Logs and final errors record status and attempt count. Each atomic append structurally validates the full prior and candidate ledgers, enforces monotonic immutable receipts, and content-verifies only newly added rows; it must not rehash all prior payloads. `freeze_raw_file()` first attempts `Sys.chmod(path, "0444")` and verifies effective no-write bits. On `noowners`/exFAT, it falls back to `/usr/bin/chflags uchg` through an argument vector and verifies the flag with `/usr/bin/stat -f %Sf`; failure of both methods stops before manifest replacement. AppleDouble `._*` sidecars in ignored raw paths may be required to persist flags and must never be ingested or deleted by the pipeline. On rerun, an identical key/provenance/path/bytes/hash receipt is a no-op. The same immutable key with any conflicting provenance, path, bytes, or hash stops the run and is never appended or overwritten silently.
 
 - [ ] **Step 4: Run a one-file smoke download before bulk download**
 
 ```bash
-/opt/homebrew/bin/Rscript scripts/02_download_freeze.R --dataset finngen_r12 --limit 1
-/opt/homebrew/bin/Rscript -e 'x <- read.csv("MANIFEST.csv"); p <- file.path(getwd(), x$path[1]); stopifnot(nrow(x) == 1, nchar(x$sha256[1]) == 64, !grepl("^/", x$path[1]), !startsWith(basename(x$path[1]), "._"), file.access(p, 2) != 0); source("R/provenance.R"); stopifnot(verify_manifest("MANIFEST.csv", "00_admin/source_inventory.csv", getwd()))'
+/opt/homebrew/bin/Rscript scripts/02_download_freeze.R --dataset ld_reference_1kg --file 1000G_EUR.fam --limit 1
+/opt/homebrew/bin/Rscript -e 'source("R/provenance.R"); inventory <- read_source_inventory_csv("00_admin/source_inventory.csv"); x <- read_manifest_csv("MANIFEST.csv"); p <- file.path(getwd(), x$path[1]); stopifnot(nrow(x) == 1, identical(x$file_name[1], "1000G_EUR.fam"), file.info(p)$size == 9557, unname(tools::md5sum(p)) == "669a4260fda7a9e1dd7df374aff294ea", nchar(x$sha256[1]) == 64, !grepl("^/", x$path[1]), !startsWith(basename(x$path[1]), "._"), validate_frozen_file(p), verify_manifest(x, inventory, getwd()))'
+/opt/homebrew/bin/Rscript scripts/02_download_freeze.R --dataset ld_reference_1kg --file 1000G_EUR.fam --limit 1
 ```
 
-Expected: one immutable file with a valid manifest row.
+Expected: one immutable 9,557-byte file with a valid manifest row; the second invocation is a no-op preserving the manifest bytes, mtime, and receipt timestamp. No other payload is downloaded.
 
 - [ ] **Step 5: Download remaining selected payloads and commit receipts only**
 
 ```bash
 /opt/homebrew/bin/Rscript scripts/02_download_freeze.R --dataset microbiome_2026
+/opt/homebrew/bin/Rscript scripts/02_download_freeze.R --dataset microbiome_2026_hunt
 /opt/homebrew/bin/Rscript scripts/02_download_freeze.R --dataset ed_2025
+/opt/homebrew/bin/Rscript scripts/02_download_freeze.R --dataset finngen_r12
 /opt/homebrew/bin/Rscript scripts/02_download_freeze.R --dataset ld_reference_1kg
-git add MANIFEST.csv scripts/02_download_freeze.R R/provenance.R tests/testthat/test-provenance.R
+/opt/homebrew/bin/Rscript -e 'source("R/provenance.R"); inventory <- read_source_inventory_csv("00_admin/source_inventory.csv"); manifest <- read_manifest_csv("MANIFEST.csv"); stopifnot(verify_manifest(manifest, inventory, getwd(), verify_files = TRUE))'
+git add MANIFEST.csv scripts/02_download_freeze.R R/download.R R/provenance.R tests/testthat/test-provenance.R README.md docs/superpowers/plans/2026-07-10-gut-ed-mr-rebuild-implementation.md
 git commit -m 'feat: freeze and verify public GWAS inputs'
 ```
+
+The current Task 4 inventory declares 345,357,963,685 bytes across all five datasets. Preserve each upstream `.tsv` or `.tsv.gz` filename exactly. Do not launch this bulk sequence until the reviewed downloader and one-file smoke both pass. Run the explicit full-file `verify_manifest(..., verify_files = TRUE)` once after the completed bulk batch, not after every receipt or dataset append. Task 11 retains the known `ed_2025`/`finngen_r12` overlap as sensitivity-only.
 
 Expected: raw files remain Git-ignored; receipts are versioned.
 
@@ -1466,11 +1472,10 @@ Expected: all tests PASS, `tar_make()` reports no outdated targets, and Git show
 - [ ] **Step 2: Verify provenance and raw immutability**
 
 ```bash
-/opt/homebrew/bin/Rscript -e 'source("R/provenance.R"); verify_manifest("MANIFEST.csv", "00_admin/source_inventory.csv", getwd())'
-find 03_data/raw -type f -perm +222 -print
+/opt/homebrew/bin/Rscript -e 'source("R/provenance.R"); inventory <- read_source_inventory_csv("00_admin/source_inventory.csv"); manifest <- read_manifest_csv("MANIFEST.csv"); stopifnot(verify_manifest(manifest, inventory, getwd()), all(vapply(file.path(getwd(), manifest$path), validate_frozen_file, logical(1))))'
 ```
 
-Expected: manifest verification PASS and the writable-file search returns no raw GWAS files.
+Expected: manifest verification PASS and every raw GWAS file has either verified no-write bits or verified `uchg`.
 
 - [ ] **Step 3: Write final verification evidence**
 
