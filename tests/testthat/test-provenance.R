@@ -1260,13 +1260,64 @@ test_that("download selection reports exact current immutable key on failure", {
   receipt$sha256 <- strrep("a", 64L)
   utils::write.csv(receipt, manifest_path, row.names = FALSE)
   expect_error(
-    download_selected_rows(
+    download_inventory_row(
       inventory[1L, ], inventory, manifest_path, root,
-      runner = function(...) stop("runner must not be called"), reserve_bytes = 0,
-      free_space_provider = function(path) 1000
+      runner = function(...) stop("runner must not be called")
     ),
-    "ld_reference_1kg/source-a/source-a.tsv"
+    "Receipt SHA-256 does not match file"
   )
+})
+
+test_that("batch resume skips structurally valid frozen receipts without rehashing", {
+  inventory <- fixture_inventory()[1L, , drop = FALSE]
+  root <- make_project()
+  manifest_path <- file.path(root, "MANIFEST.csv")
+  receipt <- receipt_for_payload(inventory, root, "alpha\n")
+  utils::write.csv(receipt, manifest_path, row.names = FALSE)
+  row_calls <- 0L
+
+  result <- download_selected_rows(
+    inventory, inventory, manifest_path, root,
+    reserve_bytes = 0,
+    free_space_provider = function(path) 1000,
+    row_downloader = function(...) {
+      row_calls <<- row_calls + 1L
+      stop("trusted frozen receipt must not reach the row downloader")
+    },
+    sha256_provider = function(path) stop("resume must not SHA-256 old payloads"),
+    checksum_provider = function(path, algorithm) {
+      stop("resume must not checksum old payloads")
+    }
+  )
+
+  expect_identical(row_calls, 0L)
+  expect_identical(result$skipped, 1L)
+  expect_identical(result$completed, 0L)
+  expect_identical(result$preflight$download_bytes, 0)
+})
+
+test_that("batch resume does not trust a receipt whose final is not frozen", {
+  inventory <- fixture_inventory()[1L, , drop = FALSE]
+  root <- make_project()
+  manifest_path <- file.path(root, "MANIFEST.csv")
+  receipt <- receipt_for_payload(inventory, root, "alpha\n")
+  final <- file.path(root, receipt$path[[1L]])
+  Sys.chmod(final, "0644")
+  utils::write.csv(receipt, manifest_path, row.names = FALSE)
+  row_calls <- 0L
+
+  result <- download_selected_rows(
+    inventory, inventory, manifest_path, root,
+    reserve_bytes = 0,
+    free_space_provider = function(path) 1000,
+    row_downloader = function(...) {
+      row_calls <<- row_calls + 1L
+      list(status = "skipped", bytes = 0)
+    }
+  )
+
+  expect_identical(row_calls, 1L)
+  expect_identical(result$skipped, 1L)
 })
 
 test_that("download lock rejects live owner, reclaims stale lock and cleans up", {

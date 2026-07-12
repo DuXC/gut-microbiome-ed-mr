@@ -493,15 +493,43 @@ default_free_space_provider <- function(path) {
   as.numeric(fields[[4L]]) * 1024
 }
 
+trusted_frozen_receipt_keys <- function(
+  manifest,
+  inventory,
+  project_root,
+  frozen_validator = validate_frozen_file,
+  file_info_provider = file.info
+) {
+  validate_receipt(manifest, inventory, project_root, verify_files = FALSE)
+  if (!nrow(manifest)) return(character())
+  if (!is.function(frozen_validator) || !is.function(file_info_provider)) {
+    stop("Frozen receipt validators must be functions", call. = FALSE)
+  }
+  trusted <- vapply(seq_len(nrow(manifest)), function(index) {
+    receipt <- manifest[index, , drop = FALSE]
+    final_path <- raw_absolute_path(project_root, receipt$path[[1L]])
+    if (!file.exists(final_path) || dir.exists(final_path)) return(FALSE)
+    info <- tryCatch(file_info_provider(final_path), error = function(error) NULL)
+    if (is.null(info) || !nrow(info) || is.na(info$size[[1L]]) ||
+        as.numeric(info$size[[1L]]) != as.numeric(receipt$bytes[[1L]])) {
+      return(FALSE)
+    }
+    isTRUE(tryCatch(frozen_validator(final_path), error = function(error) FALSE))
+  }, logical(1))
+  manifest_key(manifest[trusted, , drop = FALSE])
+}
+
 row_download_bytes <- function(
   source_row,
   manifest,
   project_root,
   inventory,
+  trusted_receipt_keys = character(),
   regular_file_provider = default_regular_file_provider,
   sha256_provider = sha256_file,
   checksum_provider = checksum_file
 ) {
+  if (inventory_key(source_row) %in% trusted_receipt_keys) return(0)
   receipt <- manifest_target_receipt(manifest, source_row)
   final_path <- raw_absolute_path(project_root, safe_raw_relative_path(source_row))
   if (file.exists(final_path)) {
@@ -532,6 +560,7 @@ preflight_download_space <- function(
   free_space_provider = default_free_space_provider,
   reserve_bytes = 10 * 1024^3,
   inventory = selected,
+  trusted_receipt_keys = character(),
   regular_file_provider = default_regular_file_provider,
   sha256_provider = sha256_file,
   checksum_provider = checksum_file
@@ -546,6 +575,7 @@ preflight_download_space <- function(
     tryCatch(
       row_download_bytes(
         source, manifest, project_root, inventory,
+        trusted_receipt_keys = trusted_receipt_keys,
         regular_file_provider = regular_file_provider,
         sha256_provider = sha256_provider,
         checksum_provider = checksum_provider
@@ -645,12 +675,22 @@ download_selected_rows <- function(
   rename_file = file.rename,
   chmod_file = Sys.chmod,
   free_space_provider = default_free_space_provider,
-  reserve_bytes = 10 * 1024^3
+  reserve_bytes = 10 * 1024^3,
+  row_downloader = download_inventory_row,
+  sha256_provider = sha256_file,
+  checksum_provider = checksum_file,
+  frozen_validator = validate_frozen_file
 ) {
   manifest <- read_manifest_csv(manifest_path)
+  trusted_receipt_keys <- trusted_frozen_receipt_keys(
+    manifest, inventory, project_root,
+    frozen_validator = frozen_validator
+  )
   preflight <- preflight_download_space(
     selected, manifest, project_root, free_space_provider, reserve_bytes,
-    inventory = inventory
+    inventory = inventory, trusted_receipt_keys = trusted_receipt_keys,
+    sha256_provider = sha256_provider,
+    checksum_provider = checksum_provider
   )
   completed <- 0L
   skipped <- 0L
@@ -658,11 +698,16 @@ download_selected_rows <- function(
   for (index in seq_len(nrow(selected))) {
     source <- selected[index, , drop = FALSE]
     key <- download_source_key(source)
+    if (inventory_key(source) %in% trusted_receipt_keys) {
+      skipped <- skipped + 1L
+      next
+    }
     result <- tryCatch(
-      download_inventory_row(
+      row_downloader(
         source, inventory, manifest_path, project_root,
         runner = runner, clock = clock, rename_file = rename_file,
-        chmod_file = chmod_file
+        chmod_file = chmod_file, sha256_provider = sha256_provider,
+        checksum_provider = checksum_provider
       ),
       error = function(error) {
         stop("Download failed for ", key, ": ", conditionMessage(error), call. = FALSE)
