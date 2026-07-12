@@ -253,8 +253,11 @@ test_that("curl uses an argument vector with strict HTTPS and exact resume flags
   expect_identical(status, 0L)
   expect_identical(capture$command, "curl")
   expect_true(all(c(
-    "--fail", "--location", "--continue-at", "-", "--retry", "5",
-    "--retry-delay", "5", "--proto", "=https", "--proto-redir", "=https"
+    "--fail", "--location", "--silent", "--show-error",
+    "--continue-at", "-", "--retry", "5",
+    "--retry-delay", "5", "--connect-timeout", "30",
+    "--speed-limit", "32768", "--speed-time", "120",
+    "--proto", "=https", "--proto-redir", "=https"
   ) %in% capture$args))
   expect_false(any(grepl("insecure|no-check-certificate", capture$args, ignore.case = TRUE)))
   expect_identical(tail(capture$args, 1L), row$source_url)

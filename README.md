@@ -16,7 +16,7 @@ Raw GWAS files are immutable and excluded from Git. The freeze is verified from 
 
 `scripts/02_download_freeze.R` resumes safe smaller `.part` files and promotes an already complete checksum-valid partial without another HTTP request. Each atomic manifest append structurally validates the full ledger but content-verifies only newly added receipt rows, avoiding quadratic rehashing.
 
-curl retains its built-in `--retry 5` handling for default transient failures. In addition, the R download layer treats only curl status 18 (an incomplete transfer) as automatically recoverable: it validates that the `.part` remains a non-symlink regular file of a safe size, keeps it writable, and makes at most three extra `--continue-at -` attempts with a one-second delay. A complete valid file is promoted even if curl reported 18; corrupt, oversized, or unsafe partials stop immediately. Permanent HTTP status 22 is not retried by the R layer. Retry logs and terminal errors report the curl status and attempt count.
+curl retains its built-in `--retry 5` handling for default transient failures. A connection must be established within 30 seconds, and a transfer sustained below 32 KiB/s for 120 seconds is treated as stalled so curl can reconnect instead of hanging indefinitely. In addition, the R download layer treats only curl status 18 (an incomplete transfer) as automatically recoverable: it validates that the `.part` remains a non-symlink regular file of a safe size, keeps it writable, and makes at most three extra `--continue-at -` attempts with a one-second delay. A complete valid file is promoted even if curl reported 18; corrupt, oversized, or unsafe partials stop immediately. Permanent HTTP status 22 is not retried by the R layer. Retry logs and terminal errors report the curl status and attempt count.
 
 After all dataset download commands in one completed bulk batch, run one explicit full-file verification:
 
@@ -25,6 +25,19 @@ After all dataset download commands in one completed bulk batch, run one explici
 ```
 
 This command intentionally reads every frozen payload twice: once for the local SHA-256 receipt and once for the upstream MD5 checksum. Run it once after the completed bulk batch; do not repeat it after each receipt or dataset append.
+
+## Persistent macOS download supervisor
+
+The checked-in LaunchAgent template `00_admin/com.duxiancheng.gut-ed-download.plist` runs `scripts/02_download_supervisor.R` independently of Codex and Terminal sessions. It waits for a live downloader instead of competing for the lock, reclaims only a dead lock, retries 30 seconds after abnormal exit, completes `microbiome_2026` before `microbiome_2026_hunt`, performs one final full-file verification, and stops after a successful exit. `/usr/bin/caffeinate -ims` prevents idle system and disk sleep while leaving display sleep available.
+
+The installed user agent is `~/Library/LaunchAgents/com.duxiancheng.gut-ed-download.plist`. Inspect it with:
+
+```bash
+launchctl print gui/$(id -u)/com.duxiancheng.gut-ed-download
+tail -f ~/Library/Logs/gut-ed-download.stderr.log
+```
+
+The logs live on the internal APFS volume because launchd cannot open its standard streams directly on this external exFAT project path.
 
 `01_protocol/analysis_decisions.md` is the normative operational source; the README, configuration, and rule engine must not weaken it.
 

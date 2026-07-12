@@ -15,8 +15,11 @@ curl_download_args <- function(source_row, part_path) {
   }
   validate_safe_basename(source_row$file_name[[1L]], "file_name")
   c(
-    "--fail", "--location", "--continue-at", "-",
+    "--fail", "--location", "--silent", "--show-error",
+    "--continue-at", "-",
     "--retry", "5", "--retry-delay", "5",
+    "--connect-timeout", "30",
+    "--speed-limit", "32768", "--speed-time", "120",
     "--proto", "=https", "--proto-redir", "=https",
     "--output", part_path, source_row$source_url[[1L]]
   )

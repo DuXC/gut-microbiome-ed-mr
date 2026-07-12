@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.duxiancheng.gut-ed-download</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/caffeinate</string>
+    <string>-ims</string>
+    <string>/opt/homebrew/bin/Rscript</string>
+    <string>/Volumes/DuXC_PhD_OS/04_PAPERS_论文发表/04_GUT_ED_MR_REBUILD_20260710/scripts/02_download_supervisor.R</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Volumes/DuXC_PhD_OS/04_PAPERS_论文发表/04_GUT_ED_MR_REBUILD_20260710</string>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <dict>
+    <key>SuccessfulExit</key>
+    <false/>
+  </dict>
+  <key>ThrottleInterval</key>
+  <integer>30</integer>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>StandardOutPath</key>
+  <string>/Users/duxiancheng/Library/Logs/gut-ed-download.stdout.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/duxiancheng/Library/Logs/gut-ed-download.stderr.log</string>
+</dict>
+</plist>
