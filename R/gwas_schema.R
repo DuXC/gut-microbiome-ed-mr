@@ -210,9 +210,6 @@ validate_gwas <- function(x) {
   if (any(!is.na(x$se) & (!is.finite(x$se) | x$se <= 0))) {
     stop("GWAS has an invalid standard error", call. = FALSE)
   }
-  if (any(is.na(x$snp) & is.na(x$variant_id))) {
-    stop("GWAS row is missing both SNP and variant_id", call. = FALSE)
-  }
   source_variant_key <- paste(x$source_id, x$variant_key, sep = "\r")
   if (anyDuplicated(source_variant_key)) {
     stop("Duplicate orientation-independent variant keys within one GWAS",

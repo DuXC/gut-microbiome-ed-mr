@@ -15,6 +15,8 @@
   accession-specific YAML metadata.
 - Audited Swedish-to-HUNT biological-label mapping without fuzzy matching;
   unmatched hMGS labels remain blocked pending an authoritative crosswalk.
+- Preserved valid upstream `#NA` rsID variants by coordinate and alleles for
+  later reference-panel mapping instead of silently dropping them.
 
 ## 2026-07-10
 

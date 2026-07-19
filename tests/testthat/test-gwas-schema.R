@@ -165,3 +165,20 @@ test_that("the same variant may appear in separate GWAS sources", {
 
   expect_true(validate_gwas(rbind(first, second)))
 })
+
+test_that("coordinate-allele keys preserve upstream variants without rsIDs", {
+  path <- tempfile(fileext = ".tsv")
+  on.exit(unlink(path), add = TRUE)
+  writeLines(c(
+    "chromosome\tbase_pair_location\teffect_allele\tother_allele\tbeta\tstandard_error\teffect_allele_frequency\tp_value\trs_id",
+    "6\t31313339\tA\tG\t0.1\t0.02\t0.2\t5.359e-6\t#NA"
+  ), path)
+  result <- normalize_gwas(
+    path, role = "exposure", build = "GRCh37", ancestry = "EUR",
+    sample_size = 16017, source_id = "source", trait = "trait"
+  )
+
+  expect_true(is.na(result$snp))
+  expect_true(is.na(result$variant_id))
+  expect_equal(result$variant_key, "6:31313339:A:G")
+})
