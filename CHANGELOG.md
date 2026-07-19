@@ -10,6 +10,11 @@
 - Replaced filesystem-flag assumptions on SMB with an explicit
   manifest-plus-hash integrity boundary; analysis remains prohibited from
   writing under `03_data/raw/`.
+- Added schema-validated, stream-filtered exposure candidate extraction with
+  four-worker parallelism, atomic Parquet shards, SHA-256 restart receipts, and
+  accession-specific YAML metadata.
+- Audited Swedish-to-HUNT biological-label mapping without fuzzy matching;
+  unmatched hMGS labels remain blocked pending an authoritative crosswalk.
 
 ## 2026-07-10
 

@@ -50,6 +50,23 @@ The logs live on the internal APFS volume because launchd cannot open its standa
 
 `01_protocol/analysis_decisions.md` is the normative operational source; the README, configuration, and rule engine must not weaken it.
 
+## Current exposure-candidate stage
+
+The complete Swedish and HUNT exposure files remain compressed and immutable.
+The analysis streams each payload once and retains the prespecified exploratory
+superset (`P < 1×10⁻⁵`) as compact Parquet shards; it does not create multi-TB
+fully decompressed copies. The batch is restartable from manifest-bound,
+SHA-256-verified shard receipts and uses four workers by default:
+
+```bash
+MR_WORKERS=4 MR_SHARD_SIZE=16 /usr/bin/caffeinate -ims /opt/homebrew/bin/Rscript scripts/03_extract_exposure_candidates.R
+```
+
+Per-accession sample sizes and trait descriptions come from the matching GWAS
+Catalog YAML. Exact Swedish–HUNT biological-label matches are audited in
+`08_qc/exposure_replication_map.csv`; unmatched hMGS labels are not treated as
+replicated without the study's hMGS-to-genome crosswalk.
+
 ## Reproducible environment
 
 Restore the exact locked R environment and ensure the pinned project-local PLINK binary:

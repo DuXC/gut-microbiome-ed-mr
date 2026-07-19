@@ -28,7 +28,8 @@ cd '/Volumes/DuXC_PhD_OS/04_PAPERS_论文发表/04_GUT_ED_MR_REBUILD_20260710'
 - `R/config.R` — validated configuration loader.
 - `R/provenance.R` — hashes, source receipts, manifest updates.
 - `R/catalog.R` — GWAS Catalog/Figshare/FinnGen discovery.
-- `R/gwas_schema.R` — column mapping, build/allele validation, normalized Parquet output.
+- `R/gwas_schema.R` — column mapping, build/allele validation, metadata parsing, and streaming candidate extraction.
+- `R/exposure_candidates.R` — resumable parallel exposure-candidate Parquet shards and QC ledgers.
 - `R/instruments.R` — genome-wide and exploratory instrument selection plus ancestry-matched clumping.
 - `R/harmonise.R` — exposure/outcome alignment and exclusion audit.
 - `R/mr_core.R` — MR estimators and sensitivity analyses.
@@ -40,12 +41,13 @@ cd '/Volumes/DuXC_PhD_OS/04_PAPERS_论文发表/04_GUT_ED_MR_REBUILD_20260710'
 - `scripts/00_bootstrap.R` — initializes `renv` and locks dependencies.
 - `scripts/01_source_inventory.R` — resolves public URLs without downloading large files.
 - `scripts/02_download_freeze.R` — resumable download, checksum, and freeze.
+- `scripts/03_extract_exposure_candidates.R` — builds the compact exposure-candidate layer without expanding complete GWAS files.
 - `scripts/03_run_pipeline.R` — executes `targets`, writes session information.
 - `tests/testthat/` — unit and integration tests.
 - `tests/fixtures/` — synthetic, non-identifying miniature GWAS inputs.
 - `01_protocol/` — frozen protocol and decision log.
 - `03_data/raw/` — immutable downloaded inputs; Git-ignored.
-- `03_data/processed/` — normalized Parquet data; Git-ignored.
+- `03_data/processed/` — compact candidate Parquet shards and candidate-only regional extracts; Git-ignored.
 - `05_results/` — generated tables, figures, and machine-readable results.
 - `06_manuscript/` — generated manuscript source/DOCX and supplement.
 - `08_qc/` — manifests, logs, session info, and final checks.
@@ -634,10 +636,17 @@ Expected: raw files remain Git-ignored; receipts are versioned.
 
 **Files:**
 - Create: `R/gwas_schema.R`
+- Create: `R/exposure_candidates.R`
 - Create: `tests/fixtures/exposure.tsv`
+- Create: `tests/fixtures/hunt_exposure.tsv`
 - Create: `tests/fixtures/outcome.tsv`
 - Create: `tests/testthat/test-gwas-schema.R`
-- Generate: `03_data/processed/*.parquet`
+- Create: `tests/testthat/test-exposure-candidates.R`
+- Create: `scripts/03_extract_exposure_candidates.R`
+- Generate: `03_data/processed/exposure_candidates/*/*.parquet`
+- Generate: `08_qc/exposure_metadata_catalog.csv`
+- Generate: `08_qc/exposure_replication_map.csv`
+- Generate: `08_qc/exposure_candidate_inventory.csv`
 
 - [ ] **Step 1: Create two miniature fixtures**
 
@@ -673,21 +682,23 @@ test_that("invalid alleles and impossible p values fail", {
 
 - [ ] **Step 3: Implement normalization and validation**
 
-`normalize_gwas()` must map documented synonyms, type columns, uppercase alleles, add metadata, remove exact duplicate SNP rows only when all analytical fields match, and call `validate_gwas()`. `validate_gwas()` must reject missing SNP IDs, non-ACGT alleles, `ea == oa`, `se <= 0`, `p <= 0 | p > 1`, `eaf <= 0 | eaf >= 1`, `n <= 0`, and duplicate SNPs with conflicting values. If builds differ, `lift_gwas_build()` must use the matching UCSC chain through `rtracklayer::liftOver`, retain original and lifted coordinates, and write failed/multi-mapped variants to `08_qc/liftover_exclusions.csv`. `normalize_manifest()` must iterate over verified GWAS receipts, write one Parquet file per GWAS, and emit `08_qc/schema_exclusions.csv` plus `08_qc/normalized_inventory.csv`.
+`normalize_gwas()` must map documented synonyms, type columns, uppercase alleles, add metadata, remove exact duplicate rows only when all analytical fields match, and call `validate_gwas()`. `validate_gwas()` must reject rows missing both an rsID and a source variant ID, non-ACGT alleles, `ea == oa`, `se <= 0`, `p <= 0 | p > 1`, observed `eaf <= 0 | eaf >= 1`, `n <= 0`, and duplicate coordinate/allele keys within one GWAS. HUNT rows without rsIDs must retain their upstream `variant_id` and an orientation-independent `chr:pos:alleles` key for later 1000 Genomes mapping.
 
-- [ ] **Step 4: Test and batch-normalize to Parquet**
+Do not inflate the 342-GB compressed exposure layer into complete normalized Parquet copies. `extract_gwas_candidates()` must stream-filter every Swedish and HUNT payload at the prespecified exploratory superset threshold (`P < 1×10⁻⁵`) before parsing. `run_exposure_candidate_extraction()` must write small atomic Parquet shards, use a manifest-bound SHA-256 progress ledger for restart, and preserve per-accession sample sizes from the accompanying YAML. The metadata catalog must keep each accession distinct; exact biological-label matches between Swedish and HUNT are recorded, while unmatched or ambiguous labels remain explicit replication blocks pending the published hMGS-to-genome crosswalk. Full-file regional reads, build conversion, and exclusion ledgers are deferred to candidate-only colocalization so that no locus is selected by downstream significance.
+
+- [ ] **Step 4: Test and stream-extract the candidate superset to Parquet**
 
 ```bash
 /opt/homebrew/bin/Rscript -e 'testthat::test_file("tests/testthat/test-gwas-schema.R")'
-/opt/homebrew/bin/Rscript -e 'source("R/gwas_schema.R"); normalize_manifest("MANIFEST.csv", "03_data/processed")'
+MR_WORKERS=4 MR_SHARD_SIZE=16 /usr/bin/caffeinate -ims /opt/homebrew/bin/Rscript scripts/03_extract_exposure_candidates.R
 ```
 
-Expected: PASS; one Parquet file per selected GWAS plus an exclusion log.
+Expected: PASS; resumable Parquet shards covering every Swedish and HUNT accession, a per-accession candidate inventory, and an explicit replication-name mapping audit.
 
 - [ ] **Step 5: Commit schema code and fixture tests**
 
 ```bash
-git add R/gwas_schema.R tests
+git add R/gwas_schema.R R/exposure_candidates.R scripts/03_extract_exposure_candidates.R tests 08_qc/exposure_metadata_catalog.csv 08_qc/exposure_replication_map.csv
 git commit -m 'feat: normalize and validate GWAS schemas'
 ```
 
