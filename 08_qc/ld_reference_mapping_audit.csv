@@ -1,0 +1,5 @@
+"dataset","tier","traits","traits_below_threshold","traits_with_mapped_variant","candidate_rows","strong_rows","mapped_rows","mapping_coverage"
+"microbiome_2026","primary",1572,231,230,5014,5014,4970,0.991224571200638
+"microbiome_2026","exploratory",1572,1572,1572,151429,151429,149589,0.987849090993139
+"microbiome_2026_hunt","primary",1009,146,146,3705,3705,3640,0.982456140350877
+"microbiome_2026_hunt","exploratory",1009,1009,1009,85935,85935,84643,0.984965380811078

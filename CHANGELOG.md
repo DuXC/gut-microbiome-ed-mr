@@ -22,6 +22,21 @@
   Parquet shards (11 MB total) with no zero-candidate traits.
 - Bound metadata caches and candidate receipts to both the manifest and schema
   code SHA-256 values so code changes invalidate stale processed outputs.
+- Added a reproducible high-density 1000 Genomes Phase 3 GRCh37 EUR reference
+  build from the official PLINK 2 source, with source URLs, byte counts, and
+  SHA-256 receipts.
+- Normalized exposure chromosome `23` to reference chromosome `X`, preventing
+  valid X-linked instruments from being misclassified as absent; the final
+  candidate reference contains 171,720 biallelic SNPs across 503 EUR samples.
+- Completed ancestry-matched LD clumping at `r² = 0.001` within 10,000 kb for
+  both prespecified tiers and all 2,581 traits using eight balanced workers.
+- Retained 272 primary and 24,867 exploratory instrument rows in the Swedish
+  discovery data, and 157 primary and 17,999 exploratory rows in HUNT; only one
+  Swedish trait with a genome-wide signal lacked any allele-matched primary
+  reference variant.
+- Added reference-mapping audits, the complete unmapped-primary ledger, and a
+  hash-bound clumping receipt covering 43,295 retained trait-tier instrument
+  rows.
 
 ## 2026-07-10
 

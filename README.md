@@ -73,6 +73,32 @@ Catalog YAML. Exact Swedish–HUNT biological-label matches are audited in
 `08_qc/exposure_replication_map.csv`; unmatched hMGS labels are not treated as
 replicated without the study's hMGS-to-genome crosswalk.
 
+## Ancestry-matched instrument construction
+
+Exposure clumping is performed on the exposures' native GRCh37 coordinates;
+the project-wide GRCh38 setting governs the downstream outcome/harmonisation
+layer and does not authorize mixing builds during LD estimation. The primary LD
+source is the official PLINK 2 1000 Genomes Phase 3 GRCh37 release. Its source
+files and checksums are recorded in
+`08_qc/high_density_ld_source_receipts.csv`.
+
+`scripts/04_prepare_ld_reference.sh` normalizes chromosome labels (`23`/`X`),
+selects 503 EUR samples, rejects multiallelic/non-ACGT variants and missing
+reference IDs, and creates a candidate-only 171,720-variant BED reference. Run
+it only when the candidate set or reference source changes. Then build both
+prespecified instrument tiers with:
+
+```bash
+MR_WORKERS=8 /usr/bin/caffeinate -ims /opt/homebrew/bin/Rscript scripts/04_build_instruments.R
+```
+
+The completed inventory contains separate primary and exploratory rows for all
+2,581 exposure traits. Clumping uses `r² = 0.001` within 10,000 kb and retains
+only instruments with F > 10. The run receipt binds the PLINK version,
+reference-panel hashes, mapping-file hash, inventory hash, and instrument
+Parquet hash. Unmapped primary variants remain visible in
+`08_qc/ld_reference_unmapped_primary.csv`; they are never silently substituted.
+
 ## Reproducible environment
 
 Restore the exact locked R environment and ensure the pinned project-local PLINK binary:
