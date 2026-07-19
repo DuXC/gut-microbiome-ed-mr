@@ -12,6 +12,15 @@ Reverse ED→microbiome analyses are a separate sensitivity family: estimable el
 
 Raw GWAS files are immutable and excluded from Git. The freeze is verified from effective no-write mode bits where the filesystem supports them, or from the macOS `uchg` flag on `noowners`/exFAT volumes. AppleDouble `._*` sidecars inside ignored raw paths may be required to persist those flags; pipeline code must never ingest or delete them as GWAS payloads. Every input is recorded in the exact nine-column `MANIFEST.csv` with source, version, size, and SHA-256.
 
+Since 2026-07-20 the project is hosted at the same absolute path on the NAS SMB
+share `DuXC_PhD_OS`. SMB does not expose the prior exFAT no-write/`uchg`
+semantics reliably, so local mode bits are not accepted as an integrity claim on
+the NAS. The versioned `MANIFEST.csv`, its recorded SHA-256 values, upstream MD5
+checksums, and the rule that analysis never writes under `03_data/raw/` are the
+authoritative integrity boundary. Content verification on this SMB share must
+use `verify_frozen = FALSE` only after SHA-256 and upstream checksum validation;
+it must never skip content hashes merely because a path exists.
+
 ## Download, resume, and full verification
 
 `scripts/02_download_freeze.R` resumes safe smaller `.part` files and promotes an already complete checksum-valid partial without another HTTP request. Each atomic manifest append structurally validates the full ledger but content-verifies only newly added receipt rows, avoiding quadratic rehashing.
@@ -67,4 +76,4 @@ quarto --version
 
 ## Repository metadata
 
-Git metadata is stored externally at `/Users/duxiancheng/.codex/gitdirs/04_GUT_ED_MR_REBUILD_20260710.git` because this external volume emits AppleDouble sidecars. Normal Git commands continue to work from the project root.
+Git metadata is stored externally at `/Users/duxiancheng/.codex/gitdirs/04_GUT_ED_MR_REBUILD_20260710.git` because the project volume emits AppleDouble sidecars. Normal Git commands continue to work from the project root on the NAS.
