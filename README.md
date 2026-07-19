@@ -62,6 +62,10 @@ SHA-256-verified shard receipts and uses four workers by default:
 MR_WORKERS=4 MR_SHARD_SIZE=16 /usr/bin/caffeinate -ims /opt/homebrew/bin/Rscript scripts/03_extract_exposure_candidates.R
 ```
 
+The cached metadata catalog is bound to the SHA-256 of `MANIFEST.csv`; individual
+payload existence and validity are then checked when each accession is opened.
+This avoids thousands of redundant SMB metadata calls at every restart.
+
 Per-accession sample sizes and trait descriptions come from the matching GWAS
 Catalog YAML. Exact Swedish–HUNT biological-label matches are audited in
 `08_qc/exposure_replication_map.csv`; unmatched hMGS labels are not treated as

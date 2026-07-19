@@ -176,9 +176,7 @@ run_exposure_candidate_extraction <- function(
   cache_valid <- is.data.frame(cached_catalog) &&
     "manifest_sha256" %in% names(cached_catalog) &&
     nrow(cached_catalog) > 0L &&
-    all(cached_catalog$manifest_sha256 == manifest_sha256) &&
-    all(file.exists(cached_catalog$data_path)) &&
-    all(file.exists(cached_catalog$metadata_path))
+    all(cached_catalog$manifest_sha256 == manifest_sha256)
   if (cache_valid) {
     catalog <- cached_catalog
     cat("Reusing verified exposure metadata catalog\n")
