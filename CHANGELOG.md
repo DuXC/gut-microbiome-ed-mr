@@ -37,6 +37,19 @@
 - Added reference-mapping audits, the complete unmapped-primary ledger, and a
   hash-bound clumping receipt covering 43,295 retained trait-tier instrument
   rows.
+- Reassembled all eight ED 2025 byte-range parts into three checksum-bound,
+  gzip-valid EUR, AFR, and cross-ancestry outcome streams.
+- Extracted the 36,290 distinct clumped reference IDs from FinnGen R12 and the
+  three ED 2025 streams without materializing uncompressed whole-outcome files.
+- Preserved 92 FinnGen multiallelic rsIDs as allele-specific records instead of
+  silently selecting an arbitrary alternate allele.
+- Declared FinnGen R12 as the primary log-odds outcome and retained the ED 2025
+  METAL Z/weight releases on an explicit standardized sensitivity scale; the
+  known FinnGen overlap prevents treating them as independent replication.
+- Harmonised all four outcome layers by rsID and alleles across declared genome
+  builds, with chromosome checks, auditable multiallelic selection, and strict
+  frequency-based palindrome handling. The FinnGen layer retained 41,440 of
+  43,295 trait-tier instrument rows (95.72%).
 
 ## 2026-07-10
 

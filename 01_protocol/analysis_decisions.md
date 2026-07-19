@@ -7,7 +7,15 @@ This file is the normative operational source for analysis eligibility, multipli
 ## Instrument thresholds
 
 - Primary instruments must meet `P < 5×10⁻⁸`, use ancestry-matched LD clumping with `r² < 0.001` in a 10,000 kb window, and have F-statistic > 10.
-- Palindromic SNPs that cannot be harmonized reliably are removed.
+- Palindromic SNPs are retained only when exposure and outcome effect-allele
+  frequencies are both available, both MAF values are at most 0.42, and exactly
+  one orientation is concordant within an absolute frequency difference of
+  0.10. All other palindromic SNPs are removed with an explicit reason.
+- GRCh37 exposure instruments and GRCh38 outcomes are joined only by rsID and
+  allele identity; chromosome identity is checked, but coordinates from the two
+  builds are never compared as if they shared one build. For multiallelic rsIDs,
+  exactly one allele-compatible outcome row must exist or the instrument is
+  excluded.
 - If a microbial phenotype lacks enough genome-wide significant instruments, an exploratory analysis may use `P < 1×10⁻⁵` only when it is explicitly labelled exploratory, is replicated in independent exposure or outcome data, uses weak-instrument-robust methods, and is not combined with the primary evidence grade.
 
 ## Multiplicity family
@@ -17,6 +25,20 @@ This file is the normative operational source for analysis eligibility, multipli
 - The strict global Bonferroni threshold is `0.05 / (N_forward + N_reverse)` across all eligible tests in both directions.
 - Species, higher taxonomic units, functional modules, diversity indices, or any other strata may be displayed separately, but strata never reduce either denominator.
 - Reverse ED→microbiome analyses remain a frozen separate BH family for directionality and sensitivity assessment. They do not use the forward independent-replication gate and can never receive `primary` or `strict` evidence labels.
+
+## Outcome effect scales
+
+- FinnGen R12 erectile dysfunction is the primary outcome and supplies log-odds
+  estimates and standard errors; exponentiated MR estimates may therefore be
+  reported as odds ratios.
+- The 2025 multi-ancestry ED release supplies METAL Z scores and variant-specific
+  weights rather than log-odds estimates. It is analysed only on the explicit
+  standardized scale `Z / sqrt(Weight)` with standard error `1 / sqrt(Weight)`
+  and is never relabelled as an odds ratio.
+- Because FinnGen contributes to the 2025 ED meta-analysis, those high-power
+  EUR, AFR, and cross-ancestry results are known-overlap sensitivity analyses,
+  not independent outcome replication. AFR and cross-ancestry results are also
+  ancestry-transfer sensitivity analyses for EUR microbiome instruments.
 
 ## Replication rule
 

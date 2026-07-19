@@ -99,6 +99,36 @@ reference-panel hashes, mapping-file hash, inventory hash, and instrument
 Parquet hash. Unmapped primary variants remain visible in
 `08_qc/ld_reference_unmapped_primary.csv`; they are never silently substituted.
 
+## Outcome assembly and harmonisation
+
+The eight Figshare byte-range parts are intentional chunks, not independent
+gzip files. Reassemble and gzip-test the three complete ED 2025 streams, then
+extract only the clumped reference IDs together with FinnGen R12:
+
+```bash
+/opt/homebrew/bin/Rscript scripts/05_assemble_outcomes.R
+MR_WORKERS=4 /usr/bin/caffeinate -ims /opt/homebrew/bin/Rscript scripts/06_extract_outcome_candidates.R
+```
+
+FinnGen is the primary log-odds outcome. The ED 2025 files contain METAL Z
+scores and weights, so their sensitivity estimates remain on the declared
+standardized `Z / sqrt(Weight)` scale and are not presented as odds ratios.
+FinnGen's multiallelic rsIDs remain as allele-specific records until exposure
+alleles select a unique row.
+
+Harmonisation uses rsID plus allele identity across the declared GRCh37/GRCh38
+builds, with chromosome concordance checked independently. Palindromic variants
+require MAF at most 0.42 in both datasets and a uniquely concordant effect-allele
+frequency within 0.10:
+
+```bash
+/usr/bin/caffeinate -ims /opt/homebrew/bin/Rscript scripts/07_harmonise_datasets.R
+```
+
+The compact summary and hash receipt is
+`08_qc/harmonisation_inventory.csv`; the row-level audit is a compressed,
+generated Parquet artifact under `03_data/processed/harmonised/`.
+
 ## Reproducible environment
 
 Restore the exact locked R environment and ensure the pinned project-local PLINK binary:
