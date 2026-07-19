@@ -25,3 +25,28 @@ test_that("invalid worker and shard settings fail closed", {
     "duplicate"
   )
 })
+
+test_that("completed shards are bound to manifest, schema, and output hashes", {
+  path <- tempfile(fileext = ".parquet")
+  on.exit(unlink(path), add = TRUE)
+  writeLines("fixture", path)
+  output_hash <- digest::digest(
+    file = path, algo = "sha256", serialize = FALSE
+  )
+  progress <- data.frame(
+    dataset = "microbiome_2026", shard = "1", source_ids = "A;B",
+    output_path = path, candidate_rows = "2", p_threshold = "1e-05",
+    manifest_sha256 = "manifest", schema_sha256 = "schema",
+    output_sha256 = output_hash, completed_at_utc = "2026-07-20T00:00:00Z",
+    stringsAsFactors = FALSE
+  )
+
+  expect_true(candidate_shard_is_complete(
+    progress, "microbiome_2026", 1L, c("A", "B"), path, 1e-5,
+    "manifest", "schema"
+  ))
+  expect_false(candidate_shard_is_complete(
+    progress, "microbiome_2026", 1L, c("A", "B"), path, 1e-5,
+    "manifest", "changed-schema"
+  ))
+})

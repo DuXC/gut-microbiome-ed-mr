@@ -17,6 +17,11 @@
   unmatched hMGS labels remain blocked pending an authoritative crosswalk.
 - Preserved valid upstream `#NA` rsID variants by coordinate and alleles for
   later reference-panel mapping instead of silently dropping them.
+- Completed the 2,581-accession exposure pass: 237,364 exploratory-superset
+  candidates, including 8,719 genome-wide-significant rows, in 163 verified
+  Parquet shards (11 MB total) with no zero-candidate traits.
+- Bound metadata caches and candidate receipts to both the manifest and schema
+  code SHA-256 values so code changes invalidate stale processed outputs.
 
 ## 2026-07-10
 

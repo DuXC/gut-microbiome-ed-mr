@@ -59,7 +59,8 @@ write_candidate_parquet_atomic <- function(x, path) {
 read_candidate_progress <- function(path) {
   columns <- c(
     "dataset", "shard", "source_ids", "output_path", "candidate_rows",
-    "p_threshold", "manifest_sha256", "output_sha256", "completed_at_utc"
+    "p_threshold", "manifest_sha256", "schema_sha256", "output_sha256",
+    "completed_at_utc"
   )
   if (!file.exists(path)) {
     return(as.data.frame(setNames(replicate(
@@ -81,7 +82,7 @@ read_candidate_progress <- function(path) {
 
 candidate_shard_is_complete <- function(
   progress, dataset, shard, source_ids, output_path, p_threshold,
-  manifest_sha256
+  manifest_sha256, schema_sha256
 ) {
   hit <- progress$dataset == dataset & progress$shard == as.character(shard)
   if (sum(hit) != 1L || !file.exists(output_path)) {
@@ -93,6 +94,7 @@ candidate_shard_is_complete <- function(
     identical(receipt$output_path, output_path) &&
     identical(as.numeric(receipt$p_threshold), as.numeric(p_threshold)) &&
     identical(receipt$manifest_sha256, manifest_sha256) &&
+    identical(receipt$schema_sha256, schema_sha256) &&
     identical(
       receipt$output_sha256,
       digest::digest(file = output_path, algo = "sha256", serialize = FALSE)
@@ -112,7 +114,7 @@ append_candidate_progress <- function(progress, receipt, path) {
 build_candidate_inventory <- function(plan, output_root, p_threshold) {
   sources <- unique(plan[, c(
     "dataset", "source_id", "trait", "canonical_trait_id", "sample_size",
-    "genome_build", "shard"
+    "genome_build", "manifest_sha256", "schema_sha256", "shard"
   )])
   sources$candidate_rows <- 0L
   sources$primary_rows <- 0L
@@ -163,6 +165,12 @@ run_exposure_candidate_extraction <- function(
   manifest_sha256 <- digest::digest(
     file = manifest_path, algo = "sha256", serialize = FALSE
   )
+  schema_path <- normalizePath(
+    file.path(project_root, "R", "gwas_schema.R"), mustWork = TRUE
+  )
+  schema_sha256 <- digest::digest(
+    file = schema_path, algo = "sha256", serialize = FALSE
+  )
   dir.create(qc_root, recursive = TRUE, showWarnings = FALSE)
   catalog_path <- file.path(qc_root, "exposure_metadata_catalog.csv")
   cached_catalog <- if (file.exists(catalog_path)) {
@@ -174,9 +182,10 @@ run_exposure_candidate_extraction <- function(
     NULL
   }
   cache_valid <- is.data.frame(cached_catalog) &&
-    "manifest_sha256" %in% names(cached_catalog) &&
+    all(c("manifest_sha256", "schema_sha256") %in% names(cached_catalog)) &&
     nrow(cached_catalog) > 0L &&
-    all(cached_catalog$manifest_sha256 == manifest_sha256)
+    all(cached_catalog$manifest_sha256 == manifest_sha256) &&
+    all(cached_catalog$schema_sha256 == schema_sha256)
   if (cache_valid) {
     catalog <- cached_catalog
     cat("Reusing verified exposure metadata catalog\n")
@@ -185,6 +194,7 @@ run_exposure_candidate_extraction <- function(
       manifest_path, project_root, workers = workers
     )
     catalog$manifest_sha256 <- manifest_sha256
+    catalog$schema_sha256 <- schema_sha256
     atomic_write_csv(catalog, catalog_path)
   }
   replication_map <- match_microbiome_replication_traits(catalog)
@@ -195,8 +205,9 @@ run_exposure_candidate_extraction <- function(
   plan <- candidate_shard_plan(catalog, shard_size)
   progress_path <- file.path(output_root, "progress.csv")
   progress <- read_candidate_progress(progress_path)
+  group_key <- paste(plan$dataset, plan$shard, sep = "\r")
   groups <- split(
-    seq_len(nrow(plan)), paste(plan$dataset, plan$shard, sep = "\r")
+    seq_len(nrow(plan)), factor(group_key, levels = unique(group_key))
   )
   total <- length(groups)
   completed <- 0L
@@ -214,7 +225,7 @@ run_exposure_candidate_extraction <- function(
 
     if (candidate_shard_is_complete(
       progress, dataset, shard, source_ids, output_path, p_threshold,
-      manifest_sha256
+      manifest_sha256, schema_sha256
     )) {
       completed <- completed + 1L
       cat(sprintf(
@@ -261,6 +272,7 @@ run_exposure_candidate_extraction <- function(
       candidate_rows = as.character(nrow(candidates)),
       p_threshold = format(p_threshold, scientific = TRUE, digits = 17L),
       manifest_sha256 = manifest_sha256,
+      schema_sha256 = schema_sha256,
       output_sha256 = output_sha256,
       completed_at_utc = format(
         Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"
