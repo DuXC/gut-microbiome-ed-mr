@@ -214,3 +214,13 @@ quarto --version
 ## Repository metadata
 
 Git metadata is stored externally at `/Users/duxiancheng/.codex/gitdirs/04_GUT_ED_MR_REBUILD_20260710.git` because the project volume emits AppleDouble sidecars. Normal Git commands continue to work from the project root on the NAS.
+
+## IJIR manuscript package
+
+The frozen NO-GO decision for a positive causal claim has been preserved. A
+separate transparent-negative manuscript package was built on 2026-07-20 under
+`06_manuscript/ijir_v0_1_20260720/`. It contains the main manuscript, title
+page, cover letter, STROBE-MR checklist, two editable main-table workbooks, two
+600-dpi figures, and a ten-sheet supplementary data workbook. The package is
+author-confirmation ready; see its `07_qc/IJIR_v0_1_QC_Report.md` and
+`01_sources/AUTHOR_CONFIRMATION_REQUIRED_v0_1.md` before submission.

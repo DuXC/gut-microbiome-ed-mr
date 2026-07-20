@@ -2,6 +2,16 @@
 
 ## 2026-07-20
 
+- Preserved the frozen NO-GO decision for positive causal claims while adding
+  an explicitly bounded publication path for a transparent negative report.
+- Built the IJIR-first v0.1 submission package with a 187-word abstract,
+  1,812-word main text, title page, cover letter, STROBE-MR checklist, two
+  editable main tables, two 600-dpi figures, and a ten-sheet supplementary
+  workbook.
+- Added explicit authorship, correspondence, funding, competing-interest,
+  data-availability, and post-freeze LLM-use statements; retained author CRediT
+  approval and the public repository DOI as visible pre-submission gates.
+
 - Migrated the completed project tree to the `DuXC_PhD_OS` NAS SMB share while
   preserving the original absolute project path.
 - Confirmed all 5,177 manifest paths and byte sizes after migration.

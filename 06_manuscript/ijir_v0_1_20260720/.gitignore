@@ -1,0 +1,6 @@
+02_builder/node_modules
+02_builder/tmp_table_data/
+02_builder/deprecated_failed/
+07_qc/inspect_logs/
+07_qc/xlsx_previews/
+08_rendered/

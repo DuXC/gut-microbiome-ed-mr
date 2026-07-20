@@ -1,0 +1,9 @@
+order,given_name,family_name,display_name,email,affiliation_numbers,corresponding_author,submission_primary_contact,orcid,proposed_credit_contribution
+1,Xiancheng,Du,Xiancheng Du,duxc@seu.edu.cn,1,No,No,0009-0000-4374-8818,"Conceptualization; Methodology; Software; Formal analysis; Data curation; Visualization; Project administration; Writing - original draft"
+2,Shuchun,Tao,Shuchun Tao,17755357445@163.com,1,No,No,,"Investigation; Data curation; Validation; Writing - review and editing"
+3,Kaihua,Xue,Kaihua Xue,xuekaihua92@163.com,1,No,No,,"Investigation; Data curation; Validation; Writing - review and editing"
+4,Yongkun,Zhu,Yongkun Zhu,329306084@qq.com,1,No,No,,"Methodology; Formal-analysis verification; Validation; Writing - review and editing"
+5,Ming,Chen,Ming Chen,mingchenseu@126.com,2,Yes,No,,"Resources; Clinical interpretation; Supervision; Writing - review and editing"
+6,Chunhui,Liu,Chunhui Liu,liuc863@126.com,2,Yes,No,,"Conceptualization; Supervision; Funding acquisition; Writing - review and editing"
+7,Chao,Sun,Chao Sun,csun@seu.edu.cn,2,Yes,Yes,0000-0003-0538-1239,"Conceptualization; Methodology; Supervision; Validation; Project administration; Funding acquisition; Writing - review and editing"
+
