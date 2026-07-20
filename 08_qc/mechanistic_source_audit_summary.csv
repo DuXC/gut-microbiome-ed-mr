@@ -1,0 +1,3 @@
+"dataset","files","expected_bytes","expected_gib","all_http_200","resolved_at_utc"
+"cytokines_2025_meta",40,12444091543,11.5894633745775,TRUE,"2026-07-20T17:32:36Z"
+"scallop_cvd1",9,3214706463,2.99392869975418,TRUE,"2026-07-20T17:32:36Z"

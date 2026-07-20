@@ -207,6 +207,43 @@ FDR, no forward signal met the independent-replication gates, and the frozen
 decision is `NO-GO`. The one-row decision and all upstream/output hashes are in
 `08_qc/final_analysis_receipt.csv`.
 
+## Prespecified v0.2 mechanistic extension
+
+The frozen v0.1.0 bidirectional analysis and its NO-GO decision remain
+unchanged. Development of v0.2 is isolated on
+`analysis/v0.2-mechanistic-extension` and follows
+`01_protocol/mechanistic_extension_v0_2.md`. The extension tests five
+biologically selected HUNT KEGG functional traits against two separately
+controlled mediator families: 40 circulating cytokines and nine endothelial
+proteins. Outcome P values from v0.1 were not used to select exposures or
+mediators. Broad metabolomics and immune-cell screens are excluded from the
+current confirmatory scope.
+
+The source audit resolves all 49 URLs, upstream MD5 checksums, build metadata,
+sample sizes, and overlap classifications into
+`00_admin/mechanistic_source_inventory.csv`. The first-wave payload is 14.583
+GiB. On the NAS, files are verified by expected bytes, upstream MD5, and local
+SHA-256; the workflow does not claim unsupported filesystem immutability.
+
+Because macOS background agents can block while opening a user-mounted SMB
+share, the persistent downloader runs inside a detached `screen` session
+started from the authorized interactive user context. The supervisor resumes
+partial files, restarts 30 seconds after abnormal exit, prevents idle
+system/disk sleep, and stops after a successful complete pass. Start or inspect
+it with:
+
+```bash
+/usr/bin/screen -dmS gut_ed_mechanistic /bin/zsh scripts/18_supervise_mechanistic_download.sh
+/opt/homebrew/bin/Rscript scripts/17_mechanistic_download_status.R
+/usr/bin/screen -ls
+/usr/bin/screen -r gut_ed_mechanistic
+tail -f ~/Library/Logs/gut-ed-mechanistic-download.stderr.log
+```
+
+Detach from an attached screen with `Ctrl-A`, then `D`. The session survives
+Codex and Terminal closure but, unlike a login agent, must be restarted after a
+Mac reboot.
+
 ## Reproducible environment
 
 Restore the exact locked R environment and ensure the pinned project-local PLINK binary:

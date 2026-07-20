@@ -15,13 +15,18 @@ SOURCE_URL_PREFIXES <- c(
     "https://storage.googleapis.com/finngen-public-data-r12/",
     "summary_stats/release/"
   ),
-  ld_reference_1kg = "https://zenodo.org/api/records/6614170/files/"
+  ld_reference_1kg = "https://zenodo.org/api/records/6614170/files/",
+  cytokines_2025_meta =
+    "https://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics/",
+  scallop_cvd1 = "https://zenodo.org/api/records/2615265/files/"
 )
 
 REPLICATION_ROLES <- c(
   "exposure_discovery", "independent_exposure_replication",
   "high_power_outcome_meta_sensitivity",
-  "outcome_source_known_overlap_with_ed_2025", "external_ld_reference"
+  "outcome_source_known_overlap_with_ed_2025", "external_ld_reference",
+  "mechanistic_mediator_screen_known_partial_overlap",
+  "mechanistic_endothelial_mediator_screen"
 )
 
 encode_provenance_vector <- function(value) {
@@ -854,7 +859,8 @@ write_manifest_atomic <- function(
   replace_file = file.rename,
   sha256_provider = sha256_file,
   checksum_provider = checksum_file,
-  frozen_validator = validate_frozen_file
+  frozen_validator = validate_frozen_file,
+  verify_frozen = TRUE
 ) {
   candidate <- manifest
   rownames(candidate) <- NULL
@@ -893,7 +899,7 @@ write_manifest_atomic <- function(
     added <- candidate[manifest_key(candidate) %in% added_keys, , drop = FALSE]
     validate_receipt_files(
       added, inventory, project_root,
-      verify_frozen = TRUE,
+      verify_frozen = verify_frozen,
       sha256_provider = sha256_provider,
       checksum_provider = checksum_provider,
       frozen_validator = frozen_validator

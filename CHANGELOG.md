@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-07-21
+
+- Preserved the released v0.1.0 NO-GO analysis and opened the isolated
+  `analysis/v0.2-mechanistic-extension` branch.
+- Froze five biologically selected HUNT KEGG functional exposures, 40
+  circulating cytokines, nine endothelial proteins, seven family-specific BH
+  denominators, and explicit mediation/colocalization compatibility gates.
+- Excluded the seven nominal v0.1 taxa from hypothesis selection and deferred
+  broad metabolomics, immune-cell scans, CRP, and GlycA until exact source and
+  phenotype mappings satisfy the protocol.
+- Audited 49 first-wave source files (14.583 GiB) against official GWAS Catalog
+  and Zenodo metadata, including URLs, builds, sample sizes, HTTP availability,
+  upstream MD5 values, and cohort-overlap classifications.
+- Added NAS-safe resumable downloads with expected-size, upstream-MD5, and
+  local-SHA-256 validation without claiming unsupported filesystem flags.
+- Added a persistent detached-screen supervisor (used because macOS background
+  agents block on this user-mounted SMB share), a compact progress command, and
+  regression tests that preserve the original immutable-file behavior by
+  default.
+
 ## 2026-07-20
 
 - Preserved the frozen NO-GO decision for positive causal claims while adding

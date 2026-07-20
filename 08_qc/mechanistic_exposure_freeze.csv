@@ -1,0 +1,6 @@
+"exposure_id","source_dataset","source_id","module_id","trait","reference_id","chromosome","position_grch37","effect_allele","other_allele","exposure_beta","exposure_se","exposure_p","F"
+"hunt_M00080","microbiome_2026_hunt","GCST90667140","M00080","Lipopolysaccharide biosynthesis, inner core to outer core to O-antigen","rs11200716","10",85639993,"T","C",0.0944526,0.017026,2.9e-08,30.7753199301918
+"hunt_M00091","microbiome_2026_hunt","GCST90667145","M00091","Phosphatidylcholine biosynthesis, PE to PC","rs148648252","7",131059829,"A","G",0.251359,0.0449862,2.3e-08,31.2198103407123
+"hunt_M00136","microbiome_2026_hunt","GCST90667169","M00136","GABA biosynthesis, prokaryotes, putrescine to GABA","rs12785341","11",110395858,"C","A",-0.110592,0.0191004,7.04e-09,33.52451468998
+"hunt_M00530","microbiome_2026_hunt","GCST90667437","M00530","Dissimilatory nitrate reduction, nitrate to ammonia","rs148029532","12",77833030,"T","C",-0.215209,0.0394008,4.71e-08,29.8339514865138
+"hunt_M00569","microbiome_2026_hunt","GCST90667452","M00569","Catechol meta-cleavage, catechol to acetyl-CoA / 4-methylcatechol to propanoyl-CoA","rs142427264","4",124535955,"G","A",0.327066,0.0549331,2.62e-09,35.4488853049831

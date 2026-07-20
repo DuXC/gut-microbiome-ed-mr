@@ -1,0 +1,81 @@
+version: v0.2
+frozen_on: 2026-07-21
+parent_release: v0.1.0
+selection_rule: biological_rationale_and_instrument_eligibility_only
+outcome_p_values_used_for_selection: false
+exposure_family:
+  dataset: microbiome_2026_hunt
+  count: 5
+  instrument_p: 5.0e-8
+  min_f: 10
+  ld_r2: 0.001
+  ld_kb: 10000
+  evidence_ceiling: exploratory_single_instrument
+mediator_families:
+  cytokine:
+    count: 40
+    m_to_y_family: cytokine_m_to_y
+    x_to_m_family: cytokine_x_to_m
+    indirect_family: cytokine_indirect
+    source_dataset: cytokines_2025_meta
+  endothelial:
+    count: 9
+    m_to_y_family: endothelial_m_to_y
+    x_to_m_family: endothelial_x_to_m
+    indirect_family: endothelial_indirect
+    source_dataset: scallop_cvd1
+multiple_testing:
+  method: BH
+  fdr: 0.05
+  non_estimable_p: 1.0
+  denominators:
+    x_to_y: 5
+    cytokine_m_to_y: 40
+    endothelial_m_to_y: 9
+    cytokine_x_to_m: 200
+    endothelial_x_to_m: 45
+    cytokine_indirect: 200
+    endothelial_indirect: 45
+mediator_instruments:
+  primary_scope: cis_pqtl
+  primary_p: 5.0e-8
+  min_f: 10
+  ld_r2: 0.001
+  ld_kb: 10000
+  trans_role: sensitivity_only
+colocalization:
+  prior_p1: 1.0e-4
+  prior_p2: 1.0e-4
+  prior_p12: 1.0e-5
+  pp4_support: 0.80
+  multiple_signal_when_possible: true
+indirect_effect:
+  estimator: product_of_coefficients
+  independent_samples_variance: delta_method
+  proportion_mediated_requires_total_fdr: true
+sources:
+  cytokines_2025_meta:
+    accession_first: GCST90428399
+    accession_last: GCST90428438
+    article: https://doi.org/10.1038/s42003-025-07453-w
+    catalog_root: https://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics
+    cohort_membership: [YFS_FINRISK, SCALLOP, deCODE]
+    overlap_with_finngen_r12: known_partial
+    analysis_role: screening_and_sensitivity
+  scallop_cvd1:
+    record: https://doi.org/10.5281/zenodo.2615265
+    api: https://zenodo.org/api/records/2615265
+    cohort_membership: [SCALLOP_CVD_I_13_cohorts]
+    overlap_with_finngen_r12: possible_unresolved
+    analysis_role: endothelial_mechanistic_screen
+  decode_component:
+    article: https://doi.org/10.1038/s41586-023-06563-x
+    portal: https://www.decode.com/summarydata/
+    cohort_membership: [deCODE_Iceland]
+    overlap_with_finngen_r12: none_known
+    analysis_role: preferred_no_known_overlap_validation
+download:
+  first_wave_datasets: [cytokines_2025_meta, scallop_cvd1]
+  raw_integrity: size_upstream_md5_and_local_sha256
+  raw_filesystem_flags_required: false
+  reserve_bytes: 10737418240

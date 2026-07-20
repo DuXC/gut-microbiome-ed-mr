@@ -1,0 +1,6 @@
+"axis_id","axis_name","candidate_phenotypes","rationale","activation_rule","status"
+"bile_acid","Bile-acid axis","primary and secondary bile acids; 7-HOCA; deoxycholate derivatives","Microbial bile-acid transformation may affect inflammation and endothelial signalling","Exact phenotype mapping plus public summary statistics and non-overlap audit","deferred_source_mapping"
+"choline_tmao","Phosphatidylcholine/TMAO axis","choline; phosphatidylcholine; betaine; carnitine; TMAO","Prespecified match to HUNT M00091","Exact phenotype mapping plus avoidance of broad 1400-metabolite rescreen","deferred_source_mapping"
+"tryptophan_kynurenine","Tryptophan/kynurenine axis","tryptophan; kynurenine; indole derivatives","Immune-metabolic and endothelial relevance","Exact phenotype mapping and FDR family amendment before analysis","deferred_source_mapping"
+"arginine_no","Arginine/citrulline/NO axis","arginine; citrulline; ornithine; nitrate-related traits","Prespecified vascular match to HUNT M00530","Exact phenotype mapping and compatible effect scales","deferred_source_mapping"
+"gaba_scfa","GABA and short-chain-fatty-acid axis","GABA; acetate; propionate; butyrate when available","Prespecified match to HUNT M00136 and gut-derived metabolites","Public GWAS with adequate instruments and overlap audit","deferred_source_mapping"

@@ -21,5 +21,6 @@ _targets/
 *.tmp
 *.log
 *.inspect.ndjson
+.mechanistic-download.lock/
 !03_data/raw/.gitkeep
 !03_data/processed/.gitkeep

@@ -280,7 +280,8 @@ promote_verified_part <- function(
   freeze_runner = safe_system2,
   regular_file_provider = default_regular_file_provider,
   sha256_provider = sha256_file,
-  checksum_provider = checksum_file
+  checksum_provider = checksum_file,
+  freeze_files = TRUE
 ) {
   finish_verified_part(
     part_path, final_path, rename_file, regular_file_provider
@@ -292,16 +293,18 @@ promote_verified_part <- function(
       checksum_provider = checksum_provider,
       verify_frozen = FALSE
     )
-    freeze_raw_file(final_path, chmod_file, mode_provider, freeze_runner)
-    validate_promoted_file(
-      final_path, source_row, expected_sha256, receipt,
-      sha256_provider = sha256_provider,
-      checksum_provider = checksum_provider,
-      frozen_validator = function(path) {
-        validate_frozen_file(path, mode_provider, freeze_runner)
-      },
-      verify_frozen = TRUE
-    )
+    if (freeze_files) {
+      freeze_raw_file(final_path, chmod_file, mode_provider, freeze_runner)
+      validate_promoted_file(
+        final_path, source_row, expected_sha256, receipt,
+        sha256_provider = sha256_provider,
+        checksum_provider = checksum_provider,
+        frozen_validator = function(path) {
+          validate_frozen_file(path, mode_provider, freeze_runner)
+        },
+        verify_frozen = TRUE
+      )
+    }
     TRUE
   }, error = identity)
   if (inherits(promoted, "error")) {
@@ -343,7 +346,8 @@ download_inventory_row <- function(
   curl_max_extra_attempts = CURL_MAX_EXTRA_ATTEMPTS,
   curl_retry_delay_seconds = CURL_RECOVERY_DELAY_SECONDS,
   curl_sleep = Sys.sleep,
-  curl_retry_logger = message
+  curl_retry_logger = message,
+  freeze_files = TRUE
 ) {
   validate_download_source(source_row, inventory)
   relative_path <- safe_raw_relative_path(source_row)
@@ -360,7 +364,9 @@ download_inventory_row <- function(
       receipt, inventory, project_root,
       verify_files = TRUE, verify_frozen = FALSE
     )
-    freeze_raw_file(final_path, chmod_file, mode_provider, freeze_runner)
+    if (freeze_files) {
+      freeze_raw_file(final_path, chmod_file, mode_provider, freeze_runner)
+    }
     return(invisible(list(
       status = "skipped", bytes = 0,
       key = download_source_key(source_row), path = relative_path
@@ -369,10 +375,15 @@ download_inventory_row <- function(
 
   if (!nrow(receipt) && file.exists(final_path)) {
     verify_upstream_file(final_path, source_row)
-    freeze_raw_file(final_path, chmod_file, mode_provider, freeze_runner)
+    if (freeze_files) {
+      freeze_raw_file(final_path, chmod_file, mode_provider, freeze_runner)
+    }
     new_receipt <- file_receipt(source_row, relative_path, final_path, clock())
     candidate <- append_receipt_idempotent(manifest, new_receipt)
-    manifest_writer(candidate, manifest_path, inventory, project_root)
+    manifest_writer(
+      candidate, manifest_path, inventory, project_root,
+      verify_frozen = freeze_files
+    )
     return(invisible(list(
       status = "adopted", bytes = 0,
       key = download_source_key(source_row), path = relative_path
@@ -396,7 +407,8 @@ download_inventory_row <- function(
       freeze_runner = freeze_runner,
       regular_file_provider = regular_file_provider,
       sha256_provider = sha256_provider,
-      checksum_provider = checksum_provider
+      checksum_provider = checksum_provider,
+      freeze_files = freeze_files
     )
     if (!nrow(receipt)) {
       new_receipt <- file_receipt(
@@ -404,7 +416,10 @@ download_inventory_row <- function(
         verified_sha256 = partial$sha256
       )
       candidate <- append_receipt_idempotent(manifest, new_receipt)
-      manifest_writer(candidate, manifest_path, inventory, project_root)
+      manifest_writer(
+        candidate, manifest_path, inventory, project_root,
+        verify_frozen = freeze_files
+      )
     }
     return(invisible(list(
       status = "completed", bytes = 0,
@@ -462,7 +477,8 @@ download_inventory_row <- function(
     freeze_runner = freeze_runner,
     regular_file_provider = regular_file_provider,
     sha256_provider = sha256_provider,
-    checksum_provider = checksum_provider
+    checksum_provider = checksum_provider,
+    freeze_files = freeze_files
   )
   if (!nrow(receipt)) {
     new_receipt <- file_receipt(
@@ -470,7 +486,10 @@ download_inventory_row <- function(
       verified_sha256 = completed$sha256
     )
     candidate <- append_receipt_idempotent(manifest, new_receipt)
-    manifest_writer(candidate, manifest_path, inventory, project_root)
+    manifest_writer(
+      candidate, manifest_path, inventory, project_root,
+      verify_frozen = freeze_files
+    )
   }
   invisible(list(
     status = "completed", bytes = as.numeric(partial$remaining),
@@ -679,13 +698,18 @@ download_selected_rows <- function(
   row_downloader = download_inventory_row,
   sha256_provider = sha256_file,
   checksum_provider = checksum_file,
-  frozen_validator = validate_frozen_file
+  frozen_validator = validate_frozen_file,
+  freeze_files = TRUE
 ) {
   manifest <- read_manifest_csv(manifest_path)
-  trusted_receipt_keys <- trusted_frozen_receipt_keys(
-    manifest, inventory, project_root,
-    frozen_validator = frozen_validator
-  )
+  trusted_receipt_keys <- if (freeze_files) {
+    trusted_frozen_receipt_keys(
+      manifest, inventory, project_root,
+      frozen_validator = frozen_validator
+    )
+  } else {
+    character()
+  }
   preflight <- preflight_download_space(
     selected, manifest, project_root, free_space_provider, reserve_bytes,
     inventory = inventory, trusted_receipt_keys = trusted_receipt_keys,
@@ -707,7 +731,8 @@ download_selected_rows <- function(
         source, inventory, manifest_path, project_root,
         runner = runner, clock = clock, rename_file = rename_file,
         chmod_file = chmod_file, sha256_provider = sha256_provider,
-        checksum_provider = checksum_provider
+        checksum_provider = checksum_provider,
+        freeze_files = freeze_files
       ),
       error = function(error) {
         stop("Download failed for ", key, ": ", conditionMessage(error), call. = FALSE)

@@ -1,0 +1,6 @@
+"exposure_id","source_dataset","source_id","module_id","trait","pathway_family","clumped_primary_instruments","instrument_tier","analysis_role","replication_status"
+"hunt_M00080","microbiome_2026_hunt","GCST90667140","M00080","Lipopolysaccharide biosynthesis, inner core to outer core to O-antigen","microbial_cell_surface_inflammation",1,"primary","prespecified_mechanistic_exposure","no_exact_swedish_function_match"
+"hunt_M00091","microbiome_2026_hunt","GCST90667145","M00091","Phosphatidylcholine biosynthesis, PE to PC","choline_tmao_axis",1,"primary","prespecified_mechanistic_exposure","no_exact_swedish_function_match"
+"hunt_M00136","microbiome_2026_hunt","GCST90667169","M00136","GABA biosynthesis, prokaryotes, putrescine to GABA","neuroactive_metabolite_axis",1,"primary","prespecified_mechanistic_exposure","no_exact_swedish_function_match"
+"hunt_M00530","microbiome_2026_hunt","GCST90667437","M00530","Dissimilatory nitrate reduction, nitrate to ammonia","nitrate_no_axis",1,"primary","prespecified_mechanistic_exposure","no_exact_swedish_function_match"
+"hunt_M00569","microbiome_2026_hunt","GCST90667452","M00569","Catechol meta-cleavage, catechol to acetyl-CoA / 4-methylcatechol to propanoyl-CoA","aromatic_metabolite_axis",1,"primary","prespecified_mechanistic_exposure","no_exact_swedish_function_match"
