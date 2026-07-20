@@ -1,0 +1,2 @@
+"exposure_id","ancestry","genome_build","effect_scale","p_threshold","candidate_snps","strong_snps","reference_panel_snps","allele_mapped_snps","post_clump_snps","min_F","mean_F","r2","kb"
+"ed_2025_eur","EUR","GRCh38","standardized_z_per_sqrt_metal_weight",5e-08,479,479,437,437,24,30.206016,65.2730422916667,0.001,10000

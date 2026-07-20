@@ -1,0 +1,2 @@
+"decision","n_forward","n_reverse","forward_fdr_signals","reverse_fdr_signals","replicated_forward_signals","conditional_go_candidates","global_bonferroni_threshold","interpretation"
+"NO-GO",230,1572,0,0,0,0,2.77469478357381e-05,"No forward association satisfied the prespecified GO or conditional-GO gates"

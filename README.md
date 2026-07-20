@@ -1,6 +1,8 @@
 # Gut microbiome–ED MR rebuild
 
-Primary command: `Rscript scripts/03_run_pipeline.R`.
+The numbered scripts are the reproducible entry points. There is deliberately
+no stale monolithic wrapper: run only the stage whose prerequisite receipts are
+already complete, in the order documented below.
 
 Evidence grades:
 - Primary: genome-wide (`P < 5×10⁻⁸`) instruments with F > 10, forward BH q < 0.05, all deterministic replication gates defined in `01_protocol/analysis_decisions.md`, and independent validation.
@@ -148,8 +150,42 @@ silent estimates. The run receipt records code, input, and output hashes in
 
 The currently frozen FinnGen forward-primary family contains 230 Swedish
 microbiome traits. Of these, 218 were estimable and seven had nominal
-`P < 0.05`; none survived BH FDR (`q < 0.05`). Reverse-family analysis remains
-required before the combined-direction global Bonferroni threshold is final.
+`P < 0.05`; none survived BH FDR (`q < 0.05`, minimum `q = 0.942`). The two
+nominal candidates with exact HUNT trait matches did not validate (`P = 0.427`
+and `P = 0.175`).
+
+## Reverse MR and final decision
+
+The reverse exposure is the 2025 EUR ED meta-analysis on its declared
+standardized `Z / sqrt(Weight)` scale. Of 479 genome-wide-significant variants,
+437 mapped by rsID, chromosome, and alleles to the 503-sample EUR LD panel; LD
+clumping retained 24 independent instruments (`r² = 0.001`, 10,000 kb; minimum
+F = 30.21). Run the restartable outcome extraction, reverse analysis, and final
+decision in order:
+
+```bash
+MR_WORKERS=8 /usr/bin/caffeinate -ims /opt/homebrew/bin/Rscript scripts/10_build_reverse_ed_instruments.R
+MR_WORKERS=8 /usr/bin/caffeinate -ims /opt/homebrew/bin/Rscript scripts/11_extract_reverse_microbiome_outcomes.R
+MR_WORKERS=8 /usr/bin/caffeinate -ims /opt/homebrew/bin/Rscript scripts/12_run_reverse_analysis.R
+/opt/homebrew/bin/Rscript scripts/13_finalize_analysis.R
+```
+
+The extractor accepts both compressed `.tsv.gz` and uncompressed `.tsv`
+accessions, propagates upstream pipe failures, records one hash-bound receipt
+per trait, and uses one-accession dynamic scheduling so interrupted tail work
+continues across all workers. It recovered 26,366 candidate rows from all 1,572
+Swedish traits. Harmonisation retained 24,794 rows (15--17 instruments per
+trait), excluded one frequency-unresolvable palindromic instrument per trait,
+and found no allele mismatches.
+
+All 1,572 reverse primary effects were estimable. Seventy-seven had nominal
+`P < 0.05`, but none survived the frozen reverse BH family (minimum
+`P = 0.001861`; minimum `q = 0.967`). The combined family therefore contains
+230 forward and 1,572 reverse tests, with a global Bonferroni threshold of
+`2.774695×10⁻⁵`. No forward or reverse effect passed its direction-specific
+FDR, no forward signal met the independent-replication gates, and the frozen
+decision is `NO-GO`. The one-row decision and all upstream/output hashes are in
+`08_qc/final_analysis_receipt.csv`.
 
 ## Reproducible environment
 

@@ -118,3 +118,45 @@ test_that("streaming outcome extraction writes only requested rows", {
   result <- data.table::fread(output, data.table = FALSE)
   expect_equal(result$rsID, "rs2")
 })
+
+test_that("streaming extraction recognizes GWAS Catalog rs_id headers", {
+  directory <- tempfile("rs-id-extract-")
+  dir.create(directory)
+  on.exit(unlink(directory, recursive = TRUE), add = TRUE)
+  input <- file.path(directory, "outcome.gz")
+  connection <- gzfile(input, open = "wt")
+  writeLines(c(
+    "chromosome\tbase_pair_location\trs_id\tbeta",
+    "1\t10\trs1\t0.1", "1\t20\trs2\t0.2"
+  ), connection)
+  close(connection)
+  ids <- file.path(directory, "ids.txt")
+  writeLines("rs1", ids)
+  output <- file.path(directory, "matched.tsv")
+  extract_outcome_rows(
+    input, ids, output,
+    awk_script = file.path(project_root, "scripts", "extract_outcome_ids.awk")
+  )
+  result <- data.table::fread(output, data.table = FALSE)
+  expect_equal(result$rs_id, "rs1")
+})
+
+test_that("streaming extraction supports uncompressed GWAS Catalog files", {
+  directory <- tempfile("plain-outcome-extract-")
+  dir.create(directory)
+  on.exit(unlink(directory, recursive = TRUE), add = TRUE)
+  input <- file.path(directory, "outcome.tsv")
+  writeLines(c(
+    "chromosome\tbase_pair_location\trs_id\tbeta",
+    "1\t10\trs1\t0.1", "1\t20\trs2\t0.2"
+  ), input)
+  ids <- file.path(directory, "ids.txt")
+  writeLines("rs2", ids)
+  output <- file.path(directory, "matched.tsv")
+  extract_outcome_rows(
+    input, ids, output,
+    awk_script = file.path(project_root, "scripts", "extract_outcome_ids.awk")
+  )
+  result <- data.table::fread(output, data.table = FALSE)
+  expect_equal(result$rs_id, "rs2")
+})

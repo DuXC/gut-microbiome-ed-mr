@@ -60,6 +60,26 @@
 - Froze the forward-primary family at 230 Swedish microbiome traits before
   association screening. Of 218 estimable primary effects, seven were nominal
   at `P < 0.05` and none survived BH FDR (minimum `q = 0.942`).
+- Built 24 independent reverse ED instruments from 479 genome-wide-significant
+  EUR candidates; 437 candidates mapped to the ancestry-matched LD reference,
+  and retained instruments had minimum F = 30.21.
+- Extracted the 24 reverse instruments from all 1,572 Swedish microbiome GWAS
+  files with restartable per-accession receipts, explicit `.tsv`/`.tsv.gz`
+  handling, pipe-failure propagation, and one-accession dynamic load balancing.
+  The final compact layer contains 26,366 matched rows with no empty traits.
+- Harmonised 24,794 reverse SNP--trait rows, with 15--17 instruments available
+  per trait, one unresolved palindromic SNP excluded per trait, and zero allele
+  mismatches.
+- Ran 1,572 reverse primary effects and 6,288 total method rows. Seventy-seven
+  reverse effects were nominal at `P < 0.05`, none survived BH FDR (minimum
+  `q = 0.967`), and 104 MR-RAPS rows with non-convergence or multiple roots were
+  retained as explicit failures.
+- Combined the frozen 230-test forward and 1,572-test reverse families. The
+  global Bonferroni threshold is `2.774695×10⁻⁵`; neither direction had an
+  FDR signal, no forward effect passed every replication gate, and the final
+  decision is `NO-GO`.
+- Added a final receipt binding the forward/reverse inputs, replication audit,
+  combined multiplicity table, decision table, and finalization code by SHA-256.
 
 ## 2026-07-10
 

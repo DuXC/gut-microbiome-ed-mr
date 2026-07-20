@@ -9,7 +9,7 @@ FNR == 1 {
   for (i = 1; i <= NF; i++) {
     header = tolower($i)
     sub(/^#/, "", header)
-    if (header == "rsid" || header == "rsids") {
+    if (header == "rsid" || header == "rsids" || header == "rs_id") {
       id_column = i
     }
   }
@@ -22,14 +22,18 @@ FNR == 1 {
 }
 
 {
-  count = split($id_column, identifiers, /[,;]/)
-  hit = 0
-  for (i = 1; i <= count; i++) {
-    if (identifiers[i] in wanted) {
-      hit = 1
-    }
-  }
-  if (hit) {
+  value = $id_column
+  if (value in wanted) {
     print
+    next
+  }
+  if (index(value, ",") || index(value, ";")) {
+    count = split(value, identifiers, /[,;]/)
+    for (i = 1; i <= count; i++) {
+      if (identifiers[i] in wanted) {
+        print
+        next
+      }
+    }
   }
 }

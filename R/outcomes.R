@@ -300,8 +300,13 @@ extract_outcome_rows <- function(
   log_path <- paste0(output_path, ".log-", Sys.getpid())
   on.exit(unlink(temporary), add = TRUE)
   on.exit(unlink(log_path), add = TRUE)
+  reader <- if (grepl("[.]gz$", input_path, ignore.case = TRUE)) {
+    paste("/usr/bin/gzip -dc", shQuote(input_path))
+  } else {
+    paste("/bin/cat", shQuote(input_path))
+  }
   command <- paste(
-    "LC_ALL=C /usr/bin/gzip -dc", shQuote(input_path), "|",
+    "set -o pipefail; LC_ALL=C", reader, "|",
     "LC_ALL=C /usr/bin/awk -f", shQuote(awk_script), shQuote(id_path), "-"
   )
   status <- system2(
