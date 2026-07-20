@@ -38,6 +38,7 @@ multiple_testing:
     endothelial_indirect: 45
 mediator_instruments:
   primary_scope: cis_pqtl
+  cis_flank_bp: 300000
   primary_p: 5.0e-8
   min_f: 10
   ld_r2: 0.001

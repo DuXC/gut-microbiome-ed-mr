@@ -15,6 +15,43 @@ MECHANISTIC_OVERLAP_COLUMNS <- c(
   "evidence_note"
 )
 
+CYTOKINE_CIS_COLUMNS <- c(
+  "mediator_id", "source_id", "source_cytokine", "encoding_gene",
+  "lead_snp", "effect_allele", "other_allele", "eaf", "beta", "se", "p",
+  "chr_grch37", "position_grch37", "het_i2", "het_p",
+  "credible_set_member", "instrument_class",
+  "heterogeneity_sensitivity_status"
+)
+
+ENDOTHELIAL_CIS_COLUMNS <- c(
+  "mediator_id", "source_id", "source_file", "assay_target",
+  "encoding_gene", "gene_id", "chromosome_grch37", "gene_start_grch37",
+  "gene_end_grch37", "strand", "cis_flank_bp", "cis_start_grch37",
+  "cis_end_grch37", "coordinate_source", "coordinate_source_url",
+  "retrieved_on", "instrument_p", "ld_r2", "ld_kb"
+)
+
+ENDOTHELIAL_CIS_MEDIATOR_IDS <- c(
+  "endothelial_SELE", "endothelial_ESM1", "endothelial_PECAM1",
+  "endothelial_TIE2", "endothelial_TM", "endothelial_LOX1",
+  "endothelial_VEGFA", "endothelial_UPAR", "endothelial_TPA"
+)
+
+CYTOKINE_CIS_MEDIATOR_IDS <- c(
+  "cytokine_CCL11", "cytokine_CCL3", "cytokine_CCL4", "cytokine_CCL7",
+  "cytokine_CXCL1", "cytokine_CXCL10", "cytokine_CXCL12", "cytokine_FGF2",
+  "cytokine_HGF", "cytokine_IL16", "cytokine_IL18", "cytokine_IL1RA",
+  "cytokine_IL2RA", "cytokine_CSF1", "cytokine_MIF", "cytokine_RANTES",
+  "cytokine_SCGF_B", "cytokine_TRAIL", "cytokine_VEGF"
+)
+
+CYTOKINE_CIS_LEAD_SNPS <- c(
+  "rs763781", "rs764872", "rs56673427", "rs74832623", "rs2367442",
+  "rs1532985", "rs17391002", "rs76665547", "rs17155615", "rs3848180",
+  "rs1852138", "rs6743171", "rs56022334", "rs61785488", "rs9620336",
+  "rs11650416", "rs7246004", "rs73169285", "rs74556053"
+)
+
 MECHANISTIC_FAMILY_DENOMINATORS <- c(
   x_to_y = 5L,
   cytokine_m_to_y = 40L,
@@ -80,6 +117,11 @@ validate_mechanistic_config <- function(config) {
   }
   if (!identical(as.numeric(config$colocalization$pp4_support), 0.80)) {
     mechanistic_error("colocalization PP4 threshold must remain 0.80")
+  }
+  if (!identical(
+      as.numeric(config$mediator_instruments$cis_flank_bp), 300000
+    )) {
+    mechanistic_error("mediator cis flank must remain 300 kb")
   }
   config
 }
@@ -188,6 +230,116 @@ read_mechanistic_overlap <- function(path) {
   overlap <- read_mechanistic_csv(path, MECHANISTIC_OVERLAP_COLUMNS)
   validate_mechanistic_overlap(overlap)
   overlap
+}
+
+read_cytokine_cis_leads <- function(path, mediators) {
+  if (!file.exists(path)) mechanistic_error(paste("missing file", path))
+  leads <- utils::read.csv(
+    path, stringsAsFactors = FALSE, check.names = FALSE,
+    colClasses = "character", na.strings = c("", "NA")
+  )
+  if (!identical(names(leads), CYTOKINE_CIS_COLUMNS) || nrow(leads) != 19L ||
+      anyDuplicated(leads$mediator_id) || anyDuplicated(leads$source_id) ||
+      anyDuplicated(leads$lead_snp) ||
+      !identical(leads$mediator_id, CYTOKINE_CIS_MEDIATOR_IDS) ||
+      !identical(leads$lead_snp, CYTOKINE_CIS_LEAD_SNPS)) {
+    mechanistic_error("cytokine cis-lead identity freeze drifted")
+  }
+  required_text <- setdiff(
+    CYTOKINE_CIS_COLUMNS,
+    c(
+      "eaf", "beta", "se", "p", "chr_grch37", "position_grch37",
+      "het_i2", "het_p", "credible_set_member"
+    )
+  )
+  if (anyNA(leads[required_text]) ||
+      any(!nzchar(trimws(as.matrix(leads[required_text]))))) {
+    mechanistic_error("cytokine cis-lead required text is missing")
+  }
+  numeric_columns <- c(
+    "eaf", "beta", "se", "p", "chr_grch37", "position_grch37",
+    "het_i2", "het_p"
+  )
+  for (column in numeric_columns) {
+    leads[[column]] <- suppressWarnings(as.numeric(leads[[column]]))
+  }
+  required_numeric <- setdiff(numeric_columns, c("het_i2", "het_p"))
+  if (anyNA(leads[required_numeric]) ||
+      any(leads$eaf <= 0 | leads$eaf >= 1) ||
+      any(leads$se <= 0) || any(leads$p >= 5e-8 | leads$p < 0) ||
+      any(leads$chr_grch37 != floor(leads$chr_grch37)) ||
+      any(leads$chr_grch37 < 1 | leads$chr_grch37 > 22) ||
+      any(leads$position_grch37 <= 0 |
+        leads$position_grch37 != floor(leads$position_grch37))) {
+    mechanistic_error("cytokine cis-lead numeric values are invalid")
+  }
+  missing_heterogeneity <- is.na(leads$het_i2) | is.na(leads$het_p)
+  if (!identical(which(missing_heterogeneity), 11L) ||
+      any(leads$het_p[!missing_heterogeneity] < 0 |
+        leads$het_p[!missing_heterogeneity] > 1) ||
+      any(leads$het_i2[!missing_heterogeneity] < 0 |
+        leads$het_i2[!missing_heterogeneity] > 100)) {
+    mechanistic_error("cytokine cis-lead heterogeneity values drifted")
+  }
+  leads$credible_set_member <- ifelse(
+    leads$credible_set_member == "TRUE", TRUE,
+    ifelse(leads$credible_set_member == "FALSE", FALSE, NA)
+  )
+  if (anyNA(leads$credible_set_member) ||
+      any(leads$instrument_class != "paper_classified_cis_lead") ||
+      sum(leads$heterogeneity_sensitivity_status ==
+        "exclude_when_het_p_lt_0_05") != 13L ||
+      sum(leads$heterogeneity_sensitivity_status ==
+        "retain_when_het_p_ge_0_05") != 5L ||
+      sum(leads$heterogeneity_sensitivity_status ==
+        "retain_when_heterogeneity_not_estimable") != 1L) {
+    mechanistic_error("cytokine cis-lead classification drifted")
+  }
+  cytokines <- mediators[mediators$family == "cytokine", , drop = FALSE]
+  registry_index <- match(leads$mediator_id, cytokines$mediator_id)
+  if (anyNA(registry_index) ||
+      !identical(leads$source_id, cytokines$source_id[registry_index])) {
+    mechanistic_error("cytokine cis leads do not match mediator registry")
+  }
+  leads
+}
+
+read_endothelial_cis_regions <- function(path, mediators) {
+  regions <- read_mechanistic_csv(path, ENDOTHELIAL_CIS_COLUMNS)
+  numeric_columns <- c(
+    "chromosome_grch37", "gene_start_grch37", "gene_end_grch37", "strand",
+    "cis_flank_bp", "cis_start_grch37", "cis_end_grch37", "instrument_p",
+    "ld_r2", "ld_kb"
+  )
+  for (column in numeric_columns) {
+    regions[[column]] <- suppressWarnings(as.numeric(regions[[column]]))
+  }
+  if (nrow(regions) != 9L || anyDuplicated(regions$mediator_id) ||
+      !identical(regions$mediator_id, ENDOTHELIAL_CIS_MEDIATOR_IDS) ||
+      anyNA(regions[numeric_columns]) ||
+      any(regions$chromosome_grch37 < 1 |
+        regions$chromosome_grch37 > 22) ||
+      any(!regions$strand %in% c(-1, 1)) ||
+      any(regions$gene_start_grch37 > regions$gene_end_grch37) ||
+      any(regions$cis_flank_bp != 300000) ||
+      any(regions$cis_start_grch37 !=
+        pmax(1, regions$gene_start_grch37 - regions$cis_flank_bp)) ||
+      any(regions$cis_end_grch37 !=
+        regions$gene_end_grch37 + regions$cis_flank_bp) ||
+      any(regions$instrument_p != 5e-8) ||
+      any(regions$ld_r2 != 0.001) || any(regions$ld_kb != 10000) ||
+      any(!grepl("^https://", regions$coordinate_source_url)) ||
+      any(regions$retrieved_on != "2026-07-21")) {
+    mechanistic_error("endothelial cis-region freeze drifted")
+  }
+  endothelial <- mediators[mediators$family == "endothelial", , drop = FALSE]
+  registry_index <- match(regions$mediator_id, endothelial$mediator_id)
+  if (anyNA(registry_index) ||
+      !identical(regions$source_id, endothelial$source_id[registry_index]) ||
+      !identical(regions$source_file, endothelial$source_file[registry_index])) {
+    mechanistic_error("endothelial cis regions do not match mediator registry")
+  }
+  regions
 }
 
 gwas_catalog_block <- function(accession) {

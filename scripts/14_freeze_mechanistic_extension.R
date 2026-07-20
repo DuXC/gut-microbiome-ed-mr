@@ -11,12 +11,42 @@ source(file.path(project_root, "R", "mechanistic_extension.R"))
 config_path <- file.path(project_root, "config", "mechanistic_extension.yml")
 mediator_path <- file.path(project_root, "config", "mechanistic_mediators.csv")
 exposure_path <- file.path(project_root, "config", "mechanistic_exposures.csv")
+cis_path <- file.path(project_root, "config", "cytokine_cis_leads.csv")
+endothelial_cis_path <- file.path(
+  project_root, "config", "endothelial_cis_regions.csv"
+)
 overlap_path <- file.path(project_root, "08_qc", "mechanistic_sample_overlap_matrix.csv")
 
 config <- read_mechanistic_config(config_path)
 mediators <- read_mechanistic_mediators(mediator_path, config)
 exposures <- read_mechanistic_exposures(exposure_path)
+cis_leads <- read_cytokine_cis_leads(cis_path, mediators)
+endothelial_cis <- read_endothelial_cis_regions(
+  endothelial_cis_path, mediators
+)
 overlap <- read_mechanistic_overlap(overlap_path)
+
+supplement_path <- file.path(
+  project_root, "02_literature", "source_files",
+  "42003_2025_7453_MOESM6_ESM.xlsx"
+)
+supplement_receipt_path <- file.path(
+  project_root, "08_qc", "cytokine_supplementary_source_receipt.csv"
+)
+supplement_receipt <- utils::read.csv(
+  supplement_receipt_path, stringsAsFactors = FALSE, check.names = FALSE
+)
+if (nrow(supplement_receipt) != 1L || !file.exists(supplement_path) ||
+    !identical(as.numeric(file.info(supplement_path)$size),
+      as.numeric(supplement_receipt$bytes[[1L]])) ||
+    !identical(
+      digest::digest(
+        supplement_path, algo = "sha256", file = TRUE, serialize = FALSE
+      ),
+      supplement_receipt$sha256[[1L]]
+    )) {
+  stop("Cytokine supplementary source receipt verification failed", call. = FALSE)
+}
 
 instruments_path <- file.path(
   project_root, "03_data", "processed", "instruments", "instruments.parquet"
@@ -69,8 +99,10 @@ write_csv_atomic(freeze, freeze_path)
 write_csv_atomic(denominators, denominator_path)
 
 receipt_files <- c(
-  config_path, mediator_path, exposure_path, overlap_path, instruments_path,
-  freeze_path, denominator_path
+  config_path, mediator_path, exposure_path, cis_path, endothelial_cis_path,
+  overlap_path,
+  supplement_receipt_path, supplement_path, instruments_path, freeze_path,
+  denominator_path
 )
 receipt <- data.frame(
   artifact = sub(paste0("^", project_root, "/"), "", receipt_files),
@@ -86,6 +118,10 @@ write_csv_atomic(
 )
 
 message(sprintf(
-  "frozen exposures=%d mediators=%d overlap_rows=%d families=%d",
-  nrow(exposures), nrow(mediators), nrow(overlap), nrow(denominators)
+  paste0(
+    "frozen exposures=%d mediators=%d cytokine_cis_leads=%d ",
+    "endothelial_cis_regions=%d overlap_rows=%d families=%d"
+  ),
+  nrow(exposures), nrow(mediators), nrow(cis_leads), nrow(endothelial_cis),
+  nrow(overlap), nrow(denominators)
 ))

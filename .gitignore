@@ -13,6 +13,7 @@ renv/library/
 renv/staging/
 03_data/raw/**
 03_data/processed/**
+02_literature/source_files/**
 05_results/_targets/
 _targets/
 08_qc/renders/

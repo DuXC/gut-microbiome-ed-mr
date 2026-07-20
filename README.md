@@ -244,6 +244,31 @@ Detach from an attached screen with `Ctrl-A`, then `D`. The session survives
 Codex and Terminal closure but, unlike a login agent, must be restarted after a
 Mac reboot.
 
+The mediator definition is frozen independently of ED results. Nineteen
+cytokine cis leads were transcribed from and programmatically checked against
+the official Supplementary Data S2 workbook. Its GRCh37 coordinates are stored
+separately from the GWAS Catalog harmonized GRCh38 coordinates. The nine
+endothelial cis intervals use the encoding gene plus/minus 300 kb on GRCh37.
+
+The downstream stages are restartable and retain missing hypotheses explicitly:
+
+```bash
+/opt/homebrew/bin/Rscript scripts/19_freeze_mechanistic_total_effects.R
+/opt/homebrew/bin/Rscript scripts/20_extract_available_mechanistic_sources.R
+/opt/homebrew/bin/Rscript scripts/21_run_cytokine_m_to_y_screen.R
+/opt/homebrew/bin/Rscript scripts/22_run_available_cytokine_x_to_m_screen.R
+/opt/homebrew/bin/Rscript scripts/23_extract_available_endothelial_sources.R
+```
+
+Stage 20 extracts only sources already present in the checksum receipt and can
+be rerun as downloads finish. Stage 22 always emits the complete 200-row
+5-by-40 family, but cannot label an association finally FDR-significant until
+all 40 cytokine files are verified. The cytokine M-to-ED screen currently
+harmonises 18 of 19 cis leads to FinnGen; none survives the frozen 40-test BH
+family. The nominal CCL11 estimate is a screening observation only because its
+q value is 1, the cytokine meta-analysis partially overlaps FinnGen, and the
+lead is excluded by the prespecified source-heterogeneity sensitivity.
+
 ## Reproducible environment
 
 Restore the exact locked R environment and ensure the pinned project-local PLINK binary:

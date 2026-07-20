@@ -95,7 +95,23 @@ requires a protocol amendment made before outcome association screening.
 - Microbial-function instruments: P<5e-8, F>10, ancestry-matched LD clumping at
   r2<0.001 in a 10,000-kb window.
 - Mediator-to-ED primary instruments: cis-pQTLs at P<5e-8, F>10, clumped at
-  r2<0.001. Trans-pQTLs are sensitivity-only.
+  r2<0.001 in a 10,000-kb window. For the nine endothelial proteins, cis is
+  frozen as the GRCh37 interval spanning the encoding gene plus 300 kb on each
+  side. Gene coordinates and source URLs were recorded before inspecting any
+  mediator-to-ED association. Trans-pQTLs are sensitivity-only.
+- Before any mediator-to-ED result was inspected, the cytokine cis definition
+  was operationally frozen to the 19 lead variants explicitly classified as
+  cis in Konieczny et al. Supplementary Data S2. The other 21 cytokines remain
+  in the 40-test denominator as non-estimable under the cis-only policy.
+- Supplementary Data S2 reports the 19 lead coordinates on GRCh37; the public
+  GWAS Catalog harmonized files provide their GRCh38 coordinates. Both builds
+  are retained in separate fields and are never mixed for regional analyses.
+- Because 13 of the 19 cytokine cis leads have HetP<0.05 and one lacks an
+  estimable heterogeneity statistic, the complete 19-lead analysis is a
+  screening layer. A prespecified heterogeneity sensitivity retains only
+  HetP>=0.05 variants, matching the source study's heterogeneity sensitivity;
+  the missing-HetP IL-18 lead is reported separately and is
+  not silently treated as homogeneous.
 - One-instrument estimates use the Wald ratio. Multi-instrument estimates use
   constrained multiplicative random-effects IVW, with weighted median,
   MR-Egger, and MR-RAPS only when their requirements are met.

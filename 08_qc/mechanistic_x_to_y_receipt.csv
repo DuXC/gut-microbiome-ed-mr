@@ -1,0 +1,6 @@
+"artifact","sha256","frozen_at_utc"
+"config/mechanistic_exposures.csv","84778f662a181b858ce79b4b90635fef87ef6aa8aa2269ada5864e4bc3879cbf","2026-07-20T17:43:01Z"
+"05_results/tables/mr_raw.csv","a2185679aca10c56e304f721442b1f1e26ab85c081aeec16d3273a7c8831d5f2","2026-07-20T17:43:01Z"
+"R/mechanistic_analysis.R","7c04f40c200693c8dd6688926db5c4293983cf770dc0710da2da721222942b69","2026-07-20T17:43:01Z"
+"scripts/19_freeze_mechanistic_total_effects.R","516b4e290cab2f7f1e6d00bca8c83458de3d0a24972bac945043bf5a1e3eae7c","2026-07-20T17:43:01Z"
+"05_results/tables/mechanistic_x_to_y_total_effects.csv","dc88733aa600344071b8902f5a64b36bf4ceb5505e5b17845d32f52198ff035c","2026-07-20T17:43:01Z"

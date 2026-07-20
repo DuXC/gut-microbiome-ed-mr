@@ -19,6 +19,30 @@
   agents block on this user-mounted SMB share), a compact progress command, and
   regression tests that preserve the original immutable-file behavior by
   default.
+- Extracted and source-validated the 19 published cytokine cis leads from the
+  official supplementary workbook, preserving its GRCh37 coordinates separately
+  from the GWAS Catalog harmonized GRCh38 coordinates. Thirteen leads enter the
+  prespecified source-heterogeneity exclusion sensitivity, five are retained,
+  and IL-18 remains explicitly heterogeneity-not-estimable.
+- Froze GRCh37 gene plus/minus 300-kb cis regions for all nine endothelial
+  proteins from authoritative gene-coordinate sources before inspecting their
+  ED associations.
+- Froze the five single-instrument microbial-function total effects; all five
+  were estimable against FinnGen and none survived the five-test BH family.
+- Added restartable target extraction for the five microbial-function SNPs and
+  the cytokine cis leads, with explicit source-missing rows and cross-build
+  separation.
+- Ran the complete 40-trait cytokine-to-ED screening family: 18 of 19 cis leads
+  harmonised to FinnGen, none survived BH FDR, and the sole nominal CCL11 result
+  is ineligible for causal interpretation because it fails multiplicity, known
+  partial-overlap, and source-heterogeneity gates.
+- Added the complete 200-row cytokine X-to-M result skeleton so unavailable
+  files remain pending rather than disappearing from the denominator; final FDR
+  labels remain disabled until all 40 cytokine sources are verified.
+- Added a streaming SCALLOP parser that extracts the five microbial-function
+  target variants plus genome-wide-significant, F>10 variants inside each
+  frozen endothelial cis interval without fully decompressing multi-gigabyte
+  source files; LD-reference mapping and clumping remain a separate gate.
 
 ## 2026-07-20
 
