@@ -1,5 +1,19 @@
 # Gut microbiome–ED MR rebuild
 
+This repository contains the reproducible code, provenance records, frozen
+summary results, and manuscript package for an error-controlled bidirectional
+Mendelian-randomization study of gut microbial traits and erectile dysfunction.
+Third-party GWAS payloads are intentionally excluded; source accessions, URLs,
+and cryptographic receipts are retained so authorized users can reconstruct the
+analysis.
+
+Citation metadata are provided in `CITATION.cff`, and the public-release scope
+is defined in `LICENSE.md`. Code is MIT-licensed; original documentation,
+figures, and derived research artifacts are CC BY 4.0. Third-party source terms
+continue to apply to external data.
+
+Public repository: https://github.com/DuXC/gut-microbiome-ed-mr
+
 The numbered scripts are the reproducible entry points. There is deliberately
 no stale monolithic wrapper: run only the stage whose prerequisite receipts are
 already complete, in the order documented below.

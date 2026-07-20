@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the archived release and the associated article."
+title: "Bidirectional Mendelian randomization of gut microbiota and erectile dysfunction"
+type: software
+version: 0.1.0
+date-released: 2026-07-20
+license: CC-BY-4.0
+repository-code: "https://github.com/DuXC/gut-microbiome-ed-mr"
+authors:
+  - family-names: Du
+    given-names: Xiancheng
+    orcid: "https://orcid.org/0009-0000-4374-8818"
+    affiliation: "Department of Urology, Zhongda Hospital, School of Medicine, Southeast University"
+  - family-names: Tao
+    given-names: Shuchun
+    affiliation: "Department of Urology, Zhongda Hospital, School of Medicine, Southeast University"
+  - family-names: Xue
+    given-names: Kaihua
+    affiliation: "Department of Urology, Zhongda Hospital, School of Medicine, Southeast University"
+  - family-names: Zhu
+    given-names: Yongkun
+    affiliation: "Department of Urology, Zhongda Hospital, School of Medicine, Southeast University"
+  - family-names: Chen
+    given-names: Ming
+    affiliation: "Department of Urology, Zhongda Hospital, Southeast University"
+  - family-names: Liu
+    given-names: Chunhui
+    affiliation: "Department of Urology, Zhongda Hospital, Southeast University"
+  - family-names: Sun
+    given-names: Chao
+    orcid: "https://orcid.org/0000-0003-0538-1239"
+    affiliation: "Department of Urology, Zhongda Hospital, Southeast University"
+keywords:
+  - Mendelian randomization
+  - gut microbiome
+  - erectile dysfunction
+  - FinnGen
+  - HUNT
+  - reproducible research

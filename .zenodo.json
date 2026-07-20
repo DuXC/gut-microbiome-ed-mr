@@ -1,0 +1,33 @@
+{
+  "title": "Bidirectional Mendelian randomization of gut microbiota and erectile dysfunction",
+  "description": "Reproducible analysis code, provenance records, frozen summary results, manuscript files, and submission-grade figures for an error-controlled bidirectional Mendelian randomization study of gut microbial traits and erectile dysfunction. Third-party GWAS payloads are not redistributed.",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "version": "0.1.0",
+  "publication_date": "2026-07-20",
+  "creators": [
+    {"name": "Du, Xiancheng", "orcid": "0009-0000-4374-8818", "affiliation": "Department of Urology, Zhongda Hospital, School of Medicine, Southeast University"},
+    {"name": "Tao, Shuchun", "affiliation": "Department of Urology, Zhongda Hospital, School of Medicine, Southeast University"},
+    {"name": "Xue, Kaihua", "affiliation": "Department of Urology, Zhongda Hospital, School of Medicine, Southeast University"},
+    {"name": "Zhu, Yongkun", "affiliation": "Department of Urology, Zhongda Hospital, School of Medicine, Southeast University"},
+    {"name": "Chen, Ming", "affiliation": "Department of Urology, Zhongda Hospital, Southeast University"},
+    {"name": "Liu, Chunhui", "affiliation": "Department of Urology, Zhongda Hospital, Southeast University"},
+    {"name": "Sun, Chao", "orcid": "0000-0003-0538-1239", "affiliation": "Department of Urology, Zhongda Hospital, Southeast University"}
+  ],
+  "keywords": [
+    "Mendelian randomization",
+    "gut microbiome",
+    "erectile dysfunction",
+    "FinnGen",
+    "HUNT",
+    "reproducible research"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/DuXC/gut-microbiome-ed-mr",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
+}

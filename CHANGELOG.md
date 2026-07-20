@@ -15,6 +15,10 @@
   address, public repository authorization, and LLM disclosure; replaced the
   ambiguous Markdown asterisk with a dagger correspondence marker so Chunhui
   Liu's name renders in roman type.
+- Added public-release metadata (`CITATION.cff`, `.zenodo.json`), dual licensing,
+  and a release audit checklist; created the public GitHub repository at
+  `https://github.com/DuXC/gut-microbiome-ed-mr` with a repository-scoped deploy
+  key instead of granting GitHub CLI access to private repositories.
 
 - Migrated the completed project tree to the `DuXC_PhD_OS` NAS SMB share while
   preserving the original absolute project path.
