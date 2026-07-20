@@ -6,8 +6,8 @@ Date: 2026-07-20
 
 The IJIR-first transparent-negative manuscript package is technically complete
 and internally consistent. All author-level confirmations were received on
-2026-07-20. The remaining operational gate is insertion of the public repository
-URL/DOI before portal upload.
+2026-07-20. The public repository and DOI archive are live, and the DOI has been
+inserted into the submission files.
 
 The full repository test suite passed after package generation: 785 tests, 0
 failures, 0 warnings, and 0 skips.
@@ -38,7 +38,7 @@ failures, 0 warnings, and 0 skips.
 
 ## File and rendering checks
 
-- Main manuscript rendered to 15 pages with continuous line numbering and page
+- Main manuscript rendered to 16 pages with continuous line numbering and page
   numbers; title page, cover letter, and two-page STROBE-MR checklist also
   rendered successfully.
 - All rendered pages were inspected in montage form; no clipping, blank pages,
@@ -70,8 +70,8 @@ failures, 0 warnings, and 0 skips.
 
 ## Open items before submission
 
-1. Public code/archive URL and DOI for the Data Availability statement. This is
-   the only `[TODO: ...]` remaining in the manuscript.
-2. Optional ORCIDs for the five authors whose ORCIDs are not yet recorded.
+1. Optional ORCIDs for the five authors whose ORCIDs are not yet recorded.
+
+No placeholder markers or mandatory author/data items remain in the package.
 
 No new database download or new MR analysis is required for this v0.1 package.

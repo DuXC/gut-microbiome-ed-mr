@@ -1,6 +1,7 @@
 20 July 2026
 
 Editors
+
 International Journal of Impotence Research
 
 Dear Editors,
@@ -13,14 +14,20 @@ No association survived multiplicity control in either direction. The two nomina
 
 This work is original, has not been published previously, and is not under consideration elsewhere. All authors have approved the manuscript and its submission. The authors declare no competing interests. The study used only publicly available, deidentified GWAS summary statistics and required no new ethical approval or participant consent.
 
+Analysis code, provenance receipts, frozen summary results, and manuscript-associated materials are publicly archived at https://doi.org/10.5281/zenodo.21456671. Third-party GWAS payloads are not redistributed.
+
 The manuscript lists Ming Chen, Chunhui Liu, and Chao Sun as corresponding authors. If the submission system permits only one corresponding author, please use Chao Sun as the primary submission contact.
 
 Corresponding author and primary submission contact:
 
-Chao Sun, PhD  
-Department of Urology, Zhongda Hospital, Southeast University  
-87 Dingjiaqiao Road, Nanjing, Jiangsu 210009, China  
-Email: csun@seu.edu.cn  
+Chao Sun, PhD
+
+Department of Urology, Zhongda Hospital, Southeast University
+
+87 Dingjiaqiao Road, Nanjing, Jiangsu 210009, China
+
+Email: csun@seu.edu.cn
+
 ORCID: 0000-0003-0538-1239
 
 Thank you for your consideration.
@@ -28,4 +35,3 @@ Thank you for your consideration.
 Sincerely,
 
 Xiancheng Du, on behalf of all authors
-

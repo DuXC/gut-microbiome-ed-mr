@@ -78,7 +78,7 @@ The main strength of this study is its deliberately conservative evidence geomet
 
 ## Data availability
 
-The GWAS summary statistics analyzed in this study are available from the GWAS Catalog, FinnGen R12, the 1000 Genomes Project reference release, and the cited 2025 ED study under their respective source terms. Source accessions, URLs, checksums, frozen result tables, and data dictionaries are supplied in the Supplementary Data. Analysis code and hash receipts will be deposited in a DOI-assigned public repository before submission; the final URL is [TODO: repository DOI/URL]. Third-party raw summary-statistic files will not be redistributed where source terms do not permit redistribution.
+The GWAS summary statistics analyzed in this study are available from the GWAS Catalog, FinnGen R12, the 1000 Genomes Project reference release, and the cited 2025 ED study under their respective source terms. Source accessions, URLs, checksums, frozen result tables, and data dictionaries are supplied in the Supplementary Data. Analysis code, hash receipts, frozen summary results, and manuscript-associated materials are publicly archived in Zenodo at https://doi.org/10.5281/zenodo.21456671 (version 0.1.0; all-version concept DOI: https://doi.org/10.5281/zenodo.21456670). The development repository is available at https://github.com/DuXC/gut-microbiome-ed-mr. Third-party raw summary-statistic files are not redistributed where source terms do not permit redistribution.
 
 ## Acknowledgements
 

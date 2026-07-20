@@ -5,6 +5,8 @@ type: software
 version: 0.1.0
 date-released: 2026-07-20
 license: CC-BY-4.0
+doi: 10.5281/zenodo.21456671
+url: "https://doi.org/10.5281/zenodo.21456671"
 repository-code: "https://github.com/DuXC/gut-microbiome-ed-mr"
 authors:
   - family-names: Du

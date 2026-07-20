@@ -150,7 +150,7 @@ checklist = [
  ("17", "Interpretation", "Discussion, final paragraph", "Conclusions bounded to tested instruments, traits and populations."),
  ("18", "Generalisability", "Discussion", "European-ancestry dominance and taxonomy/measurement transfer limitations stated."),
  ("19", "Funding", "Funding", "Grant numbers, recipients and funder role stated."),
- ("20", "Data, code and transparency", "Data availability; Software, reproducibility, and LLM use", "Source terms, planned DOI repository, hash receipts and LLM role reported."),
+ ("20", "Data, code and transparency", "Data availability; Software, reproducibility, and LLM use", "Source terms, public version DOI, hash receipts and LLM role reported."),
 ]
 doc = Document(); setup(doc, double=False, line_numbers=False)
 p = doc.add_paragraph(style="Title"); p.alignment = WD_ALIGN_PARAGRAPH.CENTER

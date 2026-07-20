@@ -11,6 +11,12 @@ Confirmed by the lead author on 2026-07-20:
 5. Missing ORCIDs for Shuchun Tao, Kaihua Xue, Yongkun Zhu, Ming Chen, and
    Chunhui Liu may remain blank unless subsequently supplied.
 
+The authorized public archive was released on 2026-07-20:
+
+- GitHub: https://github.com/DuXC/gut-microbiome-ed-mr
+- Version DOI: https://doi.org/10.5281/zenodo.21456671
+- Concept DOI: https://doi.org/10.5281/zenodo.21456670
+
 Also resolved: author order; three manuscript corresponding authors; Chao
 Sun as the sole portal contact if only one is accepted; both grant numbers and
 recipients; and no competing interests for all authors.

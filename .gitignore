@@ -20,5 +20,6 @@ _targets/
 *.part
 *.tmp
 *.log
+*.inspect.ndjson
 !03_data/raw/.gitkeep
 !03_data/processed/.gitkeep

@@ -162,6 +162,9 @@ readme = [
     ["Strict global threshold", "2.774695×10^-5 across 1,802 tests"],
     ["Interpretation boundary", "Nominal rows are not replicated causal findings. Reverse rows are sensitivity analyses."],
     ["Raw-data boundary", "Third-party GWAS payloads are not redistributed in this workbook."],
+    ["Public code repository", "https://github.com/DuXC/gut-microbiome-ed-mr"],
+    ["Archived version DOI", "https://doi.org/10.5281/zenodo.21456671"],
+    ["All-version concept DOI", "https://doi.org/10.5281/zenodo.21456670"],
     ["Workbook structure", "Source Summary; GWAS Source Ledger; Forward Primary; Forward Replication; Reverse Primary; Instrument Inventory; Method Status; Final Receipt; Data Dictionary"],
 ]
 

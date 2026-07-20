@@ -19,6 +19,10 @@
   and a release audit checklist; created the public GitHub repository at
   `https://github.com/DuXC/gut-microbiome-ed-mr` with a repository-scoped deploy
   key instead of granting GitHub CLI access to private repositories.
+- Published GitHub release `v0.1.0`; verified Zenodo version DOI
+  `10.5281/zenodo.21456671` and concept DOI `10.5281/zenodo.21456670`; inserted
+  the live identifiers into the manuscript, cover letter, citation metadata,
+  README, and supplementary workbook source.
 
 - Migrated the completed project tree to the `DuXC_PhD_OS` NAS SMB share while
   preserving the original absolute project path.

@@ -14,6 +14,12 @@ continue to apply to external data.
 
 Public repository: https://github.com/DuXC/gut-microbiome-ed-mr
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21456670.svg)](https://doi.org/10.5281/zenodo.21456670)
+
+Archived release v0.1.0: https://doi.org/10.5281/zenodo.21456671
+
+All-version concept DOI: https://doi.org/10.5281/zenodo.21456670
+
 The numbered scripts are the reproducible entry points. There is deliberately
 no stale monolithic wrapper: run only the stage whose prerequisite receipts are
 already complete, in the order documented below.

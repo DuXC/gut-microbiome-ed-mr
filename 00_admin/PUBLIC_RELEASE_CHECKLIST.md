@@ -19,12 +19,17 @@ Date: 2026-07-20
 ## Required at release
 
 - [x] Insert the public GitHub URL into `CITATION.cff` and README.
-- [ ] Enable the GitHub repository in Zenodo before creating the release.
-- [ ] Create GitHub release/tag `v0.1.0`.
-- [ ] Verify the Zenodo deposit metadata and publish the record.
-- [ ] Insert the minted concept/version DOI in the manuscript Data Availability
+- [x] Enable the GitHub repository in Zenodo before creating the release.
+- [x] Create GitHub release/tag `v0.1.0`.
+- [x] Verify the Zenodo deposit metadata and publish the record.
+- [x] Insert the minted concept/version DOI in the manuscript Data Availability
   statement, `CITATION.cff`, README, and supplementary source summary.
-- [ ] Rebuild and rerender the manuscript after DOI insertion.
+- [x] Rebuild and rerender the manuscript after DOI insertion.
+
+Published identifiers:
+
+- Version DOI: `10.5281/zenodo.21456671`
+- Concept DOI: `10.5281/zenodo.21456670`
 
 ## Explicitly excluded
 
