@@ -11,6 +11,10 @@
 - Added explicit authorship, correspondence, funding, competing-interest,
   data-availability, and post-freeze LLM-use statements; retained author CRediT
   approval and the public repository DOI as visible pre-submission gates.
+- Recorded lead-author confirmation of the CRediT statement, correspondence
+  address, public repository authorization, and LLM disclosure; replaced the
+  ambiguous Markdown asterisk with a dagger correspondence marker so Chunhui
+  Liu's name renders in roman type.
 
 - Migrated the completed project tree to the `DuXC_PhD_OS` NAS SMB share while
   preserving the original absolute project path.

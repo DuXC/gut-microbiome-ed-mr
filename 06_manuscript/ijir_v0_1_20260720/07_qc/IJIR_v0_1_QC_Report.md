@@ -5,9 +5,9 @@ Date: 2026-07-20
 ## Outcome
 
 The IJIR-first transparent-negative manuscript package is technically complete
-and internally consistent. It is **author-confirmation ready**, not yet labelled
-submission-ready, because the CRediT statement and public repository URL/DOI
-must be confirmed before portal upload.
+and internally consistent. All author-level confirmations were received on
+2026-07-20. The remaining operational gate is insertion of the public repository
+URL/DOI before portal upload.
 
 The full repository test suite passed after package generation: 785 tests, 0
 failures, 0 warnings, and 0 skips.
@@ -70,10 +70,8 @@ failures, 0 warnings, and 0 skips.
 
 ## Open items before submission
 
-1. Author approval or amendment of the proposed CRediT statement.
-2. Public code/archive URL and DOI for the Data Availability statement. This is
+1. Public code/archive URL and DOI for the Data Availability statement. This is
    the only `[TODO: ...]` remaining in the manuscript.
-3. Confirmation of the shared postal address and the LLM statement.
-4. Optional ORCIDs for the five authors whose ORCIDs are not yet recorded.
+2. Optional ORCIDs for the five authors whose ORCIDs are not yet recorded.
 
 No new database download or new MR analysis is required for this v0.1 package.
