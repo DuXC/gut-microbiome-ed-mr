@@ -129,6 +129,28 @@ The compact summary and hash receipt is
 `08_qc/harmonisation_inventory.csv`; the row-level audit is a compressed,
 generated Parquet artifact under `03_data/processed/harmonised/`.
 
+## Forward MR and frozen multiplicity
+
+Run the prespecified estimators in eight independent R sessions; PSOCK is used
+because forking an Arrow-loaded process is unsafe on macOS:
+
+```bash
+MR_WORKERS=8 /usr/bin/caffeinate -ims /opt/homebrew/bin/Rscript scripts/08_run_mr.R
+/opt/homebrew/bin/Rscript scripts/09_apply_forward_multiplicity.R
+```
+
+The primary estimator is the Wald ratio for one SNP and constrained
+multiplicative random-effects IVW for multiple SNPs. The IVW residual scale is
+never allowed below one. Weighted-median bootstraps use deterministic pair-level
+seeds; MR-RAPS non-convergence and multiple-root warnings are failures, not
+silent estimates. The run receipt records code, input, and output hashes in
+`08_qc/mr_run_receipt.csv`.
+
+The currently frozen FinnGen forward-primary family contains 230 Swedish
+microbiome traits. Of these, 218 were estimable and seven had nominal
+`P < 0.05`; none survived BH FDR (`q < 0.05`). Reverse-family analysis remains
+required before the combined-direction global Bonferroni threshold is final.
+
 ## Reproducible environment
 
 Restore the exact locked R environment and ensure the pinned project-local PLINK binary:

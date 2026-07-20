@@ -26,6 +26,20 @@ This file is the normative operational source for analysis eligibility, multipli
 - Species, higher taxonomic units, functional modules, diversity indices, or any other strata may be displayed separately, but strata never reduce either denominator.
 - Reverse ED→microbiome analyses remain a frozen separate BH family for directionality and sensitivity assessment. They do not use the forward independent-replication gate and can never receive `primary` or `strict` evidence labels.
 
+## Core MR estimators
+
+- One-SNP pairs use the Wald ratio. Multi-SNP pairs use multiplicative
+  random-effects IVW as the primary estimator, with the residual scale bounded
+  below at one so underdispersion cannot make the standard error smaller than
+  its fixed-effect value.
+- Weighted median, MR-Egger, and MR-RAPS are prespecified robust estimators when
+  their instrument-count requirements are met. MR-RAPS estimates accompanied by
+  an explicit non-convergence or multiple-root warning are marked failed rather
+  than treated as valid finite estimates.
+- MR-PRESSO, leave-one-out, and single-SNP diagnostics are run after the frozen
+  FDR screen for candidates only. A test not estimable at the available
+  instrument count remains explicitly unavailable.
+
 ## Outcome effect scales
 
 - FinnGen R12 erectile dysfunction is the primary outcome and supplies log-odds

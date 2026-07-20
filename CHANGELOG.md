@@ -50,6 +50,16 @@
   builds, with chromosome checks, auditable multiallelic selection, and strict
   frequency-based palindrome handling. The FinnGen layer retained 41,440 of
   43,295 trait-tier instrument rows (95.72%).
+- Ran 11,828 prespecified exposure–outcome–tier pairs with deterministic
+  weighted-median bootstraps across eight independent R workers, retaining
+  42,944 method rows and explicit non-estimable/failed records.
+- Prevented two-SNP underdispersion from creating spuriously precise IVW
+  results by bounding the multiplicative random-effects residual scale below at
+  one; 117 MR-RAPS rows with non-convergence or multiple-root warnings were
+  marked failed.
+- Froze the forward-primary family at 230 Swedish microbiome traits before
+  association screening. Of 218 estimable primary effects, seven were nominal
+  at `P < 0.05` and none survived BH FDR (minimum `q = 0.942`).
 
 ## 2026-07-10
 
