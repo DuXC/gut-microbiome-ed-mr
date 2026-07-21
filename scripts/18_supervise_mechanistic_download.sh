@@ -14,11 +14,11 @@ while true; do
   /usr/bin/caffeinate -ims \
     /opt/homebrew/bin/Rscript \
     "$project_root/scripts/16_download_mechanistic_sources.R"
-  status=$?
-  if [[ $status -eq 0 ]]; then
+  exit_code=$?
+  if [[ $exit_code -eq 0 ]]; then
     echo "$(date -u '+%Y-%m-%dT%H:%M:%SZ') all downloads verified"
     exit 0
   fi
-  echo "$(date -u '+%Y-%m-%dT%H:%M:%SZ') downloader exited $status; retrying in 30 seconds" >&2
+  echo "$(date -u '+%Y-%m-%dT%H:%M:%SZ') downloader exited $exit_code; retrying in 30 seconds" >&2
   sleep 30
 done

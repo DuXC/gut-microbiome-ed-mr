@@ -316,3 +316,12 @@ test_that("SCALLOP normalization separates five targets from cis candidates", {
   expect_equal(sum(result$request_role == "mediator_cis_candidate"), 1L)
   expect_equal(result$build[result$request_role == "mediator_cis_candidate"], "GRCh37")
 })
+
+test_that("mechanistic zsh supervisor avoids reserved status parameter", {
+  supervisor <- readLines(
+    file.path(project_root, "scripts", "18_supervise_mechanistic_download.sh"),
+    warn = FALSE
+  )
+  expect_false(any(grepl("^[[:space:]]*status=", supervisor)))
+  expect_true(any(grepl("^[[:space:]]*exit_code=", supervisor)))
+})
