@@ -258,16 +258,29 @@ The downstream stages are restartable and retain missing hypotheses explicitly:
 /opt/homebrew/bin/Rscript scripts/21_run_cytokine_m_to_y_screen.R
 /opt/homebrew/bin/Rscript scripts/22_run_available_cytokine_x_to_m_screen.R
 /opt/homebrew/bin/Rscript scripts/23_extract_available_endothelial_sources.R
+/opt/homebrew/bin/Rscript scripts/24_prepare_endothelial_instruments.R
+/opt/homebrew/bin/Rscript scripts/25_run_endothelial_m_to_y_screen.R
+/opt/homebrew/bin/Rscript scripts/26_run_mechanistic_indirect_effects.R
+/opt/homebrew/bin/Rscript scripts/27_validate_mechanistic_extension.R
 ```
 
-Stage 20 extracts only sources already present in the checksum receipt and can
-be rerun as downloads finish. Stage 22 always emits the complete 200-row
-5-by-40 family, but cannot label an association finally FDR-significant until
-all 40 cytokine files are verified. The cytokine M-to-ED screen currently
-harmonises 18 of 19 cis leads to FinnGen; none survives the frozen 40-test BH
-family. The nominal CCL11 estimate is a screening observation only because its
-q value is 1, the cytokine meta-analysis partially overlaps FinnGen, and the
-lead is excluded by the prespecified source-heterogeneity sensitivity.
+All 49 first-wave files are now verified. Stage 20 extracted all 40 cytokine
+sources; the complete 200-row X-to-M family contains 169 estimable rows and no
+FDR signal. The cytokine M-to-ED screen harmonises 18 of 19 cis leads to
+FinnGen; none survives the frozen 40-test BH family. The nominal CCL11 estimate
+is a screening observation only because its q value is 1, the cytokine
+meta-analysis partially overlaps FinnGen, and the lead is excluded by the
+prespecified source-heterogeneity sensitivity.
+
+For the endothelial family, all 45 X-to-M targets were recovered. Of 1,476
+pre-LD cis candidates, 371 mapped uniquely to the bundled 1000G EUR reference;
+PLINK retained 11 independent cis-pQTLs for seven of nine proteins. All 11
+harmonised to FinnGen, but none of the seven estimable M-to-ED effects survived
+the nine-test BH family. Neither the 200 cytokine nor the 45 endothelial
+product-of-coefficients family passed FDR or the joint component gates.
+Colocalization was therefore not triggered. The frozen stopping rule is to
+retain this as a supplementary falsification analysis and stop before broad
+metabolite or immune-cell expansion.
 
 ## Reproducible environment
 

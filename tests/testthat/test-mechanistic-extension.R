@@ -216,6 +216,18 @@ test_that("cytokine target extraction preserves missing rows and verifies cis le
   expect_equal(
     lead$position_grch37, 32488890
   )
+
+  swapped <- raw
+  swapped$effect_allele <- lead$other_allele
+  swapped$other_allele <- lead$effect_allele
+  swapped$beta <- -lead$beta * 1.004
+  swapped$standard_error <- lead$se * 1.004
+  swapped_normalized <- normalize_cytokine_gwas_rows(swapped)
+  expect_no_error(
+    align_cytokine_target_requests(
+      requests, swapped_normalized, cytokine, cis
+    )
+  )
 })
 
 test_that("cytokine M-to-Y results retain the frozen 40-test denominator", {
@@ -315,6 +327,98 @@ test_that("SCALLOP normalization separates five targets from cis candidates", {
   expect_equal(sum(result$extraction_status == "matched"), 1L)
   expect_equal(sum(result$request_role == "mediator_cis_candidate"), 1L)
   expect_equal(result$build[result$request_role == "mediator_cis_candidate"], "GRCh37")
+})
+
+test_that("SCALLOP normalization retains valid cis indels for LD mapping", {
+  raw <- data.frame(
+    MarkerName = "1:169795214:C_CT",
+    Allele1 = "CT", Allele2 = "C",
+    Freq1 = 0.42, Effect = 0.07, StdErr = 0.01,
+    `P-value` = 8e-11, TotalSampleSize = 18000,
+    stringsAsFactors = FALSE, check.names = FALSE
+  )
+  result <- normalize_scallop_gwas_rows(raw)
+  expect_equal(nrow(result), 1L)
+  expect_equal(result$ea, "CT")
+  expect_equal(result$oa, "C")
+})
+
+test_that("endothelial cis mapping requires one allele-compatible LD row", {
+  candidates <- data.frame(
+    mediator_id = rep("endothelial_SELE", 3L), source_id = rep("SELE", 3L),
+    marker_name = c("1:100:A_G", "1:200:C_CT", "1:300:C_T"),
+    request_role = rep("mediator_cis_candidate", 3L),
+    chr = rep("1", 3L), pos = c(100, 200, 300),
+    ea = c("A", "CT", "T"), oa = c("G", "C", "C"),
+    beta = c(0.1, 0.2, 0.3), se = rep(0.01, 3L),
+    eaf = rep(0.2, 3L), p = rep(1e-9, 3L), n = rep(10000, 3L),
+    F = c(100, 400, 900), build = rep("GRCh37", 3L),
+    stringsAsFactors = FALSE
+  )
+  bim <- data.frame(
+    chr = c("1", "1"), reference_id = c("rs1", "rs3"),
+    pos = c(100, 300), a1 = c("G", "A"), a2 = c("A", "G"),
+    stringsAsFactors = FALSE
+  )
+  result <- map_endothelial_cis_to_ld_reference(candidates, bim)
+  expect_equal(nrow(result$mapped), 2L)
+  expect_equal(result$mapped$reference_id, c("rs1", "rs3"))
+  expect_equal(
+    result$audit$mapping_status,
+    c("mapped_unique", "not_in_reference_or_allele_mismatch", "mapped_unique")
+  )
+})
+
+test_that("endothelial X-to-M family aligns alleles and freezes 45 tests", {
+  config <- read_mechanistic_config(
+    file.path(project_root, "config", "mechanistic_extension.yml")
+  )
+  mediators <- read_mechanistic_mediators(
+    file.path(project_root, "config", "mechanistic_mediators.csv"), config
+  )
+  freeze <- utils::read.csv(
+    file.path(project_root, "08_qc", "mechanistic_exposure_freeze.csv"),
+    stringsAsFactors = FALSE, check.names = FALSE
+  )
+  extracts <- do.call(rbind, lapply(seq_len(9L), function(index) {
+    mediator <- mediators[mediators$family == "endothelial", , drop = FALSE][index, ]
+    data.frame(
+      mediator_id = mediator$mediator_id,
+      request_role = "x_instrument_to_mediator",
+      request_id = freeze$exposure_id,
+      extraction_status = "matched",
+      ea = freeze$other_allele, oa = freeze$effect_allele,
+      beta = rep(-0.02, 5L), se = rep(0.01, 5L),
+      stringsAsFactors = FALSE
+    )
+  }))
+  result <- endothelial_x_to_m_family(extracts, mediators, freeze)
+  expect_equal(nrow(result), 45L)
+  expect_equal(sum(result$analysis_status == "estimated_single_instrument"), 45L)
+  expect_equal(result$mediator_beta, rep(0.02, 45L))
+  expect_true(all(result$family_denominator == 45L))
+})
+
+test_that("indirect effects retain denominator and overlap caveat", {
+  x <- data.frame(
+    exposure_id = c("x1", "x2"), module_id = c("m1", "m2"),
+    exposure_trait = c("trait1", "trait2"),
+    mediator_id = c("med1", "med1"), mediator_name = c("M", "M"),
+    beta = c(0.2, 0.3), se = c(0.1, 0.1),
+    fdr_significant = c(FALSE, TRUE), stringsAsFactors = FALSE
+  )
+  m <- data.frame(
+    mediator_id = "med1", beta = 0.4, se = 0.2,
+    fdr_significant = TRUE, stringsAsFactors = FALSE
+  )
+  result <- mechanistic_indirect_family(
+    x, m, "endothelial_indirect", 2L, "possible_unresolved"
+  )
+  expect_equal(nrow(result), 2L)
+  expect_equal(result$indirect_beta, c(0.08, 0.12))
+  expect_false(result$component_fdr_gate[[1L]])
+  expect_true(result$component_fdr_gate[[2L]])
+  expect_true(all(grepl("covariance_unavailable", result$variance_status)))
 })
 
 test_that("mechanistic zsh supervisor avoids reserved status parameter", {

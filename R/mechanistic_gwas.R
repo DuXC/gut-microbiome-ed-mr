@@ -142,10 +142,32 @@ align_cytokine_target_requests <- function(
     close_number <- function(observed, expected, tolerance = 1e-5) {
       abs(observed - expected) <= max(1e-12, tolerance * abs(expected))
     }
-    if (result$ea[hit] != toupper(cis$effect_allele[[1L]]) ||
-        result$oa[hit] != toupper(cis$other_allele[[1L]]) ||
-        !close_number(result$beta[hit], cis$beta[[1L]]) ||
-        !close_number(result$se[hit], cis$se[[1L]]) ||
+    observed_ea <- result$ea[hit]
+    observed_oa <- result$oa[hit]
+    frozen_ea <- toupper(cis$effect_allele[[1L]])
+    frozen_oa <- toupper(cis$other_allele[[1L]])
+    complemented_ea <- mechanistic_complement_allele(observed_ea)
+    complemented_oa <- mechanistic_complement_allele(observed_oa)
+    orientation_signs <- c(
+      if (observed_ea == frozen_ea && observed_oa == frozen_oa) 1 else numeric(),
+      if (observed_ea == frozen_oa && observed_oa == frozen_ea) -1 else numeric(),
+      if (complemented_ea == frozen_ea && complemented_oa == frozen_oa) 1 else numeric(),
+      if (complemented_ea == frozen_oa && complemented_oa == frozen_ea) -1 else numeric()
+    )
+    # The source article notes that some public meta-analysis effects were
+    # recovered indirectly.  Such rows can have a common beta/SE rescaling
+    # relative to Supplementary Data S2 while retaining the exact association
+    # Z statistic and P value.  Verify those scale-invariant quantities after
+    # allele alignment instead of requiring identical absolute beta and SE.
+    z_matches <- length(orientation_signs) && any(vapply(
+      unique(orientation_signs),
+      function(sign) close_number(
+        sign * result$beta[hit] / result$se[hit],
+        cis$beta[[1L]] / cis$se[[1L]]
+      ),
+      logical(1)
+    ))
+    if (!z_matches ||
         !close_number(result$p[hit], cis$p[[1L]])) {
       mechanistic_error("frozen cytokine cis lead differs from source GWAS")
     }
@@ -322,8 +344,8 @@ normalize_scallop_gwas_rows <- function(raw) {
   valid <- parsed & result$chr %in% c(as.character(1:22), "X") &
     is.finite(result$pos) & result$pos > 0 &
     result$pos == floor(result$pos) &
-    result$ea %in% c("A", "C", "G", "T") &
-    result$oa %in% c("A", "C", "G", "T") & result$ea != result$oa &
+    grepl("^[ACGT]+$", result$ea) &
+    grepl("^[ACGT]+$", result$oa) & result$ea != result$oa &
     marker_alleles_match & is.finite(result$beta) &
     is.finite(result$se) & result$se > 0 &
     is.finite(result$eaf) & result$eaf > 0 & result$eaf < 1 &
@@ -476,4 +498,113 @@ extract_scallop_mechanistic_rows <- function(
     mechanistic_error("could not atomically replace SCALLOP extract")
   }
   invisible(output_path)
+}
+
+read_plink_bim <- function(path) {
+  if (!file.exists(path)) mechanistic_error(paste("missing PLINK BIM", path))
+  result <- data.table::fread(
+    path, data.table = FALSE, header = FALSE, showProgress = FALSE,
+    col.names = c("chr", "reference_id", "cm", "pos", "a1", "a2")
+  )
+  result$chr <- as.character(result$chr)
+  result$reference_id <- as.character(result$reference_id)
+  result$pos <- mechanistic_numeric(result$pos)
+  result$a1 <- toupper(as.character(result$a1))
+  result$a2 <- toupper(as.character(result$a2))
+  valid <- result$chr %in% c(as.character(1:22), "X") &
+    grepl("^rs[0-9]+$", result$reference_id) &
+    is.finite(result$pos) & result$pos > 0 & result$pos == floor(result$pos) &
+    grepl("^[ACGT]+$", result$a1) & grepl("^[ACGT]+$", result$a2) &
+    result$a1 != result$a2
+  if (!nrow(result) || !all(valid) || anyDuplicated(result$reference_id)) {
+    mechanistic_error("PLINK BIM contains invalid or duplicate variants")
+  }
+  result
+}
+
+map_endothelial_cis_to_ld_reference <- function(candidates, bim) {
+  required_candidates <- c(
+    "mediator_id", "source_id", "marker_name", "request_role", "chr",
+    "pos", "ea", "oa", "beta", "se", "eaf", "p", "n", "F", "build"
+  )
+  required_bim <- c("chr", "reference_id", "pos", "a1", "a2")
+  if (!is.data.frame(candidates) ||
+      length(setdiff(required_candidates, names(candidates))) ||
+      !is.data.frame(bim) || length(setdiff(required_bim, names(bim)))) {
+    mechanistic_error("endothelial LD mapping inputs are invalid")
+  }
+  candidates <- candidates[
+    candidates$request_role == "mediator_cis_candidate", , drop = FALSE
+  ]
+  if (!nrow(candidates) || anyDuplicated(paste(
+      candidates$mediator_id, candidates$marker_name, sep = "\r"
+    ))) {
+    mechanistic_error("endothelial cis candidates are missing or duplicated")
+  }
+  candidates$candidate_row_id <- seq_len(nrow(candidates))
+  candidate_join <- candidates[, c(
+    "candidate_row_id", "chr", "pos", "ea", "oa"
+  ), drop = FALSE]
+  names(candidate_join)[names(candidate_join) %in% c("ea", "oa")] <-
+    c("candidate_ea", "candidate_oa")
+  bim_join <- bim[, required_bim, drop = FALSE]
+  names(bim_join)[names(bim_join) %in% c("a1", "a2")] <-
+    c("reference_a1", "reference_a2")
+  joined <- merge(
+    candidate_join, bim_join, by = c("chr", "pos"), all.x = TRUE,
+    sort = FALSE
+  )
+  complement_ea <- mechanistic_complement_allele(joined$candidate_ea)
+  complement_oa <- mechanistic_complement_allele(joined$candidate_oa)
+  joined$allele_compatible <- !is.na(joined$reference_id) & (
+    (joined$candidate_ea == joined$reference_a1 &
+      joined$candidate_oa == joined$reference_a2) |
+    (joined$candidate_ea == joined$reference_a2 &
+      joined$candidate_oa == joined$reference_a1) |
+    (complement_ea == joined$reference_a1 &
+      complement_oa == joined$reference_a2) |
+    (complement_ea == joined$reference_a2 &
+      complement_oa == joined$reference_a1)
+  )
+  compatible <- joined[joined$allele_compatible %in% TRUE, , drop = FALSE]
+  compatible <- compatible[!duplicated(compatible[, c(
+    "candidate_row_id", "reference_id"
+  )]), , drop = FALSE]
+  hit_count <- tabulate(
+    compatible$candidate_row_id, nbins = nrow(candidates)
+  )
+  unique_reference <- rep(NA_character_, nrow(candidates))
+  unique_rows <- hit_count == 1L
+  if (any(unique_rows)) {
+    index <- match(which(unique_rows), compatible$candidate_row_id)
+    unique_reference[unique_rows] <- compatible$reference_id[index]
+  }
+  mapping_status <- ifelse(
+    hit_count == 1L, "mapped_unique",
+    ifelse(
+      hit_count == 0L, "not_in_reference_or_allele_mismatch",
+      "ambiguous_multiple_reference_matches"
+    )
+  )
+  audit <- data.frame(
+    candidate_row_id = candidates$candidate_row_id,
+    mediator_id = candidates$mediator_id,
+    source_id = candidates$source_id,
+    marker_name = candidates$marker_name,
+    chr = candidates$chr,
+    pos = candidates$pos,
+    ea = candidates$ea,
+    oa = candidates$oa,
+    p = candidates$p,
+    compatible_reference_rows = hit_count,
+    reference_id = unique_reference,
+    mapping_status = mapping_status,
+    stringsAsFactors = FALSE
+  )
+  mapped <- candidates[unique_rows, , drop = FALSE]
+  mapped$reference_id <- unique_reference[unique_rows]
+  mapped$mapping_status <- "mapped_unique"
+  mapped$candidate_row_id <- NULL
+  rownames(mapped) <- NULL
+  list(mapped = mapped, audit = audit)
 }

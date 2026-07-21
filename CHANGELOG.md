@@ -42,7 +42,23 @@
 - Added a streaming SCALLOP parser that extracts the five microbial-function
   target variants plus genome-wide-significant, F>10 variants inside each
   frozen endothelial cis interval without fully decompressing multi-gigabyte
-  source files; LD-reference mapping and clumping remain a separate gate.
+  source files.
+- Completed and reverified all 49 first-wave files (14.583 GiB) against
+  expected bytes, upstream MD5, and local SHA-256; no partial files remain.
+- Made cytokine source verification allele-orientation aware and invariant to
+  the documented common beta/SE rescaling in indirectly recovered public
+  meta-analysis effects, while retaining exact rsID, direction, Z, and P-value
+  gates.
+- Retained valid SCALLOP indels as pre-LD cis candidates rather than rejecting
+  an entire protein extract, then mapped candidates by GRCh37 coordinate and
+  alleles to the ancestry-matched 1000G EUR reference.
+- Mapped 371 of 1,476 endothelial cis candidates uniquely and clumped them to
+  11 independent cis-pQTLs across seven proteins. All 11 harmonised to FinnGen;
+  no endothelial M-to-ED or X-to-M effect survived its frozen BH family.
+- Completed both product-of-coefficients families: 80 of 200 cytokine and 35 of
+  45 endothelial paths were estimable, but none survived FDR and no path passed
+  both component gates. Colocalization was not triggered and the prespecified
+  stopping rule blocks broad metabolite or immune-cell expansion.
 
 ## 2026-07-20
 

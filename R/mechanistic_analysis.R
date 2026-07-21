@@ -21,6 +21,26 @@ CYTOKINE_X_TO_M_COLUMNS <- c(
   "evidence_label", "family", "family_denominator"
 )
 
+ENDOTHELIAL_X_TO_M_COLUMNS <- c(
+  "exposure_id", "module_id", "exposure_trait", "mediator_id",
+  "mediator_name", "mediator_source_id", "instrument_snp",
+  "source_gwas_verification", "x_m_overlap_class", "exposure_beta",
+  "exposure_se", "mediator_beta", "mediator_se", "beta", "se",
+  "ci_lower", "ci_upper", "p", "p_for_fdr", "q", "fdr_alpha",
+  "fdr_significant", "instrument_F", "analysis_status",
+  "multiplicity_status", "evidence_label", "family", "family_denominator"
+)
+
+MECHANISTIC_INDIRECT_COLUMNS <- c(
+  "exposure_id", "module_id", "exposure_trait", "mediator_id",
+  "mediator_name", "a_beta", "a_se", "b_beta", "b_se", "indirect_beta",
+  "indirect_se", "ci_lower", "ci_upper", "p", "p_for_fdr", "q",
+  "fdr_alpha", "product_fdr_significant", "x_to_m_fdr_significant",
+  "m_to_y_fdr_significant", "component_fdr_gate", "overlap_class",
+  "variance_status", "colocalization_status", "analysis_status",
+  "evidence_label", "family", "family_denominator"
+)
+
 cytokine_cis_instrument_table <- function(cis_leads, mediators) {
   cytokines <- mediators[mediators$family == "cytokine", , drop = FALSE]
   index <- match(cis_leads$mediator_id, cytokines$mediator_id)
@@ -325,6 +345,234 @@ extract_mechanistic_total_effects <- function(
     family_denominator = 5L,
     stringsAsFactors = FALSE
   )
+  rownames(result) <- NULL
+  result
+}
+
+endothelial_x_to_m_family <- function(
+  extracts, mediators, exposure_freeze, fdr_alpha = 0.05
+) {
+  endothelial <- mediators[mediators$family == "endothelial", , drop = FALSE]
+  required_freeze <- c(
+    "exposure_id", "module_id", "trait", "reference_id", "effect_allele",
+    "other_allele", "exposure_beta", "exposure_se", "F"
+  )
+  if (nrow(endothelial) != 9L || nrow(exposure_freeze) != 5L ||
+      length(setdiff(required_freeze, names(exposure_freeze))) ||
+      !is.data.frame(extracts)) {
+    stop("Endothelial X-to-M family inputs are invalid", call. = FALSE)
+  }
+  rows <- vector("list", 45L)
+  row_index <- 0L
+  for (mediator_index in seq_len(nrow(endothelial))) {
+    mediator <- endothelial[mediator_index, , drop = FALSE]
+    for (exposure_index in seq_len(nrow(exposure_freeze))) {
+      row_index <- row_index + 1L
+      exposure <- exposure_freeze[exposure_index, , drop = FALSE]
+      hit <- extracts$mediator_id == mediator$mediator_id[[1L]] &
+        extracts$request_role == "x_instrument_to_mediator" &
+        extracts$request_id == exposure$exposure_id[[1L]]
+      selected <- extracts[hit, , drop = FALSE]
+      status <- "not_estimable_target_missing_or_allele_mismatch"
+      mediator_beta <- mediator_se <- beta <- se <- p <- NA_real_
+      if (nrow(selected) == 1L && selected$extraction_status[[1L]] == "matched") {
+        observed_ea <- toupper(selected$ea[[1L]])
+        observed_oa <- toupper(selected$oa[[1L]])
+        exposure_ea <- toupper(exposure$effect_allele[[1L]])
+        exposure_oa <- toupper(exposure$other_allele[[1L]])
+        complement_ea <- mechanistic_complement_allele(observed_ea)
+        complement_oa <- mechanistic_complement_allele(observed_oa)
+        signs <- c(
+          if (observed_ea == exposure_ea && observed_oa == exposure_oa) 1 else numeric(),
+          if (observed_ea == exposure_oa && observed_oa == exposure_ea) -1 else numeric(),
+          if (complement_ea == exposure_ea && complement_oa == exposure_oa) 1 else numeric(),
+          if (complement_ea == exposure_oa && complement_oa == exposure_ea) -1 else numeric()
+        )
+        signs <- unique(signs)
+        if (length(signs) == 1L) {
+          mediator_beta <- signs[[1L]] * selected$beta[[1L]]
+          mediator_se <- selected$se[[1L]]
+          beta <- mediator_beta / exposure$exposure_beta[[1L]]
+          se <- mediator_se / abs(exposure$exposure_beta[[1L]])
+          p <- 2 * stats::pnorm(abs(beta / se), lower.tail = FALSE)
+          status <- "estimated_single_instrument"
+        } else if (length(signs) > 1L) {
+          status <- "not_estimable_palindromic_orientation_ambiguous"
+        }
+      } else if (nrow(selected) > 1L) {
+        stop("Endothelial X-to-M extract has duplicate targets", call. = FALSE)
+      }
+      rows[[row_index]] <- data.frame(
+        exposure_id = exposure$exposure_id,
+        module_id = exposure$module_id,
+        exposure_trait = exposure$trait,
+        mediator_id = mediator$mediator_id,
+        mediator_name = mediator$mediator_name,
+        mediator_source_id = mediator$source_id,
+        instrument_snp = exposure$reference_id,
+        source_gwas_verification = "verified",
+        x_m_overlap_class = "possible_unresolved",
+        exposure_beta = exposure$exposure_beta,
+        exposure_se = exposure$exposure_se,
+        mediator_beta = mediator_beta,
+        mediator_se = mediator_se,
+        beta = beta, se = se,
+        ci_lower = ifelse(is.finite(beta), beta - 1.96 * se, NA_real_),
+        ci_upper = ifelse(is.finite(beta), beta + 1.96 * se, NA_real_),
+        p = p, instrument_F = exposure$F,
+        analysis_status = status,
+        stringsAsFactors = FALSE
+      )
+    }
+  }
+  result <- do.call(rbind, rows)
+  estimated <- result$analysis_status == "estimated_single_instrument"
+  result$p_for_fdr <- ifelse(estimated, result$p, 1)
+  result$q <- stats::p.adjust(result$p_for_fdr, method = "BH", n = 45L)
+  result$fdr_alpha <- fdr_alpha
+  result$fdr_significant <- estimated & result$q < fdr_alpha
+  result$multiplicity_status <- "complete_45_test_family"
+  result$evidence_label <- ifelse(
+    result$fdr_significant,
+    "fdr_supported_single_instrument_possible_overlap",
+    ifelse(estimated, "exploratory_single_instrument", "non_estimable")
+  )
+  result$family <- "endothelial_x_to_m"
+  result$family_denominator <- 45L
+  result <- result[, ENDOTHELIAL_X_TO_M_COLUMNS, drop = FALSE]
+  rownames(result) <- NULL
+  result
+}
+
+finalize_endothelial_m_to_y_family <- function(
+  primary_rows, mediators, fdr_alpha = 0.05
+) {
+  endothelial <- mediators[mediators$family == "endothelial", , drop = FALSE]
+  required <- c(
+    "mediator_id", "mediator_name", "source_id", "method", "nsnp",
+    "beta", "se", "ci_lower", "ci_upper", "p", "mean_F", "min_F",
+    "analysis_status", "error_message", "warning_message"
+  )
+  if (nrow(endothelial) != 9L || !is.data.frame(primary_rows) ||
+      length(setdiff(required, names(primary_rows))) ||
+      anyDuplicated(primary_rows$mediator_id) ||
+      !setequal(primary_rows$mediator_id, endothelial$mediator_id)) {
+    stop("Endothelial M-to-Y family inputs are invalid", call. = FALSE)
+  }
+  result <- primary_rows[
+    match(endothelial$mediator_id, primary_rows$mediator_id), , drop = FALSE
+  ]
+  estimated <- result$analysis_status == "estimated" &
+    is.finite(result$p) & is.finite(result$beta) &
+    is.finite(result$se) & result$se > 0
+  result$p_for_fdr <- ifelse(estimated, result$p, 1)
+  result$q <- stats::p.adjust(result$p_for_fdr, method = "BH", n = 9L)
+  result$fdr_alpha <- fdr_alpha
+  result$fdr_significant <- estimated & result$q < fdr_alpha
+  result$outcome_id <- MECHANISTIC_TOTAL_OUTCOME_ID
+  result$outcome_overlap_class <- "possible_unresolved"
+  result$odds_ratio <- ifelse(estimated, exp(result$beta), NA_real_)
+  result$or_ci_lower <- ifelse(estimated, exp(result$ci_lower), NA_real_)
+  result$or_ci_upper <- ifelse(estimated, exp(result$ci_upper), NA_real_)
+  result$evidence_label <- ifelse(
+    result$fdr_significant,
+    "fdr_supported_screening_possible_overlap",
+    ifelse(estimated, "screening_not_fdr_supported", "non_estimable")
+  )
+  result$family <- "endothelial_m_to_y"
+  result$family_denominator <- 9L
+  rownames(result) <- NULL
+  result
+}
+
+mechanistic_indirect_family <- function(
+  x_to_m, m_to_y, family, denominator, overlap_class,
+  fdr_alpha = 0.05
+) {
+  required_x <- c(
+    "exposure_id", "module_id", "exposure_trait", "mediator_id",
+    "mediator_name", "beta", "se", "fdr_significant"
+  )
+  required_m <- c("mediator_id", "beta", "se", "fdr_significant")
+  if (!is.data.frame(x_to_m) || !is.data.frame(m_to_y) ||
+      length(setdiff(required_x, names(x_to_m))) ||
+      length(setdiff(required_m, names(m_to_y))) ||
+      nrow(x_to_m) != denominator || anyDuplicated(m_to_y$mediator_id) ||
+      !family %in% c("cytokine_indirect", "endothelial_indirect") ||
+      !overlap_class %in% c("known_partial", "possible_unresolved")) {
+    stop("Mechanistic indirect-effect inputs are invalid", call. = FALSE)
+  }
+  m <- m_to_y[, required_m, drop = FALSE]
+  names(m)[names(m) != "mediator_id"] <- paste0(
+    "m_to_y_", names(m)[names(m) != "mediator_id"]
+  )
+  joined <- merge(x_to_m, m, by = "mediator_id", all.x = TRUE, sort = FALSE)
+  joined <- joined[match(
+    paste(x_to_m$exposure_id, x_to_m$mediator_id, sep = "\r"),
+    paste(joined$exposure_id, joined$mediator_id, sep = "\r")
+  ), , drop = FALSE]
+  estimable <- is.finite(joined$beta) & is.finite(joined$se) & joined$se > 0 &
+    is.finite(joined$m_to_y_beta) & is.finite(joined$m_to_y_se) &
+    joined$m_to_y_se > 0
+  indirect_beta <- ifelse(
+    estimable, joined$beta * joined$m_to_y_beta, NA_real_
+  )
+  indirect_se <- ifelse(
+    estimable,
+    sqrt(
+      joined$m_to_y_beta^2 * joined$se^2 +
+        joined$beta^2 * joined$m_to_y_se^2
+    ),
+    NA_real_
+  )
+  p <- ifelse(
+    estimable & indirect_se > 0,
+    2 * stats::pnorm(abs(indirect_beta / indirect_se), lower.tail = FALSE),
+    NA_real_
+  )
+  p_for_fdr <- ifelse(is.finite(p), p, 1)
+  q <- stats::p.adjust(p_for_fdr, method = "BH", n = denominator)
+  x_gate <- as.logical(joined$fdr_significant)
+  m_gate <- as.logical(joined$m_to_y_fdr_significant)
+  component_gate <- estimable & x_gate & m_gate
+  product_gate <- estimable & q < fdr_alpha
+  result <- data.frame(
+    exposure_id = joined$exposure_id,
+    module_id = joined$module_id,
+    exposure_trait = joined$exposure_trait,
+    mediator_id = joined$mediator_id,
+    mediator_name = joined$mediator_name,
+    a_beta = joined$beta, a_se = joined$se,
+    b_beta = joined$m_to_y_beta, b_se = joined$m_to_y_se,
+    indirect_beta = indirect_beta, indirect_se = indirect_se,
+    ci_lower = ifelse(estimable, indirect_beta - 1.96 * indirect_se, NA_real_),
+    ci_upper = ifelse(estimable, indirect_beta + 1.96 * indirect_se, NA_real_),
+    p = p, p_for_fdr = p_for_fdr, q = q, fdr_alpha = fdr_alpha,
+    product_fdr_significant = product_gate,
+    x_to_m_fdr_significant = x_gate,
+    m_to_y_fdr_significant = m_gate,
+    component_fdr_gate = component_gate,
+    overlap_class = overlap_class,
+    variance_status = "sensitivity_delta_covariance_unavailable_due_overlap",
+    colocalization_status = ifelse(
+      component_gate,
+      "pending_required_before_mechanistic_support",
+      "not_triggered_component_fdr_gate_failed"
+    ),
+    analysis_status = ifelse(
+      estimable, "estimated_sensitivity_overlap_covariance_unknown",
+      "not_estimable_component_missing"
+    ),
+    evidence_label = ifelse(
+      component_gate & product_gate,
+      "exploratory_pending_independence_and_colocalization",
+      ifelse(estimable, "exploratory_not_all_mediation_gates_met", "insufficient")
+    ),
+    family = family,
+    family_denominator = denominator,
+    stringsAsFactors = FALSE
+  )
+  result <- result[, MECHANISTIC_INDIRECT_COLUMNS, drop = FALSE]
   rownames(result) <- NULL
   result
 }
