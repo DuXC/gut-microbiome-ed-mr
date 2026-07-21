@@ -319,3 +319,14 @@ page, cover letter, STROBE-MR checklist, two editable main-table workbooks, two
 600-dpi figures, and a ten-sheet supplementary data workbook. The package is
 author-confirmation ready; see its `07_qc/IJIR_v0_1_QC_Report.md` and
 `01_sources/AUTHOR_CONFIRMATION_REQUIRED_v0_1.md` before submission.
+
+The complete mechanistic extension is incorporated in the versioned IJIR v0.2
+package under `06_manuscript/ijir_v0_2_20260721/`. The package preserves the
+v0.1 title and primary-analysis stopping boundary while adding the frozen
+cytokine and endothelial analyses to the Methods, Results, Discussion,
+STROBE-MR checklist, Table 1, and a 25-sheet Supplementary Data 1 workbook.
+The exact upload-file hashes and final technical review are recorded in
+`07_qc/IJIR_v0_2_submission_manifest_sha256.csv` and
+`07_qc/IJIR_v0_2_QC_Report.md`. The public Zenodo v0.1 archive remains frozen;
+v0.2 must not be described as DOI-archived until a separate author-approved
+release is created.
