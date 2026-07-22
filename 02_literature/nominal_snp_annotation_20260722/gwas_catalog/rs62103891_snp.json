@@ -1,0 +1,473 @@
+{
+  "rsId" : "rs62103891",
+  "merged" : 0,
+  "functionalClass" : "intergenic_variant",
+  "lastUpdateDate" : "2025-10-05T13:04:26.969+0000",
+  "locations" : [ {
+    "chromosomeName" : "19",
+    "chromosomePosition" : 32559668,
+    "region" : {
+      "name" : "19q13.11"
+    },
+    "_links" : {
+      "snps" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  } ],
+  "genomicContexts" : [ {
+    "isIntergenic" : true,
+    "isUpstream" : false,
+    "isDownstream" : true,
+    "distance" : 21522,
+    "gene" : {
+      "geneName" : "PDCD5",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "9141"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000105185"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "NCBI",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : true,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  }, {
+    "isIntergenic" : true,
+    "isUpstream" : false,
+    "isDownstream" : true,
+    "distance" : 48669,
+    "gene" : {
+      "geneName" : "SNORA68B",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "109616972"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000201388"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "NCBI",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : false,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  }, {
+    "isIntergenic" : true,
+    "isUpstream" : false,
+    "isDownstream" : true,
+    "distance" : 95348,
+    "gene" : {
+      "geneName" : "RN7SL789P",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "106479508"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000242436"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "NCBI",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : false,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  }, {
+    "isIntergenic" : true,
+    "isUpstream" : true,
+    "isDownstream" : false,
+    "distance" : 73773,
+    "gene" : {
+      "geneName" : "DPY19L3",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "147991"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000178904"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "Ensembl",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : true,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  }, {
+    "isIntergenic" : true,
+    "isUpstream" : false,
+    "isDownstream" : true,
+    "distance" : 37338,
+    "gene" : {
+      "geneName" : "ANKRD27",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "84079"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000105186"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "NCBI",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : false,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  }, {
+    "isIntergenic" : true,
+    "isUpstream" : false,
+    "isDownstream" : true,
+    "distance" : 21520,
+    "gene" : {
+      "geneName" : "PDCD5",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "9141"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000105185"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "Ensembl",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : true,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  }, {
+    "isIntergenic" : true,
+    "isUpstream" : false,
+    "isDownstream" : true,
+    "distance" : 76410,
+    "gene" : {
+      "geneName" : "RPS12P31",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "100130192"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000242325"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "NCBI",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : false,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  }, {
+    "isIntergenic" : true,
+    "isUpstream" : false,
+    "isDownstream" : true,
+    "distance" : 48669,
+    "gene" : {
+      "geneName" : "SNORA68B",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "109616972"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000201388"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "Ensembl",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : false,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  }, {
+    "isIntergenic" : true,
+    "isUpstream" : false,
+    "isDownstream" : true,
+    "distance" : 76410,
+    "gene" : {
+      "geneName" : "RPS12P31",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "100130192"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000242325"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "Ensembl",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : false,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  }, {
+    "isIntergenic" : true,
+    "isUpstream" : true,
+    "isDownstream" : false,
+    "distance" : 73778,
+    "gene" : {
+      "geneName" : "DPY19L3",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "147991"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000178904"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "NCBI",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : true,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  }, {
+    "isIntergenic" : true,
+    "isUpstream" : false,
+    "isDownstream" : true,
+    "distance" : 95348,
+    "gene" : {
+      "geneName" : "RN7SL789P",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "106479508"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000242436"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "Ensembl",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : false,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  }, {
+    "isIntergenic" : true,
+    "isUpstream" : false,
+    "isDownstream" : true,
+    "distance" : 37332,
+    "gene" : {
+      "geneName" : "ANKRD27",
+      "entrezGeneIds" : [ {
+        "entrezGeneId" : "84079"
+      } ],
+      "ensemblGeneIds" : [ {
+        "ensemblGeneId" : "ENSG00000105186"
+      } ]
+    },
+    "location" : {
+      "chromosomeName" : "19",
+      "chromosomePosition" : 32559668,
+      "region" : {
+        "name" : "19q13.11"
+      },
+      "_links" : {
+        "snps" : {
+          "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    "source" : "Ensembl",
+    "mappingMethod" : "Ensembl_pipeline",
+    "isClosestGene" : false,
+    "_links" : {
+      "snp" : {
+        "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+        "templated" : true
+      }
+    }
+  } ],
+  "_links" : {
+    "self" : {
+      "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891"
+    },
+    "singleNucleotidePolymorphism" : {
+      "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891{?projection}",
+      "templated" : true
+    },
+    "associationsBySnpSummary" : {
+      "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891/associations?projection=associationBySnp"
+    },
+    "currentSnp" : {
+      "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891/currentSnp"
+    },
+    "studies" : {
+      "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891/studies"
+    },
+    "associations" : {
+      "href" : "https://www.ebi.ac.uk/gwas/rest/api/singleNucleotidePolymorphisms/rs62103891/associations"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+"source_catalog_traits","eligible_traits","retained_instrument_rows","estimable_traits","non_estimable_traits","nominal_p_lt_0_05","minimum_p","minimum_q","fdr_significant","conclusion"
+1572,27,28,23,4,0,0.153256024848082,1,0,"No source-study-wide sensitivity association met BH-FDR 5%"

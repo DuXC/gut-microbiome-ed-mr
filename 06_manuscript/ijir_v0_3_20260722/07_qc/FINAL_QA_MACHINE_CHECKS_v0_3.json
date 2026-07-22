@@ -1,0 +1,250 @@
+{
+  "version": "v0.3",
+  "generated": "2026-07-22",
+  "passed": 30,
+  "failed": 0,
+  "checks": [
+    {
+      "check": "required_files_present",
+      "passed": true,
+      "evidence": "18/18 present"
+    },
+    {
+      "check": "abstract_word_limit",
+      "passed": true,
+      "evidence": "189/200"
+    },
+    {
+      "check": "main_text_word_limit",
+      "passed": true,
+      "evidence": "2230/3000"
+    },
+    {
+      "check": "reference_limit",
+      "passed": true,
+      "evidence": "30/50"
+    },
+    {
+      "check": "cover_letter_length",
+      "passed": true,
+      "evidence": "445 whitespace-delimited words"
+    },
+    {
+      "check": "main_display_items",
+      "passed": true,
+      "evidence": "3 figures + 2 tables"
+    },
+    {
+      "check": "core_conclusion_preserved",
+      "passed": true,
+      "evidence": "exact sentence present"
+    },
+    {
+      "check": "title_avoids_independent_replication",
+      "passed": true,
+      "evidence": "Bidirectional Mendelian randomization of gut microbial traits and erectile dysfunction with cross-cohort exposure validation and multiplicity control"
+    },
+    {
+      "check": "hunt_evidence_named_correctly",
+      "passed": true,
+      "evidence": "same-SNP validation plus exploratory P<1×10⁻⁵ legacy analysis disclosed"
+    },
+    {
+      "check": "no_placeholders",
+      "passed": true,
+      "evidence": "hits=0"
+    },
+    {
+      "check": "no_local_absolute_paths",
+      "passed": true,
+      "evidence": "hits=0"
+    },
+    {
+      "check": "space_thousands_style",
+      "passed": true,
+      "evidence": "comma-thousands hits=0"
+    },
+    {
+      "check": "no_workbook_formula_errors",
+      "passed": true,
+      "evidence": "errors=0"
+    },
+    {
+      "check": "engineering_terms_removed",
+      "passed": true,
+      "evidence": "none"
+    },
+    {
+      "check": "table_1_rows",
+      "passed": true,
+      "evidence": "rows=9"
+    },
+    {
+      "check": "table_2_rows",
+      "passed": true,
+      "evidence": "rows=7"
+    },
+    {
+      "check": "hunt_doi_correct",
+      "passed": true,
+      "evidence": "https://doi.org/10.1038/s41588-026-02502-4"
+    },
+    {
+      "check": "table_2_matches_frozen_results",
+      "passed": true,
+      "evidence": "P, q and F checked for 7/7 rows"
+    },
+    {
+      "check": "figure_3_matches_frozen_results",
+      "passed": true,
+      "evidence": "OR, P and q checked for 7/7 rows"
+    },
+    {
+      "check": "figure_2_complete_denominators",
+      "passed": true,
+      "evidence": "forward=230, reverse=1572"
+    },
+    {
+      "check": "figure_2_forward_nonestimable_retained",
+      "passed": true,
+      "evidence": "forward P=1 rows=12"
+    },
+    {
+      "check": "supplementary_sheet_set",
+      "passed": true,
+      "evidence": "26 sheets; required subset present=True"
+    },
+    {
+      "check": "complete_instrument_inventory",
+      "passed": true,
+      "evidence": "worksheet rows including title/header=43298"
+    },
+    {
+      "check": "methods_results_closure",
+      "passed": true,
+      "evidence": "16/16 analyses closed"
+    },
+    {
+      "check": "hunt_threshold_audit",
+      "passed": true,
+      "evidence": "0 GWS instruments; exploratory sets 23/20; same-SNP coverage 97/97; concordance 76/97"
+    },
+    {
+      "check": "power_mde_recomputed",
+      "passed": true,
+      "evidence": "median MDE ORs 2.174, 2.894 and 3.094"
+    },
+    {
+      "check": "source_study_wide_sensitivity",
+      "passed": true,
+      "evidence": "27 eligible; 23 estimable; min P=0.153256; 0 FDR"
+    },
+    {
+      "check": "mechanistic_workbook_complete",
+      "passed": true,
+      "evidence": "7 families; 544 rows; 185 non-estimable; 0 FDR"
+    },
+    {
+      "check": "figure_dpi",
+      "passed": true,
+      "evidence": "IJIR_Figure_1_Study_Design_v0_3_600dpi.png:600.0; IJIR_Figure_2_Multiplicity_v0_3_600dpi.png:600.0; IJIR_Figure_3_Forward_Evidence_Profile_v0_3_600dpi.png:600.0; IJIR_Supplementary_Figure_S1_Instrument_Architecture_v0_3_600dpi.png:600.0; IJIR_Supplementary_Figure_S2_Pvalue_Calibration_v0_3_600dpi.png:600.0; IJIR_Supplementary_Figure_S3_HUNT_Same_SNP_v0_3_600dpi.png:600.0; IJIR_Supplementary_Figure_S4_Source_Threshold_v0_3_600dpi.png:600.0; IJIR_Supplementary_Figure_S5_Mechanistic_Evidence_Map_v0_3_600dpi.png:600.0"
+    },
+    {
+      "check": "final_docx_render_receipts",
+      "passed": true,
+      "evidence": "{\"cover\": 1, \"main\": 16, \"strobe\": 1, \"title\": 1}"
+    }
+  ],
+  "checksums": [
+    {
+      "file": "03_submission_files/IJIR_Main_Manuscript_v0_3.docx",
+      "bytes": 48975,
+      "sha256": "85e33862c9b5d294dc051a2dab2fea9a72817306c4877b2fa0f7afa054751147"
+    },
+    {
+      "file": "03_submission_files/IJIR_Title_Page_v0_3.docx",
+      "bytes": 37923,
+      "sha256": "bd7b354d37eebb48cf4c8664653d0793bdf1e0724beeafac88742f5a6cc54e91"
+    },
+    {
+      "file": "03_submission_files/IJIR_Cover_Letter_v0_3.docx",
+      "bytes": 39146,
+      "sha256": "f23794201afc5fff7c260d05f1bb677ff48350c850e9a2a6a39dccb30a21c745"
+    },
+    {
+      "file": "03_submission_files/IJIR_STROBE_MR_Checklist_v0_3.docx",
+      "bytes": 39521,
+      "sha256": "89e178f542aae7ecc0e7be2b62fe3c7af22a30a17d71176cb3d426560f12b313"
+    },
+    {
+      "file": "05_tables/IJIR_Table_1_Data_Sources_v0_3.xlsx",
+      "bytes": 8194,
+      "sha256": "13a703e1648386e95da73168f189ef89fda9e13079bfdc37911fb9255c1cfe08"
+    },
+    {
+      "file": "05_tables/IJIR_Table_2_Forward_Nominal_Associations_v0_3.xlsx",
+      "bytes": 8386,
+      "sha256": "da14ae66e1b59b32c9e156cbfd178a36184776145b3338f520fd484e92682c3c"
+    },
+    {
+      "file": "06_supplement/IJIR_Supplementary_Data_v0_3.xlsx",
+      "bytes": 8694236,
+      "sha256": "d5b5dfe0698602e34046d6e90a5af2dcb7bb0cc0fb8f53282d357b46c5aa80a0"
+    },
+    {
+      "file": "06_supplement/IJIR_Supplementary_Figures_v0_3.pdf",
+      "bytes": 171198,
+      "sha256": "734603605537548803135d22e52e4fd9cd6e0e5bbe87bc735ff2d382f73778d9"
+    },
+    {
+      "file": "04_figures/IJIR_Figure_1_Study_Design_v0_3_600dpi.png",
+      "bytes": 419767,
+      "sha256": "cc7b52a4cfa31f4326963b646af1b5e7d65907080e7643484340c8af99eeac8c"
+    },
+    {
+      "file": "04_figures/IJIR_Figure_2_Multiplicity_v0_3_600dpi.png",
+      "bytes": 202450,
+      "sha256": "4a63235f81d388715fd842bf193d4f3be7c5f32066409fd077c851e2069c18f2"
+    },
+    {
+      "file": "04_figures/IJIR_Figure_3_Forward_Evidence_Profile_v0_3_600dpi.png",
+      "bytes": 659689,
+      "sha256": "114124146ea813d3ebaec50f23848e410166543b7416292f14a7876903dd8c77"
+    },
+    {
+      "file": "CHANGELOG_v0_3.md",
+      "bytes": 7051,
+      "sha256": "dfd2c5de99957dc8213d22127871b0406dbcdde6b047f65eedbd1fbf1261cf41"
+    },
+    {
+      "file": "FINAL_QA_REPORT_v0_3.md",
+      "bytes": 8142,
+      "sha256": "4e6d626c89dda9b5af526202a8aa0c61858ec80ce796286a14fd8f1b249f2c3e"
+    },
+    {
+      "file": "04_figures/supplementary/IJIR_Supplementary_Figure_S1_Instrument_Architecture_v0_3_600dpi.png",
+      "bytes": 367906,
+      "sha256": "a1404bb3b6d155e7460da59b043e64cb53e54dffac483ed194334bf255dfdade"
+    },
+    {
+      "file": "04_figures/supplementary/IJIR_Supplementary_Figure_S2_Pvalue_Calibration_v0_3_600dpi.png",
+      "bytes": 343964,
+      "sha256": "cb82a46c58ebb100928137ce992fc83731ac628261b2d3d610c432c5c9ca3a5a"
+    },
+    {
+      "file": "04_figures/supplementary/IJIR_Supplementary_Figure_S3_HUNT_Same_SNP_v0_3_600dpi.png",
+      "bytes": 273770,
+      "sha256": "64ab1268ffe59665592faca76602daa15b1ea22f44decd189b0892d5f04ffb5d"
+    },
+    {
+      "file": "04_figures/supplementary/IJIR_Supplementary_Figure_S4_Source_Threshold_v0_3_600dpi.png",
+      "bytes": 218933,
+      "sha256": "2f4c3b2fdd839feccacba4e8f13361260935c8da55ec86e2d00086e7bb3ce615"
+    },
+    {
+      "file": "04_figures/supplementary/IJIR_Supplementary_Figure_S5_Mechanistic_Evidence_Map_v0_3_600dpi.png",
+      "bytes": 237420,
+      "sha256": "0397ef534e889e80521376b086e2b44f0aeca86b8f64cb6cf829c7b3e39d4629"
+    }
+  ]
+}

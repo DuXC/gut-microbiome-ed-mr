@@ -1,0 +1,9 @@
+02_builder/node_modules
+02_builder/tmp_table_data/
+07_qc/artifact_internal_logs/
+07_qc/inspect_logs/
+07_qc/rendered_*/
+07_qc/xlsx_previews/
+08_rendered/
+09_final_delivery_v0_3/
+IJIR_v0_3_Submission_Package_20260722.zip

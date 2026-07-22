@@ -1,0 +1,20 @@
+direction,item,value,evidence_level
+Forward,Swedish traits,1572,primary discovery
+Forward,Eligible forward traits,230,primary discovery
+Forward,Estimable forward traits,218,primary discovery
+Forward,Forward nominal,7,primary discovery
+Forward,Forward FDR,0,primary discovery
+Forward,FinnGen cases and controls,218158,primary discovery
+Cross-cohort exposure validation,Exact-label traits,97,independent exposure cohort only
+Cross-cohort exposure validation,Same-SNP coverage,97,independent exposure cohort only
+Cross-cohort exposure validation,Direction concordant,76,independent exposure cohort only
+Cross-cohort exposure validation,Same-SNP HUNT GWS,11,independent exposure cohort only
+Cross-cohort exposure validation,Focal traits validated,0,independent exposure cohort only
+Reverse,ED GWS candidates,479,primary reverse screen
+Reverse,Independent ED instruments,24,primary reverse screen
+Reverse,Swedish outcomes,1572,primary reverse screen
+Reverse,Reverse nominal,77,primary reverse screen
+Reverse,Reverse FDR,0,primary reverse screen
+Known-overlap sensitivity,EUR sensitivity FDR,8,known FinnGen overlap
+Known-overlap sensitivity,AFR sensitivity FDR,0,known FinnGen overlap
+Known-overlap sensitivity,Cross-ancestry sensitivity FDR,8,known FinnGen overlap

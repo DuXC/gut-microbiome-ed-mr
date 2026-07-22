@@ -1,0 +1,4 @@
+"analysis","denominator","minimum_q","fdr_significant","interpretation"
+"primary_frozen_family",230,0.941636540848568,0,"prespecified primary analysis; non-estimable tests retained as P=1"
+"estimable_only_BH",218,0.892507677847773,0,"sensitivity restricted to the 218 estimable tests"
+"unique_signal_cluster_BH",225,0.960539151291193,0,"sensitivity collapsing only exact instrument/effect duplicates verified as taxonomically nested"

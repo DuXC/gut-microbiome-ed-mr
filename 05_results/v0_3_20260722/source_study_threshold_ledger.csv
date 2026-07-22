@@ -1,0 +1,5 @@
+"phenotype_category","source_study_threshold","source_article_doi","source_definition"
+"diversity",1.7e-08,"10.1038/s41588-026-02512-2","conventional genome-wide threshold divided by three alpha-diversity metrics"
+"species",5.4e-11,"10.1038/s41588-026-02512-2","conventional genome-wide threshold divided by 921 species; the source applied the same threshold to higher taxa"
+"higher_taxa",5.4e-11,"10.1038/s41588-026-02512-2","conventional genome-wide threshold divided by 921 species; the source applied the same threshold to higher taxa"
+"function",4.3e-10,"10.1038/s41588-026-02512-2","conventional genome-wide threshold divided by 117 functional modules"

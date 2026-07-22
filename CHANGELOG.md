@@ -1,5 +1,33 @@
 # Changelog
 
+## 2026-07-22
+
+- Reclassified HUNT evidence after instrument-level audit: the two nominal
+  exact-label traits had no HUNT instruments at `P < 5×10⁻⁸`; the earlier
+  HUNT-selected analyses used 23 and 20 SNPs at exploratory `P < 1×10⁻⁵`.
+  All manuscript and figure language now distinguishes cross-cohort same-SNP
+  exposure-association validation from independent MR replication.
+- Queried the Swedish lead SNP in all 97 exact-label HUNT GWASs with exact label,
+  position and allele alignment. All 97 were recovered; 76 directions were
+  concordant, while the two nominal focal same-SNP HUNT associations were weak.
+- Added reproducible power and minimum-detectable-effect calculations for all
+  218 estimable forward traits, including prevalence scenarios for presence
+  traits and nominal, forward-family and global thresholds.
+- Added source-study-wide microbial-threshold MR sensitivity, estimable-only BH
+  sensitivity, exact duplicate/nested signal clustering, and a complete audit
+  of all prespecified analyses.
+- Added exact-rsID/Ensembl annotation of the five unique nominal SNPs and
+  retained unverified associations as `not identified` rather than absent.
+- Completed the seven-family, 544-row bounded mechanistic workbook with all 185
+  non-estimable rows and CCL11 source-heterogeneity sensitivity; no family
+  produced an FDR association and colocalization was not triggered.
+- Rebuilt the IJIR v0.3 manuscript, title page, cover letter, STROBE-MR
+  checklist, two editable main tables, 26-sheet supplementary workbook, three
+  main figures and five supplementary figures. The 189-word abstract,
+  2 230-word main text and 30 references meet the checked IJIR Article limits.
+- Passed 847/847 repository tests and 30/30 cross-artifact submission checks;
+  Table 2 and Figure 3 were compared directly with frozen P, q, F and OR values.
+
 ## 2026-07-21
 
 - Preserved the released v0.1.0 NO-GO analysis and opened the isolated

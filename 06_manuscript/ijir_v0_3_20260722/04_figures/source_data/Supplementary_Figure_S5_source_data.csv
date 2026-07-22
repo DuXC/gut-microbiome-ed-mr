@@ -1,0 +1,8 @@
+family,planned_tests,estimable_tests,nominal_p_lt_0_05,fdr_significant_tests,minimum_p,minimum_q,non_estimable_tests,family_display
+cytokine_indirect,200,80,0,0,0.196243848034979,1,120,Cytokine indirect effect
+cytokine_m_to_y,40,18,1,0,0.0358115822999516,1,22,Cytokine → ED
+cytokine_x_to_m,200,169,7,0,0.00472806160340603,0.945612320681206,31,Function → cytokine
+endothelial_indirect,45,35,0,0,0.310015859977732,1,10,Endothelial indirect effect
+endothelial_m_to_y,9,7,0,0,0.0710237301265298,0.39528474451573,2,Endothelial protein → ED
+endothelial_x_to_m,45,45,2,0,0.0108750209305143,0.489375941873146,0,Function → endothelial protein
+mechanistic_x_to_y,5,5,0,0,0.113883349374966,0.482171532288325,0,Function → ED

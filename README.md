@@ -16,13 +16,22 @@ Public repository: https://github.com/DuXC/gut-microbiome-ed-mr
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21456670.svg)](https://doi.org/10.5281/zenodo.21456670)
 
-Archived release v0.1.0: https://doi.org/10.5281/zenodo.21456671
+Current repository/manuscript version: v0.3.0 (22 July 2026)
+
+Archived release v0.1.0: https://doi.org/10.5281/zenodo.21456671. This
+version-specific DOI must not be cited as the v0.3.0 archive.
 
 All-version concept DOI: https://doi.org/10.5281/zenodo.21456670
 
 The numbered scripts are the reproducible entry points. There is deliberately
 no stale monolithic wrapper: run only the stage whose prerequisite receipts are
 already complete, in the order documented below.
+
+The v0.3.0 manuscript is a multiplicity-controlled negative reassessment. HUNT
+provides an independent exposure cohort for exact-label same-SNP
+exposure-association validation; because FinnGen remains the outcome, neither
+that lookup nor the HUNT-selected `P < 1×10⁻⁵` sensitivity is independent MR
+replication.
 
 Evidence grades:
 - Primary: genome-wide (`P < 5×10⁻⁸`) instruments with F > 10, forward BH q < 0.05, all deterministic replication gates defined in `01_protocol/analysis_decisions.md`, and independent validation.
@@ -330,3 +339,13 @@ The exact upload-file hashes and final technical review are recorded in
 `07_qc/IJIR_v0_2_QC_Report.md`. The public Zenodo v0.1 archive remains frozen;
 v0.2 must not be described as DOI-archived until a separate author-approved
 release is created.
+
+The submission-ready v0.3 package is under
+`06_manuscript/ijir_v0_3_20260722/`. It adds same-SNP Swedish–HUNT exposure
+validation, power/minimum-detectable-effect analysis, source-study-wide
+threshold sensitivity, estimable-only and nested-signal multiplicity
+sensitivities, a five-SNP pleiotropy audit, a complete 544-row bounded
+mechanistic screen, a third main figure, five supplementary figures, and an
+expanded 26-sheet supplementary workbook. The primary conclusion remains that
+no association met the predefined multiplicity-controlled criteria for a
+robust causal interpretation in either direction.

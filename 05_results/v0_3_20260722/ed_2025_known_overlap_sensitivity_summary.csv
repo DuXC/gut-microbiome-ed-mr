@@ -1,0 +1,4 @@
+"outcome_id","outcome_ancestry","family_denominator","estimable","non_estimable","nominal_p_lt_0_05","minimum_p","minimum_q","fdr_significant","effect_scale","overlap_class"
+"ed_2025_afr","AFR",230,108,122,8,0.0168025528756346,1,0,"standardized_z_per_sqrt_metal_weight","known overlap with FinnGen; sensitivity only"
+"ed_2025_cross_ancestry","cross_ancestry",230,165,65,16,6.38799512154111e-05,0.00593972755451459,8,"standardized_z_per_sqrt_metal_weight","known overlap with FinnGen; sensitivity only"
+"ed_2025_eur","EUR",230,158,72,16,6.38799512154111e-05,0.00593972755451459,8,"standardized_z_per_sqrt_metal_weight","known overlap with FinnGen; sensitivity only"

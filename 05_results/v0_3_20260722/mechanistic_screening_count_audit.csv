@@ -1,0 +1,8 @@
+"family","expected_rows","observed_rows"
+"mechanistic_x_to_y",5,5
+"cytokine_m_to_y",40,40
+"endothelial_m_to_y",9,9
+"cytokine_x_to_m",200,200
+"endothelial_x_to_m",45,45
+"cytokine_indirect",200,200
+"endothelial_indirect",45,45

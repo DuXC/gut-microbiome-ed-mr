@@ -1,0 +1,6 @@
+Abstract words: 189
+Main-text words (Introduction through Discussion): 2230
+References: 30
+Main figures: 3
+Main tables: 2
+Supplementary files: 3

@@ -1,11 +1,11 @@
 {
-  "title": "Bidirectional Mendelian randomization of gut microbiota and erectile dysfunction",
-  "description": "Reproducible analysis code, provenance records, frozen summary results, manuscript files, and submission-grade figures for an error-controlled bidirectional Mendelian randomization study of gut microbial traits and erectile dysfunction. Third-party GWAS payloads are not redistributed.",
+  "title": "Bidirectional Mendelian randomization of gut microbial traits and erectile dysfunction with cross-cohort exposure validation and multiplicity control",
+  "description": "Reproducible analysis code, versioned provenance records, multiplicity-controlled summary results, manuscript files, and submission-grade figures for a bidirectional Mendelian randomization reassessment of gut microbial traits and erectile dysfunction. Cross-cohort HUNT evidence is limited to exposure-association validation and exploratory sensitivity analysis; it is not independent MR replication. Third-party GWAS payloads are not redistributed.",
   "upload_type": "software",
   "access_right": "open",
   "license": "cc-by-4.0",
-  "version": "0.1.0",
-  "publication_date": "2026-07-20",
+  "version": "0.3.0",
+  "publication_date": "2026-07-22",
   "creators": [
     {"name": "Du, Xiancheng", "orcid": "0009-0000-4374-8818", "affiliation": "Department of Urology, Zhongda Hospital, School of Medicine, Southeast University"},
     {"name": "Tao, Shuchun", "affiliation": "Department of Urology, Zhongda Hospital, School of Medicine, Southeast University"},
