@@ -27,6 +27,12 @@
   2 230-word main text and 30 references meet the checked IJIR Article limits.
 - Passed 847/847 repository tests and 30/30 cross-artifact submission checks;
   Table 2 and Figure 3 were compared directly with frozen P, q, F and OR values.
+- Published GitHub release `v0.3.0` at tag commit
+  `9c166fde3a7e9f3f9b739cc358566936d705ab1c`, uploaded the 10 949 450-byte
+  submission package with SHA-256
+  `23094ac5a4bdfd2241cf0b75b00b42d6e96a5064f67fe16978fbc9d51a149206`,
+  and verified Zenodo version DOI `10.5281/zenodo.21485253` under concept DOI
+  `10.5281/zenodo.21456670`.
 
 ## 2026-07-21
 

@@ -1,0 +1,16 @@
+{
+  "verified_at": "2026-07-22T14:20:57+0800",
+  "id": 21485253,
+  "doi": "10.5281/zenodo.21485253",
+  "conceptdoi": "10.5281/zenodo.21456670",
+  "version": "0.3.0",
+  "title": "Bidirectional Mendelian randomization of gut microbial traits and erectile dysfunction with cross-cohort exposure validation and multiplicity control",
+  "publication_date": "2026-07-22",
+  "created": "2026-07-22T06:17:07.600831+00:00",
+  "modified": "2026-07-22T06:17:07.803515+00:00",
+  "file": {
+    "key": "DuXC/gut-microbiome-ed-mr-v0.3.0.zip",
+    "size": 52356899,
+    "checksum": "md5:e5ea8495685fdb939ff7f0bb9bc63d2a"
+  }
+}

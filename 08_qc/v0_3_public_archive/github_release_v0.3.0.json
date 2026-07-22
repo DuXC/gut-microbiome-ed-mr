@@ -1,0 +1,16 @@
+{
+  "verified_at": "2026-07-22T14:20:57+0800",
+  "release_id": 357809572,
+  "tag_name": "v0.3.0",
+  "tagged_commit": "9c166fde3a7e9f3f9b739cc358566936d705ab1c",
+  "name": "v0.3.0 — IJIR pre-submission revision and reproducibility package",
+  "html_url": "https://github.com/DuXC/gut-microbiome-ed-mr/releases/tag/v0.3.0",
+  "published_at": "2026-07-22T06:17:00Z",
+  "asset": {
+    "id": 485593903,
+    "name": "IJIR_v0_3_Submission_Package_20260722.zip",
+    "size": 10949450,
+    "digest": "sha256:23094ac5a4bdfd2241cf0b75b00b42d6e96a5064f67fe16978fbc9d51a149206",
+    "browser_download_url": "https://github.com/DuXC/gut-microbiome-ed-mr/releases/download/v0.3.0/IJIR_v0_3_Submission_Package_20260722.zip"
+  }
+}
