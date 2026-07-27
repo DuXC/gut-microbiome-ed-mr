@@ -16,9 +16,11 @@ Public repository: https://github.com/DuXC/gut-microbiome-ed-mr
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21456670.svg)](https://doi.org/10.5281/zenodo.21456670)
 
-Current repository/manuscript version: v0.3.0 (22 July 2026)
+Current repository/manuscript version: v0.3.5 (28 July 2026)
 
-Archived release v0.3.0: https://doi.org/10.5281/zenodo.21485253
+Archived release v0.3.5: https://doi.org/10.5281/zenodo.21630442
+
+Previous archived release v0.3.0: https://doi.org/10.5281/zenodo.21485253
 
 Earlier archived release v0.1.0: https://doi.org/10.5281/zenodo.21456671
 
@@ -28,11 +30,29 @@ The numbered scripts are the reproducible entry points. There is deliberately
 no stale monolithic wrapper: run only the stage whose prerequisite receipts are
 already complete, in the order documented below.
 
-The v0.3.0 manuscript is a multiplicity-controlled negative reassessment. HUNT
-provides an independent exposure cohort for exact-label same-SNP
-exposure-association validation; because FinnGen remains the outcome, neither
-that lookup nor the HUNT-selected `P < 1×10⁻⁵` sensitivity is independent MR
-replication.
+The v0.3.5 submission package preserves the frozen v0.3.0 primary MR outputs
+and adds a reproducible submission-stage audit of the METAL transformation,
+reverse-instrument construction, alternative-outcome BH families,
+cross-trait redundancy, diagnostic feasibility, colocalization feasibility,
+and mechanistic-function traceability.
+Primary eligibility, multiplicity, per-trait clumping, HUNT lookup design,
+power analysis, bounded mechanistic families, and evidence-role criteria were
+defined before association screening. The later trait-row compression,
+cross-trait European LD calculation, LCT/MCM6 locus classification, and
+Ensembl, GWAS Catalog, and OpenGWAS exact-rsID annotation are targeted post hoc
+explanatory audits restricted to the frozen 2025 sensitivity signals.
+
+HUNT provides an independent exposure cohort for exact-label same-SNP exposure
+evaluation; because FinnGen remains the MR outcome, neither that lookup nor the
+HUNT-selected `P < 1×10⁻⁵` sensitivity is independent MR replication. The
+primary FinnGen and reverse analyses produced no FDR association. The European
+and cross-ancestry outcome sensitivities each produced the same eight FDR rows,
+which compressed to three high-LD lead SNPs within one lactase-persistence
+locus. Broad dietary, metabolic, haematological, and microbiome associations
+across that region raised substantial horizontal-pleiotropy concerns but did
+not establish horizontal pleiotropy or microbial mediation. This outcome
+discordance is reported transparently and is not interpreted as robust causal
+or therapeutic prioritization.
 
 Evidence grades:
 - Primary: genome-wide (`P < 5×10⁻⁸`) instruments with F > 10, forward BH q < 0.05, all deterministic replication gates defined in `01_protocol/analysis_decisions.md`, and independent validation.
@@ -243,7 +263,7 @@ system/disk sleep, and stops after a successful complete pass. Start or inspect
 it with:
 
 ```bash
-/usr/bin/screen -dmS gut_ed_mechanistic /bin/zsh scripts/18_supervise_mechanistic_download.sh
+/usr/bin/screen -dmS gut_ed_mechanistic /bin/bash scripts/18_supervise_mechanistic_download.sh
 /opt/homebrew/bin/Rscript scripts/17_mechanistic_download_status.R
 /usr/bin/screen -ls
 /usr/bin/screen -r gut_ed_mechanistic
@@ -312,7 +332,7 @@ Run the environment and toolchain checks with:
 
 ```bash
 /opt/homebrew/bin/Rscript -e 'testthat::test_file("tests/testthat/test-environment.R", stop_on_failure = TRUE)'
-/opt/homebrew/bin/Rscript -e 'source("R/toolchain.R"); verify_plink()'
+Rscript -e 'source("R/toolchain.R"); verify_plink()'
 quarto --version
 ```
 
@@ -350,3 +370,13 @@ mechanistic screen, a third main figure, five supplementary figures, and an
 expanded 26-sheet supplementary workbook. The primary conclusion remains that
 no association met the predefined multiplicity-controlled criteria for a
 robust causal interpretation in either direction.
+
+The final IJIR v0.3.5 package is under
+`06_manuscript/ijir_v0_3_5_20260728/`. It preserves the frozen v0.3.0 primary
+results while adding a reproducible submission-stage audit of the METAL
+transformation, reverse-instrument construction, alternative-outcome BH
+families, cross-trait redundancy, diagnostic feasibility, colocalization
+feasibility, and mechanistic-function traceability. The manuscript,
+Supplement, metadata, receipts, checksums, GitHub release, and Zenodo version
+are aligned. Frozen v0.3.0 primary outputs are never overwritten; later
+derived explanatory audits remain in separate result directories.

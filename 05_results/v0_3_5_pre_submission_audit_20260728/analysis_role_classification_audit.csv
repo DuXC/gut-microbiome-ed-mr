@@ -1,0 +1,16 @@
+"analysis","final_role","changes_primary_result"
+"primary eligibility and instrument rules","defined before association screening",FALSE
+"FinnGen primary forward MR","defined before association screening",FALSE
+"reverse MR","defined before association screening",FALSE
+"complete BH families","defined before association screening",FALSE
+"source-study-wide sensitivity","defined before association screening",FALSE
+"estimable-only and nested-signal sensitivity","defined before association screening",FALSE
+"HUNT exact-label same-SNP design","defined before association screening",FALSE
+"bounded mechanistic families","defined before association screening",FALSE
+"power/MDE analysis","defined before association screening",FALSE
+"known-overlap evidence classification","defined before association screening",FALSE
+"2025 FDR-row trait compression","targeted post hoc explanatory audit",FALSE
+"unique lead-SNP compression","targeted post hoc explanatory audit",FALSE
+"cross-trait European-LD compression","targeted post hoc explanatory audit",FALSE
+"Ensembl/GWAS Catalog/OpenGWAS exact-rsID annotation","targeted post hoc explanatory audit",FALSE
+"pre-submission Steiger feasibility audit","supplementary diagnostic feasibility audit added at revision",FALSE

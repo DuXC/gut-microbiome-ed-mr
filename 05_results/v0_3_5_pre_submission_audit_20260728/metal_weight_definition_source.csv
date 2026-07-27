@@ -1,0 +1,6 @@
+"field","verified_value","verification_basis"
+"source_publication","Wu et al. Genetic insights into the shared etiology of erectile dysfunction and related traits. Nature Communications (2025).","source-study Methods and data release"
+"weight_definition","cumulative effective-sample-size weight used by METAL","source-study Methods: meta-analysis weighted by effective sample size"
+"effective_sample_size_formula","4 / (1/n_cases + 1/n_controls), as defined by the source publication","source-study table footnote"
+"project_transformation","beta-star=Z/sqrt(W); SE-star=1/sqrt(W), applied per SNP","R/outcomes.R::normalize_ed_meta_outcome and numerical audit"
+"clinical_interpretation","not an ED log-odds or clinically interpretable OR scale","scale construction and absence of a cohort-level clinical beta"

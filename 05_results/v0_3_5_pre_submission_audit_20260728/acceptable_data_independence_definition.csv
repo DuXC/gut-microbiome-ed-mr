@@ -1,0 +1,4 @@
+"label","operational_definition","screening_use","mediation_compatible"
+"none_known","no identified cohort contribution shared between the component GWAS after source-cohort review","eligible for higher evidence classification if all other criteria pass","possible only if component FDR, direction, colocalization, and pleiotropy criteria also pass"
+"possible_unresolved","cohort lists or participant-level overlap could not be resolved sufficiently to exclude overlap","screening/sensitivity only","no"
+"known_partial","a named cohort or source component is shared","screening/sensitivity only","no"

@@ -1,0 +1,228 @@
+{
+  "version": "v0.3.5",
+  "generated": "2026-07-28",
+  "frozen_primary_results": "05_results/v0_3_20260722",
+  "revision_audit": "05_results/v0_3_5_pre_submission_audit_20260728",
+  "abstract_words": 194,
+  "main_text_words": 2823,
+  "reference_count": 34,
+  "passed": 39,
+  "failed": 4,
+  "checks": [
+    {
+      "check": "primary_results_unchanged",
+      "passed": true,
+      "evidence": "No Git diff from tag v0.3.0 in frozen result directory"
+    },
+    {
+      "check": "metal_weight_and_transformation_verified",
+      "passed": true,
+      "evidence": "3 outcome files reproduce beta-star, SE-star, Z and P"
+    },
+    {
+      "check": "reverse_instrument_construction_reproduced",
+      "passed": true,
+      "evidence": "479 GWS variants -> 437 EUR-reference matches -> 24 clumped IVs"
+    },
+    {
+      "check": "alternative_outcome_bh_families_reproduced",
+      "passed": true,
+      "evidence": "EUR 230/158/72/8; AFR 230/108/122/0; cross 230/165/65/8"
+    },
+    {
+      "check": "redundancy_and_ld_structure_reproduced",
+      "passed": true,
+      "evidence": "8 rows -> rs4988235/rs6754311/rs7570971 -> one chr2q21 locus"
+    },
+    {
+      "check": "alternative_outcome_snp_grouping_verified",
+      "passed": true,
+      "evidence": "row counts by SNP={'rs7570971': 1, 'rs4988235': 5, 'rs6754311': 2}"
+    },
+    {
+      "check": "steiger_feasibility_transparent",
+      "passed": true,
+      "evidence": "230 forward traits audited; no valid test inferred without outcome prevalence"
+    },
+    {
+      "check": "diagnostic_statuses_distinguished",
+      "passed": true,
+      "evidence": "method-specific estimated/not-applicable/not-triggered/convergence statuses retained"
+    },
+    {
+      "check": "colocalization_not_overclaimed",
+      "passed": true,
+      "evidence": "ED EAF and validated binary-outcome likelihood inputs were unavailable"
+    },
+    {
+      "check": "five_mechanistic_functions_traceable",
+      "passed": true,
+      "evidence": "Five named HUNT modules have frozen selection receipts"
+    },
+    {
+      "check": "ai_disclosure_exact",
+      "passed": true,
+      "evidence": "Exact authorized Codex disclosure appears once without reference 24"
+    },
+    {
+      "check": "authors_affiliations_and_contact_locked",
+      "passed": true,
+      "evidence": "Author order, affiliations, correspondence and ORCID match baseline"
+    },
+    {
+      "check": "ijir_targeted_phrases_preserved",
+      "passed": true,
+      "evidence": "Three locked IJIR-targeted expressions are present"
+    },
+    {
+      "check": "mde_wording_correct",
+      "passed": true,
+      "evidence": "Bonferroni alpha and standardized MDE scale are explicit"
+    },
+    {
+      "check": "pleiotropy_wording_cautious",
+      "passed": true,
+      "evidence": "Annotation raises concerns without proving horizontal pleiotropy"
+    },
+    {
+      "check": "citation_numbering_and_database_references_correct",
+      "passed": true,
+      "evidence": "References 4/5/6-9 and platform citations 32-34 are aligned"
+    },
+    {
+      "check": "prescreen_and_posthoc_roles_distinguished",
+      "passed": true,
+      "evidence": "Pre-screen criteria and later explanatory audits are separated"
+    },
+    {
+      "check": "winner_curse_and_finngen_limits_present",
+      "passed": true,
+      "evidence": "Winner's curse and treated-ED phenotype limitations are explicit"
+    },
+    {
+      "check": "evidence_role_language_correct",
+      "passed": true,
+      "evidence": "HUNT, overlap, ancestry-transfer, rsID and METAL roles are constrained"
+    },
+    {
+      "check": "abstract_under_200",
+      "passed": true,
+      "evidence": "194/200"
+    },
+    {
+      "check": "main_text_under_3000",
+      "passed": true,
+      "evidence": "2823/3000"
+    },
+    {
+      "check": "references_under_50",
+      "passed": true,
+      "evidence": "34/50"
+    },
+    {
+      "check": "cover_letter_350_420",
+      "passed": true,
+      "evidence": "403/350-420"
+    },
+    {
+      "check": "combined_article_structure",
+      "passed": true,
+      "evidence": "22-page reviewer PDF; title page first and abstract second"
+    },
+    {
+      "check": "main_tables_one_page_each_and_footnotes_complete",
+      "passed": true,
+      "evidence": "Table 1 is page 21; Table 2 is page 22; both footnotes are complete"
+    },
+    {
+      "check": "pdf_text_and_math_characters_clean",
+      "passed": true,
+      "evidence": "No replacement characters; multiplication, superscripts and square root preserved"
+    },
+    {
+      "check": "supplement_complete_and_formula_clean",
+      "passed": true,
+      "evidence": "46 sheets; formula errors=0; formulas=0"
+    },
+    {
+      "check": "document_creator_metadata_correct",
+      "passed": true,
+      "evidence": "DOCX/XLSX creator and version metadata are Xiancheng Du/v0.3.5"
+    },
+    {
+      "check": "all_pngs_600dpi",
+      "passed": true,
+      "evidence": "9 PNGs; unique dpi=[600.0]"
+    },
+    {
+      "check": "figure_s3_no_text_clipping",
+      "passed": true,
+      "evidence": "margins left/top/right/bottom=(60, 70, 83, 29)"
+    },
+    {
+      "check": "figure_s6_no_text_clipping",
+      "passed": true,
+      "evidence": "margins left/top/right/bottom=(67, 88, 129, 133)"
+    },
+    {
+      "check": "figure_1_arrow_and_evidence_flow_correct",
+      "passed": true,
+      "evidence": "Dotted path uses the gap between parallel HUNT branches"
+    },
+    {
+      "check": "figure_numbers_match_frozen_results",
+      "passed": true,
+      "evidence": "Figure builder contains frozen forward/reverse/HUNT counts"
+    },
+    {
+      "check": "combined_supplement_pdf_matches_s1_s6",
+      "passed": true,
+      "evidence": "Combined Supplementary Figures PDF contains six nonempty pages"
+    },
+    {
+      "check": "no_placeholders",
+      "passed": true,
+      "evidence": "hits=0"
+    },
+    {
+      "check": "no_local_absolute_paths",
+      "passed": true,
+      "evidence": "hits=0"
+    },
+    {
+      "check": "nonestimable_and_database_absence_not_overinterpreted",
+      "passed": true,
+      "evidence": "Required negative-evidence caveats appear in Methods, Results and Discussion"
+    },
+    {
+      "check": "versionless_portal_files_prepared",
+      "passed": true,
+      "evidence": "prepared=['IJIR_Article.docx', 'IJIR_Cover_Letter.docx', 'IJIR_Figure_1.tiff', 'IJIR_Figure_2.tiff', 'IJIR_Figure_3.tiff', 'IJIR_STROBE_MR_Checklist.docx', 'IJIR_Supplementary_Data.xlsx', 'IJIR_Supplementary_Figures.pdf']"
+    },
+    {
+      "check": "no_jwt_or_auth_header",
+      "passed": true,
+      "evidence": "Credential scan PASS; token revocation remains an unverified author action"
+    },
+    {
+      "check": "github_release_v0_3_5_exists",
+      "passed": false,
+      "evidence": "v0.3.5 release not verified"
+    },
+    {
+      "check": "zenodo_v0_3_5_doi_resolves",
+      "passed": false,
+      "evidence": "v0.3.5 Zenodo receipt not present"
+    },
+    {
+      "check": "archive_manifest_current",
+      "passed": false,
+      "evidence": "v0.3.5 archive or manifest not verified"
+    },
+    {
+      "check": "public_archive_matches_manuscript_version",
+      "passed": false,
+      "evidence": "Manuscript, GitHub tag, Zenodo DOI and local archive all identify v0.3.5"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+"component","availability","implication"
+"regional microbial exposure summary statistics","available for the relevant Swedish microbial traits","necessary but not sufficient"
+"regional 2025 EUR ED summary statistics","available as METAL Z scores and cumulative effective-sample-size weights","necessary but not sufficient"
+"genome build and alleles","available but requires GRCh37/GRCh38 cross-build harmonization","technically possible with explicit validation"
+"ED allele frequency","not supplied in the processed 2025 ED release","prevents reliable case-control likelihood specification"
+"ED likelihood/effect scale","screening statistic available; not a validated clinical log-odds estimate for conventional binary-outcome coloc","Z-only methods would add unvalidated scale and LD assumptions in this submission revision"
+"ancestry-matched LD","1000 Genomes Phase 3 EUR available","external-reference LD would add approximation"
+"final decision","formal regional colocalization not performed","exact-rsID annotation raises pleiotropy concerns but cannot establish a shared causal variant or microbial mediation"
