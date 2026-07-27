@@ -18,7 +18,7 @@ Public repository: https://github.com/DuXC/gut-microbiome-ed-mr
 
 Current repository/manuscript version: v0.3.5 (28 July 2026)
 
-Archived release v0.3.5: https://doi.org/10.5281/zenodo.21630442
+Archived release v0.3.5: https://doi.org/10.5281/zenodo.21630618
 
 Previous archived release v0.3.0: https://doi.org/10.5281/zenodo.21485253
 
