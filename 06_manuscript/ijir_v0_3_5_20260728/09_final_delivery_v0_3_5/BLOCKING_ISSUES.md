@@ -2,10 +2,7 @@
 
 ## Submission blockers
 
-- v0.3.5 release not verified
-- v0.3.5 Zenodo receipt not present
-- v0.3.5 archive or manifest not verified
-- Manuscript, GitHub tag, Zenodo DOI and local archive all identify v0.3.5
+- None.
 
 ## Transparent non-blocking limitations
 

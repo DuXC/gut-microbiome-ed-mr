@@ -1,6 +1,6 @@
 # FINAL QA REPORT — IJIR v0.3.5
 
-Final status: **NOT READY FOR SUBMISSION**
+Final status: **READY FOR AUTHOR PORTAL REVIEW**
 
 ## Scientific consistency
 
@@ -38,9 +38,9 @@ Final status: **NOT READY FOR SUBMISSION**
 
 ## Reproducibility and security
 
-- Machine checks passed: 39; failed: 4.
-- Failed checks: ['github_release_v0_3_5_exists', 'zenodo_v0_3_5_doi_resolves', 'archive_manifest_current', 'public_archive_matches_manuscript_version'].
-- Public archive aligned: no.
+- Machine checks passed: 43; failed: 0.
+- Failed checks: none.
+- Public archive aligned: yes.
 - Credential scan: PASS; no JWT or bearer header found in scanned repository, history, logs, receipts, environment/configuration or submission files.
 - OpenGWAS token revocation: not verified; author action remains.
 

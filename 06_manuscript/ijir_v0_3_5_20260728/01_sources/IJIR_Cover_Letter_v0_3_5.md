@@ -16,7 +16,7 @@ This is not a wholly negative report. After these signals appeared, a targeted p
 
 No trait met the primary criteria defined before screening for robust causal interpretation, and the locus audit further limited signal specificity. This structure should help IJIR readers interpret discordant microbiome–ED findings without dismissing sensitivity signals or advancing single-variant taxa prematurely as treatment targets.
 
-The work is original, is not under consideration elsewhere, and was approved by all authors. The authors declare no competing interests. Only deidentified summary statistics were used. The complete submission-associated code, frozen outputs, derived audits, provenance records, and supplementary materials are archived in GitHub release v0.3.5 and Zenodo (version DOI 10.5281/zenodo.21630618; concept DOI 10.5281/zenodo.21456670).
+The work is original, is not under consideration elsewhere, and was approved by all authors. The authors declare no competing interests. Only deidentified summary statistics were used. The complete submission-associated code, frozen outputs, derived audits, provenance records, and supplementary materials are archived in GitHub release v0.3.5 and Zenodo (version DOI 10.5281/zenodo.21630730; concept DOI 10.5281/zenodo.21456670).
 
 Ming Chen, Chunhui Liu, and Chao Sun are corresponding authors. If one is permitted, please use Chao Sun as the submission contact (csun@seu.edu.cn; ORCID: 0000-0003-0538-1239).
 

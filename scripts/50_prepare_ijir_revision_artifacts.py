@@ -27,7 +27,7 @@ AUDIT = ROOT / "05_results" / "v0_3_5_pre_submission_audit_20260728"
 PUBLIC_TAG = os.environ.get("IJIR_PUBLIC_TAG", "v0.3.5")
 PUBLIC_ZENODO_VERSION = os.environ.get("IJIR_ZENODO_VERSION", "0.3.5")
 PUBLIC_ZENODO_DOI = os.environ.get(
-    "IJIR_ZENODO_DOI", "10.5281/zenodo.21630618"
+    "IJIR_ZENODO_DOI", "10.5281/zenodo.21630730"
 )
 PUBLIC_ZENODO_CONCEPT_DOI = "10.5281/zenodo.21456670"
 PUBLIC_GITHUB_URL = (

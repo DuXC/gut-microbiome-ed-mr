@@ -133,7 +133,6 @@ def main() -> None:
         "IJIR_Figure_Output_Manifest_v0_3_5.csv",
         "IJIR_Word_Counts_v0_3_5.txt",
         "SECURITY_SCAN_v0_3_5.json",
-        "FINAL_QA_MACHINE_CHECKS_v0_3_5.json",
         "VISUAL_QA_RECEIPT_v0_3_5.json",
     ]:
         copy_file(
@@ -142,8 +141,6 @@ def main() -> None:
         )
     for name in [
         "CHANGELOG_REVISION.md",
-        "FINAL_QA_REPORT.md",
-        "BLOCKING_ISSUES.md",
         "SECURITY_QA.md",
         "FILE_CHECKSUMS.csv",
     ]:

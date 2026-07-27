@@ -112,7 +112,7 @@ Clinically, no microbial trait should be prioritized as an ED treatment target f
 
 ## Data availability
 
-The primary MR outputs were frozen before the explanatory audit. Submission-associated code, frozen outputs, derived locus and pleiotropy audits, provenance records, and final supplementary materials are archived in GitHub release v0.3.5 (https://github.com/DuXC/gut-microbiome-ed-mr/releases/tag/v0.3.5) and Zenodo (version DOI https://doi.org/10.5281/zenodo.21630618; concept DOI https://doi.org/10.5281/zenodo.21456670). Restricted third-party GWAS payloads are not redistributed.
+The primary MR outputs were frozen before the explanatory audit. Submission-associated code, frozen outputs, derived locus and pleiotropy audits, provenance records, and final supplementary materials are archived in GitHub release v0.3.5 (https://github.com/DuXC/gut-microbiome-ed-mr/releases/tag/v0.3.5) and Zenodo (version DOI https://doi.org/10.5281/zenodo.21630730; concept DOI https://doi.org/10.5281/zenodo.21456670). Restricted third-party GWAS payloads are not redistributed.
 
 ## Acknowledgements
 
