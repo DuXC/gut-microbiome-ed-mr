@@ -1,0 +1,20 @@
+{
+  "version": "0.3.5",
+  "record_id": "21630730",
+  "doi": "10.5281/zenodo.21630730",
+  "concept_doi": "10.5281/zenodo.21456670",
+  "record_url": "https://zenodo.org/records/21630730",
+  "doi_url": "https://doi.org/10.5281/zenodo.21630730",
+  "status": "published",
+  "publication_date": "2026-07-28",
+  "archive_filename": "IJIR_v0_3_5_public_archive.zip",
+  "archive_size_bytes": 36131806,
+  "archive_sha256": "9631f2bfb815648aed6c6e7986c0fbc6086d4484409b20b9ffff5af4ea75bbea",
+  "archive_md5_local_and_zenodo": "8098ba65bdd9580e5184f30da737bf0c",
+  "manifest_filename": "ARCHIVE_MANIFEST_v0_3_5.csv",
+  "sha256_receipt_filename": "IJIR_v0_3_5_public_archive.zip.sha256",
+  "github_release_url": "https://github.com/DuXC/gut-microbiome-ed-mr/releases/tag/v0.3.5",
+  "github_tag_commit": "ed89044",
+  "verification": "Zenodo public API returned version 0.3.5, publication date 2026-07-28, and the same archive size and MD5 as the local file. GitHub release assets report the same SHA-256 as the local archive.",
+  "superseded_record_note": "The GitHub-Zenodo integration automatically created intermediary record 10.5281/zenodo.21630442 from the GitHub source snapshot. Record 10.5281/zenodo.21630618 contained the curated archive but also retained pre-publication external-status reports inside that immutable ZIP. Neither intermediary is cited. Record 10.5281/zenodo.21630730 is the final complete-archive version cited by the manuscript; external publication-status reports are retained outside the immutable ZIP to avoid circular self-verification."
+}

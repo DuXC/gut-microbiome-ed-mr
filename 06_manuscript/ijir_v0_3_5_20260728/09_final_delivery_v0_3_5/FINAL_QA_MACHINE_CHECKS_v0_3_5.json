@@ -212,12 +212,12 @@
     {
       "check": "zenodo_v0_3_5_doi_resolves",
       "passed": true,
-      "evidence": "10.5281/zenodo.21630618"
+      "evidence": "10.5281/zenodo.21630730"
     },
     {
       "check": "archive_manifest_current",
       "passed": true,
-      "evidence": "archive SHA-256=7c795d409aeaaec8c3e6e54896ddb2f9c49805ba3c9bbf0545de084a1b579f89"
+      "evidence": "archive SHA-256=9631f2bfb815648aed6c6e7986c0fbc6086d4484409b20b9ffff5af4ea75bbea"
     },
     {
       "check": "public_archive_matches_manuscript_version",

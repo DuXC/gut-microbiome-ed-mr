@@ -2,8 +2,8 @@
 
 Status: **PASS**
 
-- Working-tree text files scanned: 476
-- Git revisions scanned: 27
+- Working-tree text files scanned: 478
+- Git revisions scanned: 30
 - JWT-like or bearer-header hits in the working tree: 0
 - JWT-like or bearer-header hits in selected shell/log history: 0
 - JWT-like hits in committed Git history: 0
